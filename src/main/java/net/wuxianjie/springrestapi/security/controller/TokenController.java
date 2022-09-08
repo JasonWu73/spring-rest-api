@@ -67,7 +67,7 @@ public class TokenController {
         new HashMap<>() {{
           put("username", token.getUsername());
           put("type", ACCESS_TOKEN_TYPE);
-          put(JWTPayload.EXPIRES_AT, currentTimeSeconds + 5);
+          put(JWTPayload.EXPIRES_AT, currentTimeSeconds + EXPIRES_IN_SECONDS);
         }},
         properties.getJwtKey().getBytes()
       );
@@ -76,7 +76,7 @@ public class TokenController {
         new HashMap<>() {{
           put("username", token.getUsername());
           put("type", REFRESH_TOKEN_TYPE);
-          put(JWTPayload.EXPIRES_AT, currentTimeSeconds + 5);
+          put(JWTPayload.EXPIRES_AT, currentTimeSeconds + EXPIRES_IN_SECONDS);
         }},
         properties.getJwtKey().getBytes()
       );
