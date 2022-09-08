@@ -31,6 +31,12 @@
       <version>${hutool.version}</version>
     </dependency>
 
+    <!-- Bean 属性验证库，包含 JSR-303 的实现（hibernate-validator）-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
     <!-- 使用 Spring MVC、Jackson 和 Tomcat 嵌入式 Web 服务器 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
