@@ -51,7 +51,7 @@ public class TokenController {
    * }</pre>
    */
   @PostMapping("token")
-  public ResponseEntity<Map<String, Object>> getToken(@RequestBody @Valid AuthRequest request) {
+  public ResponseEntity<Map<String, Object>> getToken(@RequestBody @Valid final AuthRequest request) {
     try {
       // 通过 Spring Security 身份验证管理器进行身份验证并获取用户身份信息
       final Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
