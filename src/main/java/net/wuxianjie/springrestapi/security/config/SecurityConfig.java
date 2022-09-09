@@ -52,7 +52,7 @@ public class SecurityConfig {
       .authorizeRequests()
       // 公共请求端点
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
-      .antMatchers(HttpMethod.PUT, "/api/v1/token/*").permitAll()
+      .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
       // 私有请求端点
       .anyRequest().authenticated()
       // 启用 CORS 并禁用 CSRF
@@ -67,7 +67,7 @@ public class SecurityConfig {
       // 设置授权（Authorization）异常处理程序，对应 403 HTTP 状态
       .accessDeniedHandler((request, response, accessDeniedException) ->
         ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, accessDeniedException.getMessage()))
-      // 添加 JWT 令牌过滤器
+      // 添加 JWT Token 过滤器
       .and().addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
@@ -85,7 +85,7 @@ public class SecurityConfig {
    *
    * @param config 身份验证配置
    * @return 身份验证管理器
-   * @throws Exception 在身份验证管理器获取失败时抛出
+   * @throws Exception 获取身份验证管理器失败的异常
    */
   @Bean
   public AuthenticationManager authenticationManager(final AuthenticationConfiguration config) throws Exception {

@@ -2,13 +2,8 @@ package net.wuxianjie.springrestapi.security.filter;
 
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.JWTValidator;
-import cn.hutool.jwt.signers.JWTSignerUtil;
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.security.config.SecurityProperties;
-import net.wuxianjie.springrestapi.security.controller.TokenController;
+import net.wuxianjie.springrestapi.security.service.JwtTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,8 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-  private final SecurityProperties properties;
-  private final UserDetailsService service;
+  private final UserDetailsService userDetailsService;
+  private final JwtTokenService jwtTokenService;
 
   @Override
   protected void doFilterInternal(
@@ -46,30 +41,26 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       return;
     }
 
-    // 获取 JWT 令牌并验证
+    // 获取 JWT Token 并验证
     final String token = header.split(" ")[1].trim();
     try {
-      JWTValidator
-        .of(token)
-        .validateAlgorithm(JWTSignerUtil.hs256(properties.getJwtKey().getBytes()))
-        .validateDate();
+      jwtTokenService.validateToken(token);
     } catch (ValidateException e) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    // 获取用户身份并将其设置在 Spring Security 上下文中
-    final JWT jwt = JWTUtil.parseToken(token);
-    final String username = (String) jwt.getPayload("username");
-    final String type = (String) jwt.getPayload("type");
+    // 解析 JWT Token，获取用户身份并将其设置在 Spring Security 上下文中
+    final String username = jwtTokenService.getUsername(token);
+    final String type = jwtTokenService.getType(token);
 
-    if (!TokenController.ACCESS_TOKEN_TYPE.equals(type)) {
+    if (!JwtTokenService.ACCESS_TOKEN_TYPE.equals(type)) {
       filterChain.doFilter(request, response);
       return;
     }
 
     try {
-      final UserDetails userDetails = service.loadUserByUsername(username);
+      final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
       final UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
         userDetails,

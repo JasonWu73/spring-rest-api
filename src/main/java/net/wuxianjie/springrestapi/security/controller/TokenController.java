@@ -1,25 +1,12 @@
 package net.wuxianjie.springrestapi.security.controller;
 
-import cn.hutool.jwt.JWTPayload;
-import cn.hutool.jwt.JWTUtil;
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.security.config.SecurityProperties;
 import net.wuxianjie.springrestapi.security.dto.AuthRequest;
-import net.wuxianjie.springrestapi.security.dto.TokenDetails;
-import net.wuxianjie.springrestapi.security.util.ApiUtils;
-import org.springframework.http.HttpStatus;
+import net.wuxianjie.springrestapi.security.service.TokenService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -27,12 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TokenController {
 
-  public static final String ACCESS_TOKEN_TYPE = "access";
-  private static final String REFRESH_TOKEN_TYPE = "refresh";
-  private static final Integer EXPIRES_IN_SECONDS = 1800;
-
-  private final SecurityProperties properties;
-  private final AuthenticationManager authManager;
+  private final TokenService service;
 
   /**
    * 获取 Access Token，在私有 API 时需要在 HTTP 请求中携带 Access Token：
@@ -46,50 +28,34 @@ public class TokenController {
    *   {
    *     "accessToken": "...", // 要获取的 Access Token
    *     "refreshToken": "...", // 用于刷新的 Refresh Token
-   *     "expiresIn": 1800 // Access Token 的有效期（秒为单位，有效期 30 分钟）
+   *     "expiresIn": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）
+   *     "username": "zhangsan", // 用户名
+   *     "nickname": "张三", // 昵称
+   *     "authorities": ["user"] // 权限列表
    *   }
    * }</pre>
    */
   @PostMapping("token")
   public ResponseEntity<Map<String, Object>> getToken(@RequestBody @Valid final AuthRequest request) {
-    try {
-      // 通过 Spring Security 身份验证管理器进行身份验证并获取用户身份信息
-      final Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
-        request.getUsername(),
-        request.getPassword()
-      ));
+    return service.getToken(request);
+  }
 
-      final TokenDetails token = (TokenDetails) authentication.getPrincipal();
-
-      // 创建 JWT并返回
-      final long currentTimeSeconds = System.currentTimeMillis() / 1000;
-      final String accessToken = JWTUtil.createToken(
-        new HashMap<>() {{
-          put("username", token.getUsername());
-          put("type", ACCESS_TOKEN_TYPE);
-          put(JWTPayload.EXPIRES_AT, currentTimeSeconds + EXPIRES_IN_SECONDS);
-        }},
-        properties.getJwtKey().getBytes()
-      );
-
-      final String refreshToken = JWTUtil.createToken(
-        new HashMap<>() {{
-          put("username", token.getUsername());
-          put("type", REFRESH_TOKEN_TYPE);
-          put(JWTPayload.EXPIRES_AT, currentTimeSeconds + EXPIRES_IN_SECONDS);
-        }},
-        properties.getJwtKey().getBytes()
-      );
-
-      return ResponseEntity.ok()
-        .body(new HashMap<>() {{
-          put("accessToken", accessToken);
-          put("refreshToken", refreshToken);
-          put("expiresIn", EXPIRES_IN_SECONDS);
-        }});
-    } catch (AuthenticationException e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-        .body(ApiUtils.error(e.getMessage()));
-    }
+  /**
+   * 刷新 Access Token，刷新后旧 Access Token 将不可用。
+   *
+   * @return <pre>{@code
+   *   {
+   *     "accessToken": "...", // 要获取的 Access Token
+   *     "refreshToken": "...", // 用于刷新的 Refresh Token
+   *     "expiresIn": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）
+   *     "username": "zhangsan", // 用户名
+   *     "nickname": "张三", // 昵称
+   *     "authorities": ["user"] // 权限列表
+   *   }
+   * }</pre>
+   */
+  @PostMapping("token/{refreshToken}")
+  public ResponseEntity<Map<String, Object>> refreshToken(@PathVariable final String refreshToken) {
+    return service.refreshToken(refreshToken);
   }
 }

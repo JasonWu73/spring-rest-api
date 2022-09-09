@@ -18,6 +18,6 @@ import javax.validation.constraints.NotBlank;
 @ConfigurationProperties(prefix = "security")
 public class SecurityProperties {
 
-  @NotBlank(message = "JWT 令牌的签名密钥不能为空")
+  @NotBlank(message = "JWT Token 的签名密钥不能为空")
   private String jwtKey;
 }
