@@ -1,8 +1,10 @@
 package net.wuxianjie.springrestapi.security.filter;
 
+import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.security.dto.CachedToken;
 import net.wuxianjie.springrestapi.security.service.JwtTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,7 @@ import java.util.List;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
   private final UserDetailsService userDetailsService;
+  private final TimedCache<String, CachedToken> usernameToToken;
   private final JwtTokenService jwtTokenService;
 
   @Override
@@ -50,15 +53,24 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       return;
     }
 
-    // 解析 JWT Token，获取用户身份并将其设置在 Spring Security 上下文中
+    // 解析 JWT Token 并获取用户名和 Token 类型
     final String username = jwtTokenService.getUsername(token);
     final String type = jwtTokenService.getType(token);
 
+    // 验证 Token 是否为 Access Token
     if (!JwtTokenService.ACCESS_TOKEN_TYPE.equals(type)) {
       filterChain.doFilter(request, response);
       return;
     }
 
+    // 判断 Access Token 是否为当前有效的 Token
+    final CachedToken cachedToken = usernameToToken.get(username, false);
+    if (cachedToken == null || !cachedToken.getAccessToken().equals(token)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
+    // 将通过身份验证后的用户身份设置在 Spring Security 上下文中
     try {
       final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
