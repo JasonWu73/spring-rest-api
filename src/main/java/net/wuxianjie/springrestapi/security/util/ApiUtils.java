@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wuxianjie.springrestapi.security.dto.TokenDetails;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,7 +39,9 @@ public final class ApiUtils {
     final HttpStatus httpStatus,
     final String message
   ) throws IOException {
-    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+    // 此外必须要设置 JSON 响应体的字符编码
+    // 默认使用 Tomcat 的默认字符编码（ISO-8859-1），这会导致响应体中文字符乱码
+    response.setContentType("application/json;charset=UTF-8");
     response.setStatus(httpStatus.value());
 
     final String json = JSONUtil.toJsonStr(error(message));
