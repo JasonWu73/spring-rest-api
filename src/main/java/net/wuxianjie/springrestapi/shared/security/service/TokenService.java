@@ -1,11 +1,11 @@
-package net.wuxianjie.springrestapi.security.service;
+package net.wuxianjie.springrestapi.shared.security.service;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.exceptions.ValidateException;
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.security.dto.AuthRequest;
-import net.wuxianjie.springrestapi.security.dto.CachedToken;
-import net.wuxianjie.springrestapi.security.dto.TokenDetails;
+import net.wuxianjie.springrestapi.shared.security.dto.AuthRequest;
+import net.wuxianjie.springrestapi.shared.security.dto.CachedToken;
+import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,11 +1,11 @@
-package net.wuxianjie.springrestapi.security.filter;
+package net.wuxianjie.springrestapi.shared.security.filter;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.security.dto.CachedToken;
-import net.wuxianjie.springrestapi.security.service.JwtTokenService;
+import net.wuxianjie.springrestapi.shared.security.dto.CachedToken;
+import net.wuxianjie.springrestapi.shared.security.service.JwtTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,8 +1,8 @@
-package net.wuxianjie.springrestapi.security.config;
+package net.wuxianjie.springrestapi.shared.security.config;
 
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.security.filter.JwtTokenFilter;
-import net.wuxianjie.springrestapi.security.util.ApiUtils;
+import net.wuxianjie.springrestapi.shared.security.filter.JwtTokenFilter;
+import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

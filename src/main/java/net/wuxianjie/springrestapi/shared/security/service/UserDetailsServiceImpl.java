@@ -1,6 +1,6 @@
-package net.wuxianjie.springrestapi.security.service;
+package net.wuxianjie.springrestapi.shared.security.service;
 
-import net.wuxianjie.springrestapi.security.dto.TokenDetails;
+import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

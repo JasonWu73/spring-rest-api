@@ -1,9 +1,9 @@
-package net.wuxianjie.springrestapi.security.controller;
+package net.wuxianjie.springrestapi.shared.security.controller;
 
-import net.wuxianjie.springrestapi.security.annotation.IsAdmin;
-import net.wuxianjie.springrestapi.security.annotation.IsUser;
-import net.wuxianjie.springrestapi.security.dto.TokenDetails;
-import net.wuxianjie.springrestapi.security.util.ApiUtils;
+import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
+import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
+import net.wuxianjie.springrestapi.shared.security.annotation.IsAdmin;
+import net.wuxianjie.springrestapi.shared.security.annotation.IsUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

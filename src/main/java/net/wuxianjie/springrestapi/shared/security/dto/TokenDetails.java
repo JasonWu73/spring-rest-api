@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.security.dto;
+package net.wuxianjie.springrestapi.shared.security.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

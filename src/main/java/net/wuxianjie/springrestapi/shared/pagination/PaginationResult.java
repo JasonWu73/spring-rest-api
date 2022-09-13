@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.pagination;
+package net.wuxianjie.springrestapi.shared.pagination;
 
 import lombok.Data;
 

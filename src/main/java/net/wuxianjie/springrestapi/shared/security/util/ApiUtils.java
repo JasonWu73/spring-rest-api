@@ -1,9 +1,9 @@
-package net.wuxianjie.springrestapi.security.util;
+package net.wuxianjie.springrestapi.shared.security.util;
 
 import cn.hutool.json.JSONUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.wuxianjie.springrestapi.security.dto.TokenDetails;
+import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

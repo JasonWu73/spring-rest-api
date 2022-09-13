@@ -1,9 +1,9 @@
-package net.wuxianjie.springrestapi.security.config;
+package net.wuxianjie.springrestapi.shared.security.config;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
-import net.wuxianjie.springrestapi.security.dto.CachedToken;
-import net.wuxianjie.springrestapi.security.service.JwtTokenService;
+import net.wuxianjie.springrestapi.shared.security.dto.CachedToken;
+import net.wuxianjie.springrestapi.shared.security.service.JwtTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

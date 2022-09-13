@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.security.config;
+package net.wuxianjie.springrestapi.shared.security.config;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.security.annotation;
+package net.wuxianjie.springrestapi.shared.security.annotation;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAuthority(\"user\")")
-public @interface IsUser {
+@PreAuthorize("hasAuthority(\"admin\")")
+public @interface IsAdmin {
 }

@@ -1,8 +1,8 @@
-package net.wuxianjie.springrestapi.security.controller;
+package net.wuxianjie.springrestapi.shared.security.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.security.dto.AuthRequest;
-import net.wuxianjie.springrestapi.security.service.TokenService;
+import net.wuxianjie.springrestapi.shared.security.dto.AuthRequest;
+import net.wuxianjie.springrestapi.shared.security.service.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
