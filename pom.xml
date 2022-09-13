@@ -49,6 +49,12 @@
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
+    <!-- 通过 Spring AOP 和 AspectJ 实现面向切面编程 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+
     <!--
       注解处理器，生成程序中拥有 `@ConfigurationProperties` 注解类的元数据：
       可为在 IDE 中编辑 `application.properties` 和 `application.yaml` 时提供代码补全和文档说明
