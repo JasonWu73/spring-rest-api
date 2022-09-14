@@ -1,19 +1,47 @@
 package net.wuxianjie.springrestapi.shared.security.service;
 
+import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
+import net.wuxianjie.springrestapi.user.dto.AuthData;
+import net.wuxianjie.springrestapi.user.mapper.UserMapper;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+  private final UserMapper userMapper;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    final AuthData authData = userMapper.selectByUsername(username);
+    if (authData == null) {
+      throw new UsernameNotFoundException("账号不存在");
+    }
+
+    System.out.println(authData);
+
+    return new TokenDetails(
+      authData.getUsername(),
+      authData.getHashedPassword(),
+      AuthorityUtils.commaSeparatedStringToAuthorityList(authData.getMenus()),
+      authData.getEnabled(),
+      authData.getUserId(),
+      authData.getNickname()
+    );
+    /*
+    if (!usernameToToken.containsKey(username)) {
+      throw new UsernameNotFoundException("账号不存在");
+    }
+    return usernameToToken.get(username);
+    */
+  }
+
+  /*
   private static final Map<String, TokenDetails> usernameToToken = new HashMap<>() {{
     put("wxj", new TokenDetails(
       "wxj",
@@ -48,12 +76,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       "王五"
     ));
   }};
-
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    if (!usernameToToken.containsKey(username)) {
-      throw new UsernameNotFoundException("账号不存在");
-    }
-    return usernameToToken.get(username);
-  }
+  */
 }

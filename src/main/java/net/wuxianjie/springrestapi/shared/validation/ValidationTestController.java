@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import net.wuxianjie.springrestapi.shared.validation.group.SaveOne;
+import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
 import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +36,7 @@ public class ValidationTestController {
   }
 
   @PostMapping("validator-save")
-  public Params saveGroup(@RequestBody @Validated(SaveOne.class) final Params params) throws JsonProcessingException {
+  public Params saveGroup(@RequestBody @Validated(CreateOne.class) final Params params) throws JsonProcessingException {
     log.info("params: {}", objectMapper.writeValueAsString(params));
     return params;
   }
@@ -50,7 +50,7 @@ public class ValidationTestController {
   @Data
   static class Params {
 
-    @NotNull(message = "日期时间不能为 null", groups = SaveOne.class)
+    @NotNull(message = "日期时间不能为 null", groups = CreateOne.class)
     private LocalDateTime dateTime;
 
     @NotNull(message = "类型不能为 null", groups = UpdateOne.class)
@@ -60,7 +60,7 @@ public class ValidationTestController {
     private Boolean bool;
 
     @Valid
-    @NotNull(message = "用户信息不能为 null", groups = SaveOne.class)
+    @NotNull(message = "用户信息不能为 null", groups = CreateOne.class)
     private User user;
   }
 
