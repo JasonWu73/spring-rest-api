@@ -70,11 +70,10 @@ public class ValidationTestController {
   enum Type {
 
     BOOK(1),
-    INTERNET(2),
-    ;
+    INTERNET(2);
 
     @JsonValue
-    private final Integer code;
+    private final int code;
   }
 
   @Data

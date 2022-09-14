@@ -1,2 +1,22 @@
+# 部署时，将 application.yml 放于与 Jar 同级目录的 config 子目录下
+server:
+  # HTTP 服务监听端口
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:sqlite:app.db
+    # SQLite 维护多连接会导致库锁！
+    hikari:
+      connection-timeout: 30000
+      minimum-idle: 1
+      maximum-pool-size: 1
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      auto-commit: true
+mybatis:
+  type-handlers-package: net.wuxianjie.springrestapi.shared.mybatis
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 security:
   jwt_key: '{lBUw2_>L3[_I:f'

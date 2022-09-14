@@ -53,6 +53,7 @@ public class SecurityConfig {
       // 公共请求端点
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
       .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
+      .antMatchers("/api/v1/public/**").permitAll()
       // 私有请求端点
       .anyRequest().authenticated()
       // 启用 CORS 并禁用 CSRF

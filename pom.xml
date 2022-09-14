@@ -21,6 +21,7 @@
     <java.version>11</java.version>
 
     <hutool.version>5.8.6</hutool.version>
+    <mybatis.spring.boot.starter.version>2.2.2</mybatis.spring.boot.starter.version>
   </properties>
 
   <dependencies>
@@ -29,6 +30,19 @@
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-all</artifactId>
       <version>${hutool.version}</version>
+    </dependency>
+
+    <!-- MyBatis Spring Boot Starter -->
+    <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+      <version>${mybatis.spring.boot.starter.version}</version>
+    </dependency>
+
+    <!-- SQLite -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
     </dependency>
 
     <!-- Bean 属性验证库，包含 JSR-303 的实现（hibernate-validator）-->
