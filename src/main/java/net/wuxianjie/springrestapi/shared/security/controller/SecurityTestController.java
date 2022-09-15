@@ -1,13 +1,15 @@
 package net.wuxianjie.springrestapi.shared.security.controller;
 
-import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
-import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
+import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springrestapi.shared.security.annotation.IsAdmin;
 import net.wuxianjie.springrestapi.shared.security.annotation.IsUser;
+import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
+import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/test")
 public class SecurityTestController {
@@ -16,7 +18,7 @@ public class SecurityTestController {
   @GetMapping("admin")
   public String admin() {
     final TokenDetails authentication = ApiUtils.getAuthentication().orElseThrow();
-    System.out.println(authentication);
+    log.info("当前用户：{}", authentication);
     return "管理员";
   }
 

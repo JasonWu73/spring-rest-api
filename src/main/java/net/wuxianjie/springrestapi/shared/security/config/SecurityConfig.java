@@ -1,5 +1,6 @@
 package net.wuxianjie.springrestapi.shared.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.security.filter.JwtTokenFilter;
 import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
@@ -37,6 +38,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
   private final JwtTokenFilter jwtTokenFilter;
+  private final ObjectMapper objectMapper;
 
   @Bean
   public RoleHierarchy roleHierarchy() {
@@ -64,10 +66,10 @@ public class SecurityConfig {
       .and().exceptionHandling()
       // 设置身份验证（Authentication）异常处理程序，对应 401 HTTP 状态
       .authenticationEntryPoint((request, response, authException) ->
-        ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, authException.getMessage()))
+        ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, authException.getMessage(), objectMapper))
       // 设置授权（Authorization）异常处理程序，对应 403 HTTP 状态
       .accessDeniedHandler((request, response, accessDeniedException) ->
-        ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, accessDeniedException.getMessage()))
+        ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, accessDeniedException.getMessage(), objectMapper))
       // 添加 JWT Token 过滤器
       .and().addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();

@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 非项目文件 ###
+logs/

@@ -17,6 +17,6 @@ public class ExceptionControllerAdvice {
   public ResponseEntity<Map<String, Object>> handleException(final ResponseStatusException e) {
     log.warn("{}", e.getMessage());
     return ResponseEntity.status(e.getStatus())
-      .body(ApiUtils.error(e.getReason()));
+      .body(ApiUtils.error(e.getStatus(), e.getReason()));
   }
 }
