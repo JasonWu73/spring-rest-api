@@ -2,10 +2,10 @@ package net.wuxianjie.springrestapi.shared.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -13,10 +13,17 @@ import java.util.Map;
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
-  @ExceptionHandler(ResponseStatusException.class)
-  public ResponseEntity<Map<String, Object>> handleException(final ResponseStatusException e) {
-    log.warn("{}", e.getMessage());
-    return ResponseEntity.status(e.getStatus())
-      .body(ApiUtils.error(e.getStatus(), e.getReason()));
+  @ExceptionHandler(ApiException.class)
+  public ResponseEntity<Map<String, Object>> handleApiException(final ApiException e) {
+    // 若客户端请求异常，则以 WARN 级别记录异常消息
+    final HttpStatus status = e.getStatus();
+    if (status.is4xxClientError()) {
+      log.warn("{}", e.getMessage());
+    } else {
+      // 若非客户端请求异常，则以 ERROR 级别记录异常栈
+      log.warn("非客户端错误", e);
+    }
+    return ResponseEntity.status(status)
+      .body(ApiUtils.error(status, e.getReason()));
   }
 }

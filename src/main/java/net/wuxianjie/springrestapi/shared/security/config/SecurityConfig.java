@@ -1,9 +1,8 @@
 package net.wuxianjie.springrestapi.shared.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.security.filter.JwtTokenFilter;
-import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
  * @see <a href="https://www.baeldung.com/spring-security-method-security">Introduction to Spring Method Security | Introduction to Spring Method Security | Baeldung</a>
@@ -30,6 +30,7 @@ import org.springframework.web.filter.CorsFilter;
  * @see <a href="https://stackoverflow.com/questions/29888458/spring-security-role-hierarchy-not-working-using-java-config">Spring Security Role Hierarchy not working using Java Config - Stack Overflo</a>
  * @see <a href="https://www.toptal.com/spring/spring-security-tutorial">Spring Security JWT Tutorial | Toptal</a>
  * @see <a href="https://stackoverflow.com/questions/72381114/spring-security-upgrading-the-deprecated-websecurityconfigureradapter-in-spring">Spring Security: Upgrading the deprecated WebSecurityConfigurerAdapter in Spring Boot 2.7.0 - Stack Overflow</a>
+ * @see <a href="https://www.baeldung.com/spring-security-exceptionhandler">Handle Spring Security Exceptions With @ExceptionHandler | Baeldung</a>
  */
 @Configuration
 @EnableWebSecurity
@@ -38,7 +39,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
 
   private final JwtTokenFilter jwtTokenFilter;
-  private final ObjectMapper objectMapper;
+  private final HandlerExceptionResolver handlerExceptionResolver;
 
   @Bean
   public RoleHierarchy roleHierarchy() {
@@ -65,11 +66,15 @@ public class SecurityConfig {
       // 设置异常处理程序
       .and().exceptionHandling()
       // 设置身份验证（Authentication）异常处理程序，对应 401 HTTP 状态
-      .authenticationEntryPoint((request, response, authException) ->
-        ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, authException.getMessage(), objectMapper))
+      .authenticationEntryPoint((request, response, authException) -> {
+        final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", authException);
+        handlerExceptionResolver.resolveException(request, response, null, apiException);
+      })
       // 设置授权（Authorization）异常处理程序，对应 403 HTTP 状态
-      .accessDeniedHandler((request, response, accessDeniedException) ->
-        ApiUtils.sendResponse(response, HttpStatus.UNAUTHORIZED, accessDeniedException.getMessage(), objectMapper))
+      .accessDeniedHandler((request, response, accessDeniedException) -> {
+        final ApiException apiException = new ApiException(HttpStatus.FORBIDDEN, "权限不足", accessDeniedException);
+        handlerExceptionResolver.resolveException(request, response, null, apiException);
+      })
       // 添加 JWT Token 过滤器
       .and().addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();

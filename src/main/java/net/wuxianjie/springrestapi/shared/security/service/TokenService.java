@@ -3,6 +3,7 @@ package net.wuxianjie.springrestapi.shared.security.service;
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.exceptions.ValidateException;
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.security.dto.AuthRequest;
 import net.wuxianjie.springrestapi.shared.security.dto.CachedToken;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
@@ -15,7 +16,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class TokenService {
 
-  private final AuthenticationManager authManager;
+  private final AuthenticationManager authenticationManager;
   private final UserDetailsService userDetailsService;
   private final TimedCache<String, CachedToken> usernameToToken;
   private final JwtTokenService jwtTokenService;
@@ -45,8 +45,7 @@ public class TokenService {
     // 加入缓存
     addTokenCache(username, tokenResult);
 
-    return ResponseEntity.ok()
-      .body(tokenResult);
+    return ResponseEntity.ok(tokenResult);
   }
 
   public ResponseEntity<Map<String, Object>> refreshToken(final String refreshToken) {
@@ -54,7 +53,7 @@ public class TokenService {
     try {
       jwtTokenService.validateToken(refreshToken);
     } catch (ValidateException e) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "非法 Token", e);
+      throw new ApiException(HttpStatus.UNAUTHORIZED, "非法 Token", e);
     }
 
     // 解析 JWT Token 并获取用户名和 Token 类型
@@ -63,13 +62,13 @@ public class TokenService {
 
     // 验证 Token 是否为 Refresh Token
     if (!JwtTokenService.REFRESH_TOKEN_TYPE.equals(type)) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "非 Refresh Token");
+      throw new ApiException(HttpStatus.UNAUTHORIZED, "非 Refresh Token");
     }
 
     // 判断 Refresh Token 是否为当前有效的 Token
     final CachedToken cachedToken = usernameToToken.get(username, false);
     if (cachedToken == null || !cachedToken.getRefreshToken().equals(refreshToken)) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "无效 Refresh Token");
+      throw new ApiException(HttpStatus.UNAUTHORIZED, "无效 Refresh Token");
     }
 
     // 获取 Token 详细信息
@@ -85,19 +84,18 @@ public class TokenService {
     // 加入缓存
     addTokenCache(username, tokenResult);
 
-    return ResponseEntity.ok()
-      .body(tokenResult);
+    return ResponseEntity.ok(tokenResult);
   }
 
-  private TokenDetails authenticate(final String username, final String password) throws ResponseStatusException {
+  private TokenDetails authenticate(final String username, final String password) throws ApiException {
     try {
-      final Authentication authentication = authManager.authenticate(
+      final Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(username, password)
       );
 
       return (TokenDetails) authentication.getPrincipal();
     } catch (AuthenticationException e) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+      throw new ApiException(HttpStatus.UNAUTHORIZED, "用户名或密码错误", e);
     }
   }
 

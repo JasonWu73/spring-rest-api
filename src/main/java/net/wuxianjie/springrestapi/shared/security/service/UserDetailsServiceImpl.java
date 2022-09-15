@@ -22,9 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     final AuthData authData = userMapper.selectByUsername(username);
     if (authData == null) {
+      // 该异常内容并不会打印或显示给客户端
       throw new UsernameNotFoundException("账号不存在");
     }
-
     log.info("登录用户：{}", authData);
 
     return new TokenDetails(

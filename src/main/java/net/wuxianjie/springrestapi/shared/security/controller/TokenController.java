@@ -14,7 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TokenController {
 
-  private final TokenService service;
+  private final TokenService tokenService;
 
   /**
    * 获取 Access Token，在私有 API 时需要在 HTTP 请求中携带 Access Token：
@@ -37,7 +37,7 @@ public class TokenController {
    */
   @PostMapping("token")
   public ResponseEntity<Map<String, Object>> getToken(@RequestBody @Valid final AuthRequest request) {
-    return service.getToken(request);
+    return tokenService.getToken(request);
   }
 
   /**
@@ -56,6 +56,6 @@ public class TokenController {
    */
   @PostMapping("token/{refreshToken}")
   public ResponseEntity<Map<String, Object>> refreshToken(@PathVariable final String refreshToken) {
-    return service.refreshToken(refreshToken);
+    return tokenService.refreshToken(refreshToken);
   }
 }
