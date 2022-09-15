@@ -1,5 +1,6 @@
-package net.wuxianjie.springrestapi.shared.logger.core;
+package net.wuxianjie.springrestapi.shared.operationlog.core;
 
+import cn.hutool.core.lang.Console;
 import cn.hutool.core.text.StrSplitter;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
@@ -10,7 +11,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.wuxianjie.springrestapi.shared.logger.entity.Log;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
 import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -35,12 +35,12 @@ import java.util.*;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class LoggerAspect {
+public class OperationLoggAspect {
 
   private final HttpServletRequest request;
   private final Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer;
 
-  @Around("@annotation(Logger)")
+  @Around("@annotation(OpLog)")
   public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
     final LocalDateTime requestTime = LocalDateTime.now();
     final Object result = joinPoint.proceed();
@@ -49,32 +49,32 @@ public class LoggerAspect {
   }
 
   private void saveLog(final ProceedingJoinPoint joinPoint, final LocalDateTime requestTime) throws JsonProcessingException {
-    final Log logData = new Log();
-    logData.setRequestTime(requestTime);
+    final net.wuxianjie.springrestapi.shared.operationlog.entity.OperationLog operationLog = new net.wuxianjie.springrestapi.shared.operationlog.entity.OperationLog();
+    operationLog.setRequestTime(requestTime);
 
     // 请求信息
     final String requestIp = ServletUtil.getClientIP(request);
-    logData.setRequestIp(requestIp);
+    operationLog.setRequestIp(requestIp);
     final String requestUri = request.getRequestURI();
     final String requestMethod = request.getMethod();
     final String endPoint = StrUtil.format("{} [{}]", requestUri, requestMethod);
-    logData.setEndPoint(endPoint);
+    operationLog.setEndPoint(endPoint);
     final String username = ApiUtils.getAuthentication().map(TokenDetails::getUsername).orElse("anonymous");
-    logData.setUsername(username);
+    operationLog.setUsername(username);
 
     // 方法信息
     final MethodSignature signature = (MethodSignature) joinPoint.getSignature();
     final Method method = signature.getMethod();
-    final Logger annotation = method.getAnnotation(Logger.class);
+    final OpLog annotation = method.getAnnotation(OpLog.class);
     if (annotation == null) {
       throw new RuntimeException("未使用操作日志注解");
     }
     final String message = annotation.value();
-    logData.setMessage(message);
+    operationLog.setMessage(message);
     final String className = joinPoint.getTarget().getClass().getName();
     final String methodName = signature.getName();
     final String qualifiedMethod = StrUtil.format("{}.{}()", className, methodName);
-    logData.setMethod(qualifiedMethod);
+    operationLog.setMethod(qualifiedMethod);
     final Map<String, Object> paramMap = Optional.ofNullable(joinPoint.getArgs())
       .map(args -> {
         final Object[] values = Arrays.stream(args)
@@ -91,21 +91,29 @@ public class LoggerAspect {
       .orElse(new HashMap<>());
     final Jackson2ObjectMapperBuilder jsonBuilder = Jackson2ObjectMapperBuilder.json();
     jackson2ObjectMapperBuilderCustomizer.customize(jsonBuilder);
-    final ObjectMapper objectMapper = jsonBuilder.build();
-    final String paramJson = objectMapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
+    final ObjectMapper objectMapper = jsonBuilder.build().setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
       @Override
       public boolean hasIgnoreMarker(final AnnotatedMember m) {
         final String ignores = annotation.ignores();
         final List<String> exclusions = StrSplitter.split(ignores, ",", 0, true, true);
         return exclusions.contains(m.getName()) || super.hasIgnoreMarker(m);
       }
-    }).writeValueAsString(paramMap);
-    logData.setParams(paramJson);
+    });
+    final String paramJson = objectMapper.writeValueAsString(paramMap);
+    operationLog.setParams(paramJson);
 
     // 打印控制台
-    final String logJson = objectMapper.writeValueAsString(logData);
-    log.info("操作日志：{}", logJson);
+    log.info(
+      "{} [{}] {} -> {}, method: {}, params: {}",
+      operationLog.getUsername(),
+      operationLog.getRequestIp(),
+      operationLog.getMessage(),
+      operationLog.getEndPoint(),
+      operationLog.getMethod(),
+      operationLog.getParams()
+    );
 
     // 保存数据库
+    Console.log(operationLog);
   }
 }

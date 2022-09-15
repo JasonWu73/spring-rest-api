@@ -1,11 +1,11 @@
-package net.wuxianjie.springrestapi.shared.logger.entity;
+package net.wuxianjie.springrestapi.shared.operationlog.entity;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class Log {
+public class OperationLog {
 
   private Integer id;
 
