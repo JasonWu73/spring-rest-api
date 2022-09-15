@@ -47,7 +47,6 @@ public class JsonConfig {
 
       // 在序列化时去除字符串值的首尾空白字符
       builder.serializerByType(String.class, new JsonSerializer<String>() {
-
         @Override
         public void serialize(final String value, final JsonGenerator gen, final SerializerProvider serializers) throws IOException {
           gen.writeString(StrUtil.trim(value));
@@ -56,7 +55,6 @@ public class JsonConfig {
 
       // 在反序列化时去除字符串值的首尾空白字符
       builder.deserializerByType(String.class, new StdScalarDeserializer<String>(String.class) {
-
         @Override
         public String deserialize(final JsonParser p, final DeserializationContext ctx) throws IOException {
           return StrUtil.trim(p.getValueAsString());
@@ -65,7 +63,6 @@ public class JsonConfig {
 
       // 设置 Java 8 LocalDateTime/LocalDate 反序列化
       builder.deserializerByType(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
-
         @Override
         public LocalDateTime deserialize(final JsonParser p, final DeserializationContext ctx) throws IOException {
           return LocalDateTime.parse(p.getValueAsString(), dateTimeFormatter);
@@ -74,7 +71,6 @@ public class JsonConfig {
 
       // 设置 Date 反序列化
       builder.deserializerByType(Date.class, new JsonDeserializer<Date>() {
-
         @Override
         public Date deserialize(final JsonParser p, final DeserializationContext ctx) throws IOException {
           final String value = p.getValueAsString();

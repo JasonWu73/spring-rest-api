@@ -21,7 +21,7 @@ public class ExceptionControllerAdvice {
       log.warn("{}", e.getMessage());
     } else {
       // 若非客户端请求异常，则以 ERROR 级别记录异常栈
-      log.warn("非客户端错误", e);
+      log.error("非客户端错误", e);
     }
     return ResponseEntity.status(status)
       .body(ApiUtils.error(status, e.getReason()));

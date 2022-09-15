@@ -1,7 +1,6 @@
 package net.wuxianjie.springrestapi.shared.security.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
 import net.wuxianjie.springrestapi.user.dto.AuthData;
 import net.wuxianjie.springrestapi.user.mapper.UserMapper;
@@ -11,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -25,7 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       // 该异常内容并不会打印或显示给客户端
       throw new UsernameNotFoundException("账号不存在");
     }
-    log.info("登录用户：{}", authData);
 
     return new TokenDetails(
       authData.getUsername(),

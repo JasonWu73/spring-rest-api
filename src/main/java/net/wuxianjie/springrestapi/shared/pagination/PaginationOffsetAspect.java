@@ -22,7 +22,7 @@ public class PaginationOffsetAspect {
    * @param joinPoint 程序执行期间的一个点，Spring AOP 中即为一个方法执行
    */
   // execution([方法的可见性] 返回类型 [方法所在类的全路径名].方法名(参数类型列表) [方法抛出的异常类型])
-  @Before("execution(public net.wuxianjie.springrestapi.shared.pagination.PaginationResult *..*Controller.*(net.wuxianjie.springrestapi.shared.pagination.PaginationRequest, ..))")
+  @Before("execution(public PaginationResult *..*Controller.*(PaginationRequest, ..))")
   public void beforeCallGetByPagination(JoinPoint joinPoint) {
     final Object[] args = joinPoint.getArgs();
     for (final Object arg : args) {

@@ -1,6 +1,7 @@
 package net.wuxianjie.springrestapi.shared.security.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import net.wuxianjie.springrestapi.shared.logger.core.Logger;
 import net.wuxianjie.springrestapi.shared.security.annotation.IsAdmin;
 import net.wuxianjie.springrestapi.shared.security.annotation.IsUser;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
@@ -17,8 +18,6 @@ public class SecurityTestController {
   @IsAdmin
   @GetMapping("admin")
   public String admin() {
-    final TokenDetails authentication = ApiUtils.getAuthentication().orElseThrow();
-    log.info("当前用户：{}", authentication);
     return "管理员";
   }
 
@@ -28,8 +27,11 @@ public class SecurityTestController {
     return "普通用户";
   }
 
+  @Logger("已通过身份验证的测试 API")
   @GetMapping("logged-in")
   public String loggedIn() {
+    final TokenDetails authentication = ApiUtils.getAuthentication().orElseThrow();
+    log.info("当前用户：{}", authentication);
     return "己登录";
   }
 }

@@ -19,7 +19,6 @@ public class ExceptionConfig {
   @Bean
   public ErrorAttributes errorAttributes() {
     return new DefaultErrorAttributes() {
-
       @Override
       public Map<String, Object> getErrorAttributes(final WebRequest webRequest, final ErrorAttributeOptions options) {
         return super.getErrorAttributes(webRequest, options);

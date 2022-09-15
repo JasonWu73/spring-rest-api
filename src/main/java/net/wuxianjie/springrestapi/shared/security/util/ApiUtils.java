@@ -3,11 +3,12 @@ package net.wuxianjie.springrestapi.shared.security.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
-import net.wuxianjie.springrestapi.shared.util.NetUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -33,7 +34,12 @@ public final class ApiUtils {
       put("timestamp", LocalDateTime.now());
       put("status", status.value());
       put("error", errorMessage);
-      put("path", NetUtils.getHttpServletRequest().map(HttpServletRequest::getRequestURI).orElse(null));
+      put("path", getHttpServletRequest().map(HttpServletRequest::getRequestURI).orElse(null));
     }};
+  }
+
+  public static Optional<HttpServletRequest> getHttpServletRequest() {
+    return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
+      .map(attr -> (HttpServletRequest) attr.resolveReference(RequestAttributes.REFERENCE_REQUEST));
   }
 }
