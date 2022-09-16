@@ -1,0 +1,35 @@
+package net.wuxianjie.springrestapi.shared.security.test;
+
+import lombok.extern.slf4j.Slf4j;
+import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
+import net.wuxianjie.springrestapi.shared.security.ApiUtils;
+import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/v1/test")
+public class SecurityTestController {
+
+  @IsAdmin
+  @GetMapping("admin")
+  public String admin() {
+    return "管理员";
+  }
+
+  @IsUser
+  @GetMapping("user")
+  public String user() {
+    return "普通用户";
+  }
+
+  @Log("测试身份验证")
+  @GetMapping("logged-in")
+  public String loggedIn() {
+    final TokenDetails authentication = ApiUtils.getAuthentication().orElseThrow();
+    log.info("当前用户：{}", authentication);
+    return "己登录";
+  }
+}

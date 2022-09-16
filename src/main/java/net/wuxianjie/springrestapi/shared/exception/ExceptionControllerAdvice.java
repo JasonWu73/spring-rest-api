@@ -1,7 +1,7 @@
 package net.wuxianjie.springrestapi.shared.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
+import net.wuxianjie.springrestapi.shared.security.ApiUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

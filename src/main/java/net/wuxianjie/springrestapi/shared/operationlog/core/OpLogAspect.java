@@ -10,9 +10,10 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.wuxianjie.springrestapi.shared.operationlog.mapper.OpLogMapper;
-import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
-import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
+import net.wuxianjie.springrestapi.shared.operationlog.OpLog;
+import net.wuxianjie.springrestapi.shared.operationlog.OpLogMapper;
+import net.wuxianjie.springrestapi.shared.security.ApiUtils;
+import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -53,7 +54,7 @@ public class OpLogAspect {
   }
 
   private void saveLog(final ProceedingJoinPoint joinPoint, final LocalDateTime requestTime) throws JsonProcessingException {
-    final net.wuxianjie.springrestapi.shared.operationlog.entity.OpLog opLog = new net.wuxianjie.springrestapi.shared.operationlog.entity.OpLog();
+    final OpLog opLog = new OpLog();
     opLog.setRequestTime(requestTime);
 
     // 请求信息
