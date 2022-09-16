@@ -13,7 +13,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -29,7 +28,7 @@ public final class ApiUtils {
     return Optional.of((TokenDetails) authentication.getPrincipal());
   }
 
-  public static Map<String, Object> error(final HttpStatus status, final String errorMessage) {
+  public static LinkedHashMap<String, Object> error(final HttpStatus status, final String errorMessage) {
     return new LinkedHashMap<>() {{
       put("timestamp", LocalDateTime.now());
       put("status", status.value());

@@ -17,6 +17,8 @@ mybatis:
   type-handlers-package: net.wuxianjie.springrestapi.shared.mybatis
   mapper-locations: classpath:mapper/*.xml
   configuration:
+    call-setters-on-nulls: true
+    shrink-whitespaces-in-sql: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 security:
   jwt_key: '{lBUw2_>L3[_I:f'

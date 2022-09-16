@@ -25,7 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @see <a href="https://www.appsdeveloperblog.com/a-guide-to-spring-boot-aop-to-record-user-operations/">A guide to Spring Boot AOP to Record User Operations - Apps Developer Blog</a>
@@ -58,8 +61,8 @@ public class OpLogAspect {
     opLog.setRequestIp(requestIp);
     final String requestUri = request.getRequestURI();
     final String requestMethod = request.getMethod();
-    final String endPoint = StrUtil.format("{} [{}]", requestUri, requestMethod);
-    opLog.setEndPoint(endPoint);
+    final String endpoint = StrUtil.format("{} [{}]", requestUri, requestMethod);
+    opLog.setEndpoint(endpoint);
     final String username = ApiUtils.getAuthentication()
       .map(TokenDetails::getUsername)
       .orElse(null);
@@ -78,7 +81,7 @@ public class OpLogAspect {
     final String methodName = signature.getName();
     final String qualifiedMethod = StrUtil.format("{}.{}()", className, methodName);
     opLog.setMethod(qualifiedMethod);
-    final Map<String, Object> paramMap = Optional.ofNullable(joinPoint.getArgs())
+    final LinkedHashMap<String, Object> paramMap = Optional.ofNullable(joinPoint.getArgs())
       .map(args -> {
         final Object[] values = Arrays.stream(args)
           .map(arg -> {
@@ -89,9 +92,9 @@ public class OpLogAspect {
           })
           .toArray();
         final String[] keys = signature.getParameterNames();
-        return ArrayUtil.zip(keys, values, true);
+        return (LinkedHashMap<String, Object>) ArrayUtil.zip(keys, values, true);
       })
-      .orElse(new HashMap<>());
+      .orElse(new LinkedHashMap<>());
     final Jackson2ObjectMapperBuilder jsonBuilder = Jackson2ObjectMapperBuilder.json();
     jackson2ObjectMapperBuilderCustomizer.customize(jsonBuilder);
     final ObjectMapper objectMapper = jsonBuilder.build().setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
@@ -111,7 +114,7 @@ public class OpLogAspect {
       opLog.getUsername(),
       opLog.getRequestIp(),
       opLog.getMessage(),
-      opLog.getEndPoint(),
+      opLog.getEndpoint(),
       opLog.getMethod(),
       opLog.getParams()
     );

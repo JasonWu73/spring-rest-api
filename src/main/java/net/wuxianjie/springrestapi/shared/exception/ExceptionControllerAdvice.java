@@ -7,14 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 @Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
 
   @ExceptionHandler(ApiException.class)
-  public ResponseEntity<Map<String, Object>> handleApiException(final ApiException e) {
+  public ResponseEntity<LinkedHashMap<String, Object>> handleApiException(final ApiException e) {
     // 若客户端请求异常，则以 WARN 级别记录异常消息
     final HttpStatus status = e.getStatus();
     if (status.is4xxClientError()) {

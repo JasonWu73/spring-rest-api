@@ -17,7 +17,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,13 +30,13 @@ public class TokenService {
   private final TimedCache<String, CachedToken> usernameToToken;
   private final JwtTokenService jwtTokenService;
 
-  public ResponseEntity<Map<String, Object>> getToken(final AuthRequest request) {
+  public ResponseEntity<LinkedHashMap<String, Object>> getToken(final AuthRequest request) {
     // 通过 Spring Security 身份验证管理器进行身份验证并获取用户身份信息
     final String username = request.getUsername();
     final TokenDetails tokenDetails = authenticate(username, request.getPassword());
 
     // 创建 JWT
-    final Map<String, Object> tokenResult = createToken(
+    final LinkedHashMap<String, Object> tokenResult = createToken(
       username,
       tokenDetails.getNickname(),
       AuthorityUtils.authorityListToSet(tokenDetails.getAuthorities())
@@ -44,11 +44,10 @@ public class TokenService {
 
     // 加入缓存
     addTokenCache(username, tokenResult);
-
     return ResponseEntity.ok(tokenResult);
   }
 
-  public ResponseEntity<Map<String, Object>> refreshToken(final String refreshToken) {
+  public ResponseEntity<LinkedHashMap<String, Object>> refreshToken(final String refreshToken) {
     // 验证 JWT Token
     try {
       jwtTokenService.validateToken(refreshToken);
@@ -75,7 +74,7 @@ public class TokenService {
     final TokenDetails tokenDetails = (TokenDetails) userDetailsService.loadUserByUsername(username);
 
     // 创建 JWT
-    final Map<String, Object> tokenResult = createToken(
+    final LinkedHashMap<String, Object> tokenResult = createToken(
       username,
       tokenDetails.getNickname(),
       AuthorityUtils.authorityListToSet(tokenDetails.getAuthorities())
@@ -83,7 +82,6 @@ public class TokenService {
 
     // 加入缓存
     addTokenCache(username, tokenResult);
-
     return ResponseEntity.ok(tokenResult);
   }
 
@@ -100,7 +98,7 @@ public class TokenService {
   }
 
 
-  private Map<String, Object> createToken(
+  private LinkedHashMap<String, Object> createToken(
     final String username,
     final String nickname,
     final Set<String> authorities
@@ -108,7 +106,7 @@ public class TokenService {
     final String accessToken = jwtTokenService.createToken(username, JwtTokenService.ACCESS_TOKEN_TYPE);
     final String refreshToken = jwtTokenService.createToken(username, JwtTokenService.REFRESH_TOKEN_TYPE);
 
-    return new HashMap<>() {{
+    return new LinkedHashMap<>() {{
       put("accessToken", accessToken);
       put("refreshToken", refreshToken);
       put("expiresIn", JwtTokenService.EXPIRES_IN_SECONDS);

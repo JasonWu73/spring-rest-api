@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.wuxianjie.springrestapi.shared.operationlog.mapper.OpLogMapper">
+  <select id="selectCountByReqIpLikeEndPointLikeMessageLike" resultType="java.lang.Integer">
+    select count(1)
+    from op_log
+    where request_time between #{startTime} and #{endTime}
+    <if test="requestIp != null">and request_ip like #{requestIp}</if>
+    <if test="endpoint != null">and endpoint like #{endpoint}</if>
+    <if test="message != null">and message like #{message}</if>
+  </select>
+
+  <select id="selectByReqIpLikeEndPointLikeMessageLikeOrderByReqTimeDesc" resultType="java.util.LinkedHashMap">
+    select
+    request_time as requestTime,
+    request_ip as requestIp,
+    endpoint,
+    username,
+    message,
+    method,
+    params
+    from op_log
+    where request_time between #{q.startTime} and #{q.endTime}
+    <if test="q.requestIp != null">and request_ip like #{q.requestIp}</if>
+    <if test="q.endpoint != null">and endpoint like #{q.endpoint}</if>
+    <if test="q.message != null">and message like #{q.message}</if>
+    order by request_time desc
+    limit #{p.offset}, #{p.pageSize}
+  </select>
+
   <insert id="insert">
-    insert into op_log (request_time, request_ip, end_point, username, message, method, params)
-    values (#{requestTime}, #{requestIp}, #{endPoint}, #{username}, #{message}, #{message}, #{params})
+    insert into op_log (request_time, request_ip, endpoint, username, message, method, params)
+    values (#{requestTime}, #{requestIp}, #{endpoint}, #{username}, #{message}, #{method}, #{params})
   </insert>
 </mapper>

@@ -38,14 +38,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     final FilterChain filterChain
   ) throws ServletException, IOException {
     // 获取 Authorization HTTP 请求头并验证
-    final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (StrUtil.isBlank(header) || !header.startsWith("Bearer ")) {
+    final String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (StrUtil.isBlank(bearer) || !bearer.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
       return;
     }
 
     // 获取 JWT Token 并验证
-    final String token = header.split(" ")[1].trim();
+    final String token = bearer.split("\\s+")[1].trim();
     try {
       jwtTokenService.validateToken(token);
     } catch (ValidateException e) {

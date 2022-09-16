@@ -44,7 +44,21 @@ public class SecurityConfig {
   @Bean
   public RoleHierarchy roleHierarchy() {
     RoleHierarchyImpl role = new RoleHierarchyImpl();
-    role.setHierarchy("admin > user");
+
+    final String hierarchyValue = "admin > user\n" +
+      Authority.OperationLog.ROOT + " > " + Authority.OperationLog.VIEW + "\n" +
+
+      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.VIEW + "\n" +
+      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.ADD + "\n" +
+      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.EDIT + "\n" +
+      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.DEL + "\n" +
+
+      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.VIEW + "\n" +
+      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.ADD + "\n" +
+      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.EDIT + "\n" +
+      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.DEL + "\n";
+
+    role.setHierarchy(hierarchyValue);
     return role;
   }
 

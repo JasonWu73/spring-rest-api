@@ -12,4 +12,5 @@ public class Role {
   private LocalDateTime updatedAt;
   private String remark;
   private String name;
+  private String menus;
 }
