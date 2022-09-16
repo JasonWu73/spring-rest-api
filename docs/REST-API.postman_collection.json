@@ -9,98 +9,6 @@
 			"name": "鉴权测试",
 			"item": [
 				{
-					"name": "获取 Access Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.status === \"OK\") {",
-									"  const data = pm.response.json();",
-									"  pm.collectionVariables.set('accessToken', data.accessToken);",
-									"  pm.collectionVariables.set('refreshToken', data.refreshToken);",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"username\": \"wxj\",\n  \"password\": \"111\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/token",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"token"
-							]
-						},
-						"description": "## 请求参数\n\nJSON 请求体：\n\n```json\n{\n  \"username\": \"...\", // 用户名，必填，长度 <= 100\n  \"password\": \"...\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
-					},
-					"response": []
-				},
-				{
-					"name": "刷新 Access Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (pm.response.status === \"OK\") {",
-									"  const data = pm.response.json();",
-									"  pm.collectionVariables.set('accessToken', data.accessToken);",
-									"  pm.collectionVariables.set('refreshToken', data.refreshToken);",
-									"}"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "123",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "text/html",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/token/{{refreshToken}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"token",
-								"{{refreshToken}}"
-							]
-						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/token/{{refreshToken}}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
-					},
-					"response": []
-				},
-				{
 					"name": "管理员",
 					"event": [
 						{
@@ -355,6 +263,162 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "操作日志",
+			"item": [
+				{
+					"name": "获取操作日志分页列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/op-log?pageNumber=1&pageSize=10&startTime=2022-09-16 15:35:55&endTime=2022-09-16 16:00:00",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"op-log"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1",
+									"description": "页码，必填，值 >= 1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10",
+									"description": "每页显示条目个数，必填，值 >= 1"
+								},
+								{
+									"key": "startTime",
+									"value": "2022-09-16 15:35:55",
+									"description": "开始时间，必填，格式为 yyyy-MM-dd HH:mm:ss"
+								},
+								{
+									"key": "endTime",
+									"value": "2022-09-16 16:00:00",
+									"description": "结束时间，必填，格式为 yyyy-MM-dd HH:mm:ss"
+								}
+							]
+						},
+						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 2, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"requestTime\": \"2022-09-16 15:35:57\", // 请求时间\n      \"requestIp\": \"127.0.0.1\", // 请求方 IP\n      \"endpoint\": \"/api/v1/token [POST]\", // 接口端点\n      \"username\": \"zhangsan\", // 用户名\n      \"message\": \"虚拟方法\", // 方法信息\n      \"method\": \"xxx.xxx.test()\" // 方法名\n      \"params\": \"{\\\"request\\\":{\\\"param\\\":\\\"test\\\"}}\" // 方法参数（JSON 字符串）\n    }\n  ]\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "获取 Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.status === \"OK\") {",
+							"  const data = pm.response.json();",
+							"  pm.collectionVariables.set('accessToken', data.accessToken);",
+							"  pm.collectionVariables.set('refreshToken', data.refreshToken);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"su\",\n  \"password\": \"111\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/token",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token"
+					]
+				},
+				"description": "## 请求参数\n\nJSON 请求体：\n\n```json\n{\n  \"username\": \"...\", // 用户名，必填，长度 <= 100\n  \"password\": \"...\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "刷新 Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.status === \"OK\") {",
+							"  const data = pm.response.json();",
+							"  pm.collectionVariables.set('accessToken', data.accessToken);",
+							"  pm.collectionVariables.set('refreshToken', data.refreshToken);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "123",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "text/html",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{host}}/api/v1/token/{{refreshToken}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"token",
+						"{{refreshToken}}"
+					]
+				},
+				"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/token/{refreshToken}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+			},
+			"response": []
 		}
 	],
 	"event": [
