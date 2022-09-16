@@ -1,6 +1,5 @@
 package net.wuxianjie.springrestapi.shared.operationlog.core;
 
-import cn.hutool.core.lang.Console;
 import cn.hutool.core.text.StrSplitter;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.wuxianjie.springrestapi.shared.operationlog.mapper.OpLogMapper;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
 import net.wuxianjie.springrestapi.shared.security.util.ApiUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -35,12 +35,13 @@ import java.util.*;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class OperationLoggAspect {
+public class OpLogAspect {
 
   private final HttpServletRequest request;
   private final Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer;
+  private final OpLogMapper opLogMapper;
 
-  @Around("@annotation(OpLog)")
+  @Around("@annotation(Log)")
   public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
     final LocalDateTime requestTime = LocalDateTime.now();
     final Object result = joinPoint.proceed();
@@ -49,32 +50,34 @@ public class OperationLoggAspect {
   }
 
   private void saveLog(final ProceedingJoinPoint joinPoint, final LocalDateTime requestTime) throws JsonProcessingException {
-    final net.wuxianjie.springrestapi.shared.operationlog.entity.OperationLog operationLog = new net.wuxianjie.springrestapi.shared.operationlog.entity.OperationLog();
-    operationLog.setRequestTime(requestTime);
+    final net.wuxianjie.springrestapi.shared.operationlog.entity.OpLog opLog = new net.wuxianjie.springrestapi.shared.operationlog.entity.OpLog();
+    opLog.setRequestTime(requestTime);
 
     // 请求信息
     final String requestIp = ServletUtil.getClientIP(request);
-    operationLog.setRequestIp(requestIp);
+    opLog.setRequestIp(requestIp);
     final String requestUri = request.getRequestURI();
     final String requestMethod = request.getMethod();
     final String endPoint = StrUtil.format("{} [{}]", requestUri, requestMethod);
-    operationLog.setEndPoint(endPoint);
-    final String username = ApiUtils.getAuthentication().map(TokenDetails::getUsername).orElse("anonymous");
-    operationLog.setUsername(username);
+    opLog.setEndPoint(endPoint);
+    final String username = ApiUtils.getAuthentication()
+      .map(TokenDetails::getUsername)
+      .orElse(null);
+    opLog.setUsername(username);
 
     // 方法信息
     final MethodSignature signature = (MethodSignature) joinPoint.getSignature();
     final Method method = signature.getMethod();
-    final OpLog annotation = method.getAnnotation(OpLog.class);
+    final Log annotation = method.getAnnotation(Log.class);
     if (annotation == null) {
       throw new RuntimeException("未使用操作日志注解");
     }
     final String message = annotation.value();
-    operationLog.setMessage(message);
+    opLog.setMessage(message);
     final String className = joinPoint.getTarget().getClass().getName();
     final String methodName = signature.getName();
     final String qualifiedMethod = StrUtil.format("{}.{}()", className, methodName);
-    operationLog.setMethod(qualifiedMethod);
+    opLog.setMethod(qualifiedMethod);
     final Map<String, Object> paramMap = Optional.ofNullable(joinPoint.getArgs())
       .map(args -> {
         final Object[] values = Arrays.stream(args)
@@ -99,21 +102,21 @@ public class OperationLoggAspect {
         return exclusions.contains(m.getName()) || super.hasIgnoreMarker(m);
       }
     });
-    final String paramJson = objectMapper.writeValueAsString(paramMap);
-    operationLog.setParams(paramJson);
+    final String paramJson = paramMap.isEmpty() ? null : objectMapper.writeValueAsString(paramMap);
+    opLog.setParams(paramJson);
 
     // 打印控制台
     log.info(
       "{} [{}] {} -> {}, method: {}, params: {}",
-      operationLog.getUsername(),
-      operationLog.getRequestIp(),
-      operationLog.getMessage(),
-      operationLog.getEndPoint(),
-      operationLog.getMethod(),
-      operationLog.getParams()
+      opLog.getUsername(),
+      opLog.getRequestIp(),
+      opLog.getMessage(),
+      opLog.getEndPoint(),
+      opLog.getMethod(),
+      opLog.getParams()
     );
 
     // 保存数据库
-    Console.log(operationLog);
+    opLogMapper.insert(opLog);
   }
 }

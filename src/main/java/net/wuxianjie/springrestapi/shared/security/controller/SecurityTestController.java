@@ -1,7 +1,7 @@
 package net.wuxianjie.springrestapi.shared.security.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import net.wuxianjie.springrestapi.shared.operationlog.core.OpLog;
+import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
 import net.wuxianjie.springrestapi.shared.security.annotation.IsAdmin;
 import net.wuxianjie.springrestapi.shared.security.annotation.IsUser;
 import net.wuxianjie.springrestapi.shared.security.dto.TokenDetails;
@@ -27,7 +27,7 @@ public class SecurityTestController {
     return "普通用户";
   }
 
-  @OpLog("测试身份验证")
+  @Log("测试身份验证")
   @GetMapping("logged-in")
   public String loggedIn() {
     final TokenDetails authentication = ApiUtils.getAuthentication().orElseThrow();

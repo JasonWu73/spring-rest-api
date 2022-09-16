@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class OperationLog {
+public class OpLog {
 
   private Integer id;
 

@@ -1,7 +1,7 @@
 package net.wuxianjie.springrestapi.shared.security.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.shared.operationlog.core.OpLog;
+import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
 import net.wuxianjie.springrestapi.shared.security.dto.AuthRequest;
 import net.wuxianjie.springrestapi.shared.security.service.TokenService;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class TokenController {
    *   }
    * }</pre>
    */
-  @OpLog("获取 Access Token")
+  @Log("获取 Access Token")
   @PostMapping("token")
   public ResponseEntity<Map<String, Object>> getToken(@RequestBody @Valid final AuthRequest request) {
     return tokenService.getToken(request);
@@ -56,7 +56,7 @@ public class TokenController {
    *   }
    * }</pre>
    */
-  @OpLog("刷新 Access Token")
+  @Log("刷新 Access Token")
   @PostMapping("token/{refreshToken}")
   public ResponseEntity<Map<String, Object>> refreshToken(@PathVariable final String refreshToken) {
     return tokenService.refreshToken(refreshToken);

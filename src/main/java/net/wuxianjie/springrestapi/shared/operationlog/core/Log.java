@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OpLog {
+public @interface Log {
 
   String value() default "接口描述";
 
