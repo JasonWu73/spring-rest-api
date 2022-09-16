@@ -25,6 +25,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * <a href="https://www.baeldung.com/jackson-json-node-tree-model">Working with Tree Model Nodes in Jackson | Baeldung</a>
+ */
 @Configuration
 public class JsonConfig {
 
