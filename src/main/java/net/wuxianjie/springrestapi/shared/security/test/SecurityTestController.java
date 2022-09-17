@@ -2,8 +2,8 @@ package net.wuxianjie.springrestapi.shared.security.test;
 
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
-import net.wuxianjie.springrestapi.shared.security.ApiUtils;
 import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
+import net.wuxianjie.springrestapi.shared.util.ApiUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

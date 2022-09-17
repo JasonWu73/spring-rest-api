@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.shared.security;
+package net.wuxianjie.springrestapi.shared.security.core;
 
 import lombok.Data;
 

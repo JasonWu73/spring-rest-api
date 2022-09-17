@@ -1,6 +1,6 @@
 package net.wuxianjie.springrestapi.user;
 
-import net.wuxianjie.springrestapi.shared.security.AuthData;
+import net.wuxianjie.springrestapi.shared.security.core.AuthData;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -2,7 +2,6 @@ package net.wuxianjie.springrestapi.shared.security.core;
 
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
-import net.wuxianjie.springrestapi.shared.security.Authority;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

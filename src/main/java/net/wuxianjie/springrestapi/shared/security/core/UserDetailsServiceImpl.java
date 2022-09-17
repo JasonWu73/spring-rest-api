@@ -1,7 +1,6 @@
 package net.wuxianjie.springrestapi.shared.security.core;
 
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.shared.security.AuthData;
 import net.wuxianjie.springrestapi.user.UserMapper;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

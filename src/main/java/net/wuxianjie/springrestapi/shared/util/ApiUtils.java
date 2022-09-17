@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.shared.security;
+package net.wuxianjie.springrestapi.shared.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

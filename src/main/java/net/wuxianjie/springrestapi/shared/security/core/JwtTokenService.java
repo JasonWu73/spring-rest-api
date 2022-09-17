@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.shared.security;
+package net.wuxianjie.springrestapi.shared.security.core;
 
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.jwt.JWT;
@@ -7,7 +7,6 @@ import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.shared.security.core.SecurityProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

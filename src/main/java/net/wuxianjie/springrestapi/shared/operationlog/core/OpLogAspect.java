@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springrestapi.shared.operationlog.OpLog;
 import net.wuxianjie.springrestapi.shared.operationlog.OpLogMapper;
-import net.wuxianjie.springrestapi.shared.security.ApiUtils;
 import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
+import net.wuxianjie.springrestapi.shared.util.ApiUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,12 +34,15 @@ import java.util.Optional;
 /**
  * @see <a href="https://www.appsdeveloperblog.com/a-guide-to-spring-boot-aop-to-record-user-operations/">A guide to Spring Boot AOP to Record User Operations - Apps Developer Blog</a>
  * @see <a href="https://stackoverflow.com/questions/44671154/jackson-filtering-out-fields-without-annotations">java - Jackson filtering out fields without annotations - Stack Overflow</a>
+ * @see <a href="https://www.digitalocean.com/community/tutorials/java-singleton-design-pattern-best-practices-examples">Java Singleton Design Pattern Best Practices with Examples  | DigitalOcean</a>
  */
 @Slf4j
 @Aspect
 @Component
 @RequiredArgsConstructor
 public class OpLogAspect {
+
+  private static ObjectMapper objectMapper;
 
   private final HttpServletRequest request;
   private final Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer;
@@ -96,23 +99,14 @@ public class OpLogAspect {
         return (LinkedHashMap<String, Object>) ArrayUtil.zip(keys, values, true);
       })
       .orElse(new LinkedHashMap<>());
-    final Jackson2ObjectMapperBuilder jsonBuilder = Jackson2ObjectMapperBuilder.json();
-    jackson2ObjectMapperBuilderCustomizer.customize(jsonBuilder);
-    final ObjectMapper objectMapper = jsonBuilder.build().setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
-      @Override
-      public boolean hasIgnoreMarker(final AnnotatedMember m) {
-        final String ignores = annotation.ignores();
-        final List<String> exclusions = StrSplitter.split(ignores, ",", 0, true, true);
-        return exclusions.contains(m.getName()) || super.hasIgnoreMarker(m);
-      }
-    });
+    final ObjectMapper objectMapper = getIgnoreConfigured(annotation);
     final String paramJson = paramMap.isEmpty() ? null : objectMapper.writeValueAsString(paramMap);
     opLog.setParams(paramJson);
 
     // 打印控制台
     log.info(
       "{} [{}] {} -> {}, method: {}, params: {}",
-      opLog.getUsername(),
+      opLog.getUsername() == null ? "开放 API" : opLog.getUsername(),
       opLog.getRequestIp(),
       opLog.getMessage(),
       opLog.getEndpoint(),
@@ -122,5 +116,24 @@ public class OpLogAspect {
 
     // 保存数据库
     opLogMapper.insert(opLog);
+  }
+
+  private ObjectMapper getIgnoreConfigured(final Log annotation) {
+    if (objectMapper == null) {
+      synchronized (this) {
+        final Jackson2ObjectMapperBuilder jsonBuilder = Jackson2ObjectMapperBuilder.json();
+        jackson2ObjectMapperBuilderCustomizer.customize(jsonBuilder);
+        objectMapper = jsonBuilder.build();
+      }
+    }
+    objectMapper.setAnnotationIntrospector(new JacksonAnnotationIntrospector() {
+      @Override
+      public boolean hasIgnoreMarker(final AnnotatedMember m) {
+        final String ignores = annotation.ignores();
+        final List<String> exclusions = StrSplitter.split(ignores, ",", 0, true, true);
+        return exclusions.contains(m.getName()) || super.hasIgnoreMarker(m);
+      }
+    });
+    return objectMapper;
   }
 }

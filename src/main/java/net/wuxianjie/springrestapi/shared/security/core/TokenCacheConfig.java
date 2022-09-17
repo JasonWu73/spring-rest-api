@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.shared.security;
+package net.wuxianjie.springrestapi.shared.security.core;
 
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;

@@ -1,4 +1,4 @@
-package net.wuxianjie.springrestapi.shared.operationlog;
+package net.wuxianjie.springrestapi.user;
 
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationRequest;
@@ -16,9 +16,9 @@ import java.util.LinkedHashMap;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class OpLogController {
+public class UserController {
 
-  private final OpLogService opLogService;
+  private final UserService userService;
 
   /**
    * 获取操作日志分页列表。
@@ -28,11 +28,9 @@ public class OpLogController {
    * pageSize: 10 // 每页显示条目个数，必填，值 >= 1
    * }</pre>
    * @param request <pre>{@code
-   * startTime: 2022-09-16 15:35:55 // 开始时间，必填，格式为 yyyy-MM-dd HH:mm:ss
-   * endTime: 2022-09-16 16:00:00 // 结束时间，必填，格式为 yyyy-MM-dd HH:mm:ss
-   * requestIp: 127 // 请求方 IP，长度 <= 100
-   * endpoint: token // 接口端点，长度 <= 100
-   * message: 获取 Token // 方法信息，长度 <= 100
+   * username: zhangsan // 用户名，长度 <= 100
+   * nickname: 张三 // 用户昵称，长度 <= 100
+   * enabled: 1 // 用户是否启用，1：已启用，0：已禁用
    * }</pre>
    * @return <pre>{@code
    * {
@@ -53,12 +51,12 @@ public class OpLogController {
    * }
    * }</pre>
    */
-  @GetMapping("op-log")
+  @GetMapping("users")
   @PreAuthorize(Authority.OperationLog.HAS_VIEW)
-  public ResponseEntity<PaginationResult<LinkedHashMap<String, Object>>> getLogs(
+  public ResponseEntity<PaginationResult<LinkedHashMap<String, Object>>> getUsers(
     @Valid final PaginationRequest pagination,
-    @Valid final OpLogRequest request
+    @Valid final UserRequest request
   ) {
-    return opLogService.getLogs(pagination, request);
+    return userService.getUsers(pagination, request);
   }
 }
