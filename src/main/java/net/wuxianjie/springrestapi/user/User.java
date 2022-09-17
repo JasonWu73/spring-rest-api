@@ -14,7 +14,7 @@ public class User {
   private String remark;
   private String username;
   private String nickname;
-  private String hashed_password;
+  private String hashedPassword;
   private Boolean enabled;
 
   /**

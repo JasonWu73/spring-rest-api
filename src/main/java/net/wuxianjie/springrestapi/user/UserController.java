@@ -21,7 +21,7 @@ public class UserController {
   private final UserService userService;
 
   /**
-   * 获取操作日志分页列表。
+   * 获取用户分页列表。
    *
    * @param pagination <pre>{@code
    * pageNumber: 1 // 页码，必填，值 >= 1
@@ -30,29 +30,31 @@ public class UserController {
    * @param request <pre>{@code
    * username: zhangsan // 用户名，长度 <= 100
    * nickname: 张三 // 用户昵称，长度 <= 100
-   * enabled: 1 // 用户是否启用，1：已启用，0：已禁用
+   * enabled: 1 // 是否启用：1：已启用，0：已禁用
    * }</pre>
    * @return <pre>{@code
    * {
    *   "pageNumber": 1, // 页码
    *   "pageSize": 10, // 每页显示条目个数
-   *   "total": 2, // 总条目数
+   *   "total": 1, // 总条目数
    *   "list": [ // 具体数据列表
    *     {
-   *       "requestTime": "2022-09-16 15:35:57", // 请求时间
-   *       "requestIp": "127.0.0.1", // 请求方 IP
-   *       "endpoint": "/api/v1/token [POST]", // 接口端点
+   *       "userId": 123, // 用户 ID
+   *       "updatedAt": "2022-09-16 11:44:07", // 修改时间
+   *       "remark": "测试备注", // 备注
    *       "username": "zhangsan", // 用户名
-   *       "message": "虚拟方法", // 方法信息
-   *       "method": "xxx.xxx.test()" // 方法名
-   *       "params": "{\"request\":{\"param\":\"test\"}}" // 方法参数（JSON 字符串）
+   *       "nickname": "张三", // 用户昵称
+   *       "enabled": 1, // 是否启用：1：已启用，0：已禁用
+   *       "roleId": 123, // 角色 ID
+   *       "role": "测试人员", // 角色名
+   *       "menus": "xxx,xxx" // 功能权限
    *     }
    *   ]
    * }
    * }</pre>
    */
   @GetMapping("users")
-  @PreAuthorize(Authority.OperationLog.HAS_VIEW)
+  @PreAuthorize(Authority.UserManagement.HAS_VIEW)
   public ResponseEntity<PaginationResult<LinkedHashMap<String, Object>>> getUsers(
     @Valid final PaginationRequest pagination,
     @Valid final UserRequest request

@@ -31,11 +31,11 @@ public class OpLogService {
       .selectByReqIpLikeEndPointLikeMessageLikeOrderByReqTimeDesc(pagination, request);
 
     // 构造并返回分页结果
-    final PaginationResult<LinkedHashMap<String, Object>> result = new PaginationResult<>();
-    result.setPageNumber(pagination.getPageNumber());
-    result.setPageSize(pagination.getPageSize());
-    result.setTotal(total);
-    result.setList(list);
-    return ResponseEntity.ok(result);
+    return ResponseEntity.ok(new PaginationResult<>(
+      pagination.getPageNumber(),
+      pagination.getPageSize(),
+      total,
+      list
+    ));
   }
 }
