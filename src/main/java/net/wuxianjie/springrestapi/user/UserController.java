@@ -53,7 +53,7 @@ public class UserController {
    * }
    * }</pre>
    */
-  @GetMapping("users")
+  @GetMapping("user")
   @PreAuthorize(Authority.UserManagement.HAS_VIEW)
   public ResponseEntity<PaginationResult<LinkedHashMap<String, Object>>> getUsers(
     @Valid final PaginationRequest pagination,

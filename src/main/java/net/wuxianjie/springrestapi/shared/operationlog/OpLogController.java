@@ -53,7 +53,7 @@ public class OpLogController {
    * }
    * }</pre>
    */
-  @GetMapping("op-logs")
+  @GetMapping("op-log")
   @PreAuthorize(Authority.OperationLog.HAS_VIEW)
   public ResponseEntity<PaginationResult<LinkedHashMap<String, Object>>> getLogs(
     @Valid final PaginationRequest pagination,
