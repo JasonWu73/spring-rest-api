@@ -1,6 +1,7 @@
 package net.wuxianjie.springrestapi.role;
 
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
 import net.wuxianjie.springrestapi.shared.security.core.Authority;
 import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
 import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
@@ -55,6 +56,7 @@ public class RoleController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("新增角色")
   @PostMapping("role")
   @PreAuthorize(Authority.Role.HAS_ADD)
   public ResponseEntity<Void> addRole(@RequestBody @Validated(CreateOne.class) final RoleRequest request) {
@@ -76,6 +78,7 @@ public class RoleController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("更新角色")
   @PutMapping("role/{roleId:\\d+}")
   @PreAuthorize(Authority.Role.HAS_EDIT)
   public ResponseEntity<Void> updateRole(
@@ -93,6 +96,7 @@ public class RoleController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("删除角色")
   @DeleteMapping("role/{roleId:\\d+}")
   @PreAuthorize(Authority.Role.HAS_DEL)
   public ResponseEntity<Void> deleteRole(@PathVariable final int roleId) {

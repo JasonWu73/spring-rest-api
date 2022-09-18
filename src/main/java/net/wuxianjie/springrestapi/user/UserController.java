@@ -1,6 +1,7 @@
 package net.wuxianjie.springrestapi.user;
 
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationRequest;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationResult;
 import net.wuxianjie.springrestapi.shared.security.core.Authority;
@@ -80,6 +81,7 @@ public class UserController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("新增用户")
   @PostMapping("user")
   @PreAuthorize(Authority.User.HAS_ADD)
   public ResponseEntity<Void> addUser(@RequestBody @Validated(CreateOne.class) final UserRequest request) {
@@ -101,6 +103,7 @@ public class UserController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("更新用户")
   @PutMapping("user/{userId:\\d+}")
   @PreAuthorize(Authority.User.HAS_EDIT)
   public ResponseEntity<Void> updateUser(
@@ -123,6 +126,7 @@ public class UserController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("重置密码")
   @PutMapping("user/{userId:\\d+}/reset")
   @PreAuthorize(Authority.User.HAS_RESET)
   public ResponseEntity<Void> resetPassword(
@@ -159,6 +163,7 @@ public class UserController {
    * @return <pre>{@code
    * }</pre>
    */
+  @Log("删除用户")
   @DeleteMapping("user/{userId:\\d+}")
   @PreAuthorize(Authority.User.HAS_DEL)
   public ResponseEntity<Void> deleteUser(@PathVariable final int userId) {
