@@ -21,6 +21,10 @@
     select exists(select 1 from role where name = #{name} and id != #{roleId})
   </select>
 
+  <select id="selectExitsByFullPathLike" resultType="java.lang.Boolean">
+    select exists(select 1 from role where full_path like #{fullPathPrefix})
+  </select>
+
   <select id="selectAll" resultType="java.util.LinkedHashMap">
     select id          as roleId,
            remark,
@@ -73,4 +77,10 @@
         full_path  = replace(full_path, #{oldFullPathPrefix}, #{lower.fullPath})
     where full_path like (#{oldFullPathPrefix} || '%')
   </update>
+
+  <delete id="deleteById">
+    delete
+    from role
+    where id = #{roleId}
+  </delete>
 </mapper>

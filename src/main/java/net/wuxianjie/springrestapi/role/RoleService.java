@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
 import net.wuxianjie.springrestapi.shared.util.ApiUtils;
+import net.wuxianjie.springrestapi.user.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.*;
 public class RoleService {
 
   private final RoleMapper roleMapper;
+  private final UserMapper userMapper;
 
   public ResponseEntity<List<LinkedHashMap<String, Object>>> getRoles() {
     // 获取当前用户角色的所有下级角色
@@ -122,6 +124,31 @@ public class RoleService {
       roleMapper.updateUpdateAtFullPathByFullPathLike(lower, oldFullPath + ".");
     }
 
+    return ResponseEntity.ok().build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public ResponseEntity<Void> deleteRole(final int roleId) {
+    // 当角色存在下级角色时不可删除
+    final Role role = roleMapper.selectById(roleId);
+    if (role == null) {
+      return ResponseEntity.ok().build();
+    }
+
+    final String fullPathPrefix = role.getFullPath() + ".%";
+    final boolean existsLower = roleMapper.selectExitsByFullPathLike(fullPathPrefix);
+    if (existsLower) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "不可删除存在下级的角色");
+    }
+
+    // 当角色已被用户使用时不可删除
+    final boolean userExists = userMapper.selectExistsByRoleId(roleId);
+    if (userExists) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "不可删除已被用户使用中的角色");
+    }
+
+    // 删除数据库
+    roleMapper.deleteById(roleId);
     return ResponseEntity.ok().build();
   }
 

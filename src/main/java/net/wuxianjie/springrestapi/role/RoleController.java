@@ -85,4 +85,17 @@ public class RoleController {
     request.setRoleId(roleId);
     return roleService.updateRole(request);
   }
+
+  /**
+   * 删除角色。
+   *
+   * @param roleId {@code /api/v1/role/{roleId}}
+   * @return <pre>{@code
+   * }</pre>
+   */
+  @DeleteMapping("role/{roleId:\\d+}")
+  @PreAuthorize(Authority.Role.HAS_DEL)
+  public ResponseEntity<Void> deleteRole(@PathVariable final int roleId) {
+    return roleService.deleteRole(roleId);
+  }
 }

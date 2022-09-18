@@ -17,6 +17,8 @@ public interface UserMapper {
 
   boolean selectExistsByUsername(String username);
 
+  boolean selectExistsByRoleId(int roleId);
+
   int selectCountByUsernameLikeNicknameLikeEnabled(UserRequest request);
 
   List<LinkedHashMap<String, Object>> selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(

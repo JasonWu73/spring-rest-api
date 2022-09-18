@@ -30,6 +30,10 @@
     select exists(select 1 from user where username = #{username})
   </select>
 
+  <select id="selectExistsByRoleId" resultType="java.lang.Boolean">
+    select exists(select 1 from user where role_id = #{roleId})
+  </select>
+
   <select id="selectCountByUsernameLikeNicknameLikeEnabled" resultType="java.lang.Integer">
     select count(1)
     from user
