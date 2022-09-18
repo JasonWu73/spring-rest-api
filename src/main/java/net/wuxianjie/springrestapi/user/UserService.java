@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -160,9 +161,10 @@ public class UserService {
     final Role currentUserRole = roleMapper.selectById(token.getRoleId());
     final String currentUserRoleFullPath = currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
     final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
-    final boolean startWithCurrentUserRoleFullPath = StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath);
+    final boolean startWithCurrentUserRoleFullPath = Objects.equals(addedUserFullPath, currentUserRoleFullPath) ||
+      StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath + ".");
     if (!startWithCurrentUserRoleFullPath) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "不可创建上级角色的用户");
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建自身或下级角色的用户");
     }
   }
 

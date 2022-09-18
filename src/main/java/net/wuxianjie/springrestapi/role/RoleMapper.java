@@ -12,6 +12,8 @@ public interface RoleMapper {
 
   boolean selectExitsByName(String name);
 
+  boolean selectExitsByNameIdNot(String name, int roleId);
+
   List<LinkedHashMap<String, Object>> selectAll();
 
   List<LinkedHashMap<String, Object>> selectByFullPathOrLike(String fullPath, String fullPathLike);
@@ -19,4 +21,8 @@ public interface RoleMapper {
   void insert(Role role);
 
   void updateById(Role role);
+
+  void updateUpdateAtParentNameByParentId(Role child);
+
+  void updateUpdateAtFullPathByFullPathLike(Role lower, String oldFullPathPrefix);
 }

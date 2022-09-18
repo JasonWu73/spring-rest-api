@@ -56,7 +56,7 @@ public class UserController {
    * }</pre>
    */
   @GetMapping("user")
-  @PreAuthorize(Authority.UserManagement.HAS_VIEW)
+  @PreAuthorize(Authority.User.HAS_VIEW)
   public ResponseEntity<PaginationResult<LinkedHashMap<String, Object>>> getUsers(
     @Valid final PaginationRequest pagination,
     @Valid final UserRequest request
@@ -81,7 +81,7 @@ public class UserController {
    * }</pre>
    */
   @PostMapping("user")
-  @PreAuthorize(Authority.UserManagement.HAS_ADD)
+  @PreAuthorize(Authority.User.HAS_ADD)
   public ResponseEntity<Void> addUser(@RequestBody @Validated(CreateOne.class) final UserRequest request) {
     return userService.addUser(request);
   }
@@ -102,7 +102,7 @@ public class UserController {
    * }</pre>
    */
   @PutMapping("user/{userId:\\d+}")
-  @PreAuthorize(Authority.UserManagement.HAS_EDIT)
+  @PreAuthorize(Authority.User.HAS_EDIT)
   public ResponseEntity<Void> updateUser(
     @PathVariable final int userId,
     @RequestBody @Validated(UpdateOne.class) final UserRequest request
@@ -124,7 +124,7 @@ public class UserController {
    * }</pre>
    */
   @PutMapping("user/{userId:\\d+}/reset")
-  @PreAuthorize(Authority.UserManagement.HAS_RESET)
+  @PreAuthorize(Authority.User.HAS_RESET)
   public ResponseEntity<Void> resetPassword(
     @PathVariable final int userId,
     @RequestBody @Validated(UpdateTwo.class) final UserRequest request
@@ -160,7 +160,7 @@ public class UserController {
    * }</pre>
    */
   @DeleteMapping("user/{userId:\\d+}")
-  @PreAuthorize(Authority.UserManagement.HAS_DEL)
+  @PreAuthorize(Authority.User.HAS_DEL)
   public ResponseEntity<Void> deleteUser(@PathVariable final int userId) {
     return userService.deleteUser(userId);
   }

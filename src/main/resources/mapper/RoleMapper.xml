@@ -17,6 +17,10 @@
     select exists(select 1 from role where name = #{name})
   </select>
 
+  <select id="selectExitsByNameIdNot" resultType="java.lang.Boolean">
+    select exists(select 1 from role where name = #{name} and id != #{roleId})
+  </select>
+
   <select id="selectAll" resultType="java.util.LinkedHashMap">
     select id          as roleId,
            remark,
@@ -54,5 +58,19 @@
         parent_name = #{parentName},
         full_path   = #{fullPath}
     where id = #{id}
+  </update>
+
+  <update id="updateUpdateAtParentNameByParentId">
+    update role
+    set updated_at  = #{updatedAt},
+        parent_name = #{parentName}
+    where parent_id = #{parentId}
+  </update>
+
+  <update id="updateUpdateAtFullPathByFullPathLike">
+    update role
+    set updated_at = #{lower.updatedAt},
+        full_path  = replace(full_path, #{oldFullPathPrefix}, #{lower.fullPath})
+    where full_path like (#{oldFullPathPrefix} || '%')
   </update>
 </mapper>

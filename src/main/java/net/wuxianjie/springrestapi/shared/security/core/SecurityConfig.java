@@ -47,16 +47,16 @@ public class SecurityConfig {
     final String hierarchyValue = "" +
       Authority.OperationLog.ROOT + " > " + Authority.OperationLog.VIEW + "\n" +
 
-      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.VIEW + "\n" +
-      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.ADD + "\n" +
-      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.EDIT + "\n" +
-      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.DEL + "\n" +
-      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.RESET + "\n" +
+      Authority.User.ROOT + " > " + Authority.User.VIEW + "\n" +
+      Authority.User.ROOT + " > " + Authority.User.ADD + "\n" +
+      Authority.User.ROOT + " > " + Authority.User.EDIT + "\n" +
+      Authority.User.ROOT + " > " + Authority.User.DEL + "\n" +
+      Authority.User.ROOT + " > " + Authority.User.RESET + "\n" +
 
-      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.VIEW + "\n" +
-      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.ADD + "\n" +
-      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.EDIT + "\n" +
-      Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.DEL + "\n";
+      Authority.Role.ROOT + " > " + Authority.Role.VIEW + "\n" +
+      Authority.Role.ROOT + " > " + Authority.Role.ADD + "\n" +
+      Authority.Role.ROOT + " > " + Authority.Role.EDIT + "\n" +
+      Authority.Role.ROOT + " > " + Authority.Role.DEL + "\n";
 
     role.setHierarchy(hierarchyValue);
     return role;

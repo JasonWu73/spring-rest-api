@@ -17,7 +17,7 @@ public final class Authority {
     public static final String HAS_VIEW = "hasAuthority('op_log_view')";
   }
 
-  public static class UserManagement {
+  public static class User {
     public static final String ROOT = "user";
     public static final String VIEW = "user_view";
     public static final String ADD = "user_add";
@@ -33,7 +33,7 @@ public final class Authority {
     public static final String HAS_RESET = "hasAuthority('user_reset')";
   }
 
-  public static class RoleManagement {
+  public static class Role {
     public static final String ROOT = "role";
     public static final String VIEW = "role_view";
     public static final String ADD = "role_add";
