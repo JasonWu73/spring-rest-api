@@ -10,7 +10,13 @@ public interface RoleMapper {
 
   Role selectById(int roleId);
 
+  boolean selectExitsByName(String name);
+
   List<LinkedHashMap<String, Object>> selectAll();
 
   List<LinkedHashMap<String, Object>> selectByFullPathOrLike(String fullPath, String fullPathLike);
+
+  void insert(Role role);
+
+  void updateById(Role role);
 }

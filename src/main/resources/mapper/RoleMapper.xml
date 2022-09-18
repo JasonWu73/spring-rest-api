@@ -13,6 +13,10 @@
     where id = #{roleId}
   </select>
 
+  <select id="selectExitsByName" resultType="java.lang.Boolean">
+    select exists(select 1 from role where name = #{name})
+  </select>
+
   <select id="selectAll" resultType="java.util.LinkedHashMap">
     select id          as roleId,
            remark,
@@ -34,4 +38,21 @@
     where full_path = #{fullPath}
        or full_path like #{fullPathLike}
   </select>
+
+  <insert id="insert" parameterType="net.wuxianjie.springrestapi.role.Role" useGeneratedKeys="true" keyProperty="id">
+    insert into role (created_at, updated_at, remark, name, menus, parent_id, parent_name, full_path)
+    values (#{createdAt}, #{updatedAt}, #{remark}, #{name}, #{menus}, #{parentId}, #{parentName}, #{fullPath})
+  </insert>
+
+  <update id="updateById">
+    update role
+    set updated_at  = #{updatedAt},
+        remark      = #{remark},
+        name        = #{name},
+        menus       = #{menus},
+        parent_id   = #{parentId},
+        parent_name = #{parentName},
+        full_path   = #{fullPath}
+    where id = #{id}
+  </update>
 </mapper>
