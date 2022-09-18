@@ -2,6 +2,7 @@ package net.wuxianjie.springrestapi.user;
 
 import lombok.Data;
 import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
+import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,12 +28,14 @@ public class UserRequest {
   @Size(max = 100, message = "密码最多 100 个字符")
   private String password;
 
-  @NotNull(message = "是否启用不能为 null", groups = CreateOne.class)
+  @NotNull(message = "是否启用不能为 null", groups = {CreateOne.class, UpdateOne.class})
   private Boolean enabled;
 
   @Size(max = 200, message = "备注最多 200 个字符")
   private String remark;
 
-  @NotNull(message = "角色 id 不能为 null", groups = CreateOne.class)
+  @NotNull(message = "角色 id 不能为 null", groups = {CreateOne.class, UpdateOne.class})
   private Integer roleId;
+
+  private Integer userId;
 }

@@ -3,6 +3,7 @@
 <mapper namespace="net.wuxianjie.springrestapi.role.RoleMapper">
   <select id="selectById" resultType="net.wuxianjie.springrestapi.role.Role">
     select id,
+           remark,
            name,
            menus,
            parent_id   as parentId,

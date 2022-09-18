@@ -5,6 +5,7 @@ import net.wuxianjie.springrestapi.shared.pagination.PaginationRequest;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationResult;
 import net.wuxianjie.springrestapi.shared.security.core.Authority;
 import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
+import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -83,5 +84,30 @@ public class UserController {
   @PreAuthorize(Authority.UserManagement.HAS_ADD)
   public ResponseEntity<Void> addUser(@RequestBody @Validated(CreateOne.class) final UserRequest request) {
     return userService.addUser(request);
+  }
+
+  /**
+   * 更新用户。
+   *
+   * @param request <pre>{@code
+   * {
+   *   "enabled": 1, // 是否启用：1：已启用，0：已禁用，必填
+   *   "roleId": 1, // 角色 id，必填
+   *   "nickname": "张三", // 用户昵称，长度 <= 100
+   *   "remark": "测试用户" // 备注，长度 <= 200
+   * }
+   * }</pre>
+   * @return <pre>{@code
+   * {}
+   * }</pre>
+   */
+  @PostMapping("user/{userId:\\d+}")
+  @PreAuthorize(Authority.UserManagement.HAS_EDIT)
+  public ResponseEntity<Void> updateUser(
+    @PathVariable final int userId,
+    @RequestBody @Validated(UpdateOne.class) final UserRequest request
+  ) {
+    request.setUserId(userId);
+    return userService.updateUser(request);
   }
 }

@@ -23,11 +23,14 @@ public final class Authority {
     public static final String ADD = "user_mgmt_add";
     public static final String EDIT = "user_mgmt_edit";
     public static final String DEL = "user_mgmt_del";
+    public static final String RESET = "user_mgmt_reset";
+
 
     public static final String HAS_VIEW = "hasAuthority('user_mgmt_view')";
     public static final String HAS_ADD = "hasAuthority('user_mgmt_add')";
     public static final String HAS_EDIT = "hasAuthority('user_mgmt_edit')";
     public static final String HAS_DEL = "hasAuthority('user_mgmt_del')";
+    public static final String HAS_RESET = "hasAuthority('user_mgmt_reset')";
   }
 
   public static class RoleManagement {

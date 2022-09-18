@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.wuxianjie.springrestapi.user.UserMapper">
+  <select id="selectById" resultType="net.wuxianjie.springrestapi.user.User">
+    select id,
+           remark,
+           username,
+           nickname,
+           hashed_password as hashedPassword,
+           is_enabled      as enabled,
+           role_id         as roleId
+    from user
+    where id = #{userId}
+  </select>
+
   <select id="selectByUsername" resultType="net.wuxianjie.springrestapi.shared.security.core.AuthData">
     select u.username,
            u.hashed_password as hashedPassword,
@@ -54,4 +66,15 @@
     insert into user (created_at, updated_at, remark, username, nickname, hashed_password, is_enabled, role_id)
     values (#{createdAt}, #{updatedAt}, #{remark}, #{username}, #{nickname}, #{hashedPassword}, #{enabled}, #{roleId})
   </insert>
+
+  <update id="updateById">
+    update user
+    set updated_at      = #{updatedAt},
+        remark          = #{remark},
+        nickname        = #{nickname},
+        hashed_password =#{hashedPassword},
+        is_enabled      = #{enabled},
+        role_id         = #{roleId}
+    where id = #{id}
+  </update>
 </mapper>

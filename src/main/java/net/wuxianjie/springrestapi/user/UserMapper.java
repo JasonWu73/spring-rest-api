@@ -11,6 +11,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
+  User selectById(int userId);
+
   AuthData selectByUsername(String username);
 
   boolean selectExistsByUsername(String username);
@@ -23,4 +25,6 @@ public interface UserMapper {
   );
 
   void insert(User user);
+
+  void updateById(User user);
 }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -49,6 +50,7 @@ public class UserService {
     ));
   }
 
+  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> addUser(final UserRequest request) {
     // 用户名唯一性校验
     final String username = request.getUsername();
@@ -57,22 +59,7 @@ public class UserService {
       throw new ApiException(HttpStatus.CONFLICT, "已存在相同用户名");
     }
 
-    // 角色 id 有效性校验
-    final int roleId = request.getRoleId();
-    final Role addedUserRole = roleMapper.selectById(roleId);
-    if (addedUserRole == null) {
-      throw new ApiException(HttpStatus.NOT_FOUND, "角色不存在");
-    }
-
-    // 用户仅可创建自身或下级角色的用户
-    final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
-    final Role currentUserRole = roleMapper.selectById(token.getRoleId());
-    final String currentUserRoleFullPath = currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
-    final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
-    final boolean startWithCurrentUserRoleFullPath = StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath);
-    if (!startWithCurrentUserRoleFullPath) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "不可创建上级角色的用户");
-    }
+    checkForRole(request.getRoleId());
 
     // 密码编码
     final String rawPassword = request.getPassword();
@@ -91,5 +78,44 @@ public class UserService {
     userMapper.insert(user);
 
     return ResponseEntity.ok().build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public ResponseEntity<Void> updateUser(final UserRequest request) {
+    // 数据存在性校验
+    final User user = userMapper.selectById(request.getUserId());
+    if (user == null) {
+      throw new ApiException(HttpStatus.NOT_FOUND, "用户不存在");
+    }
+
+    checkForRole(request.getRoleId());
+
+    // 更新数据库
+    user.setUpdatedAt(LocalDateTime.now());
+    user.setRemark(request.getRemark());
+    user.setNickname(request.getNickname());
+    user.setEnabled(request.getEnabled());
+    user.setRoleId(request.getRoleId());
+    userMapper.updateById(user);
+
+    return ResponseEntity.ok().build();
+  }
+
+  private void checkForRole(final int roleId) {
+    // 角色 id 有效性校验
+    final Role addedUserRole = roleMapper.selectById(roleId);
+    if (addedUserRole == null) {
+      throw new ApiException(HttpStatus.NOT_FOUND, "角色不存在");
+    }
+
+    // 用户仅可创建自身或下级角色的用户
+    final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
+    final Role currentUserRole = roleMapper.selectById(token.getRoleId());
+    final String currentUserRoleFullPath = currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
+    final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
+    final boolean startWithCurrentUserRoleFullPath = StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath);
+    if (!startWithCurrentUserRoleFullPath) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "不可创建上级角色的用户");
+    }
   }
 }

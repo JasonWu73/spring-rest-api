@@ -51,6 +51,7 @@ public class SecurityConfig {
       Authority.UserManagement.ROOT + " > " + Authority.UserManagement.ADD + "\n" +
       Authority.UserManagement.ROOT + " > " + Authority.UserManagement.EDIT + "\n" +
       Authority.UserManagement.ROOT + " > " + Authority.UserManagement.DEL + "\n" +
+      Authority.UserManagement.ROOT + " > " + Authority.UserManagement.RESET + "\n" +
 
       Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.VIEW + "\n" +
       Authority.RoleManagement.ROOT + " > " + Authority.RoleManagement.ADD + "\n" +
