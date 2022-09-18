@@ -458,7 +458,7 @@
 								"user"
 							]
 						},
-						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"username\": \"zhangsan\", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n  \"enabled\": 1, // 是否启用：1：已启用，0：已禁用，必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"username\": \"zhangsan\", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n  \"enabled\": 1, // 是否启用：1：已启用，0：已禁用，必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},
@@ -505,7 +505,7 @@
 								"6"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"enabled\": 1, // 是否启用：1：已启用，0：已禁用，必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"enabled\": 1, // 是否启用：1：已启用，0：已禁用，必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},
@@ -553,7 +553,7 @@
 								"reset"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}/reset\n```\n\nJSON 参数：\n\n```json\n{\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}/reset\n```\n\nJSON 参数：\n\n```json\n{\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},
@@ -591,7 +591,180 @@
 								"6"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "角色管理",
+			"item": [
+				{
+					"name": "获取角色列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/role",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role"
+							]
+						},
+						"description": "## 请求参数\n\n## 返回值\n\n成功时：\n\n```json\n[\n  {\n    \"roleId\": 2, // 角色 id\n    \"remark\": \"角色用途说明\", // 备注\n    \"name\": \"测试账号\", // 角色名\n    \"menus\": \"user_view,role_view\", // 菜单\n    \"parentId\": 1, // 上级角色 id\n    \"parentName\": \"管理员\" // 上级角色名\n  }\n]\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "新增角色",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"测试账号\",\n  \"menus\": \"user_view,role_view\",\n  \"remark\": \"测试用途\",\n  \"parentId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/role",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role"
+							]
+						},
+						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"name\": \"测试账号\", // 角色名，必填，长度 <= 100\n  \"menus\": \"user_view,role_view\", // 菜单，必填，长度 <= 200\n  \"remark\": \"角色用途说明\", // 备注，长度 <= 200\n  \"parentId\": 1 // 上级角色 id\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "更新角色",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"用户\",\n  \"menus\": \"user_view,role_view\",\n  \"remark\": \"普通管理员\",\n  \"parentId\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/role/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role",
+								"2"
+							]
+						},
+						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"name\": \"测试账号\", // 角色名，必填，长度 <= 100\n  \"menus\": \"user_view,role_view\", // 菜单，必填，长度 <= 200\n  \"remark\": \"角色用途说明\", // 备注，长度 <= 200\n  \"parentId\": 1 // 上级角色 id\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "删除角色",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/role/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role",
+								"6"
+							]
+						},
+						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/role/{roleId}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				}
@@ -732,7 +905,7 @@
 						"passwd"
 					]
 				},
-				"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/passwd\n```\n\nJSON 参数：\n\n```json\n{\n  \"oldPassword\": \"111\", // 密码，必填，长度 <= 100\n  \"newPassword\": \"123\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+				"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/passwd\n```\n\nJSON 参数：\n\n```json\n{\n  \"oldPassword\": \"111\", // 密码，必填，长度 <= 100\n  \"newPassword\": \"123\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 			},
 			"response": []
 		}
