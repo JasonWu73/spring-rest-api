@@ -7,10 +7,15 @@
            r.menus,
            u.is_enabled      as enabled,
            u.id              as userId,
-           u.nickname
+           u.nickname,
+           r.id              as roleId
     from user u
            join role r on r.id = u.role_id
     where u.username = #{username}
+  </select>
+
+  <select id="selectExistsByUsername" resultType="java.lang.Boolean">
+    select exists(select 1 from user where username = #{username})
   </select>
 
   <select id="selectCountByUsernameLikeNicknameLikeEnabled" resultType="java.lang.Integer">
@@ -44,4 +49,9 @@
     order by u.updated_at desc
     limit #{p.offset}, #{p.pageSize}
   </select>
+
+  <insert id="insert">
+    insert into user (created_at, updated_at, remark, username, nickname, hashed_password, is_enabled, role_id)
+    values (#{createdAt}, #{updatedAt}, #{remark}, #{username}, #{nickname}, #{hashedPassword}, #{enabled}, #{roleId})
+  </insert>
 </mapper>

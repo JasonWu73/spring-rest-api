@@ -13,4 +13,7 @@ public class Role {
   private String remark;
   private String name;
   private String menus;
+  private Integer parentId;
+  private String parentName;
+  private String fullPath;
 }

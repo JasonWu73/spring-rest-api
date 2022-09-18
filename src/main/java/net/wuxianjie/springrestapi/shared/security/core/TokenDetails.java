@@ -25,6 +25,7 @@ public class TokenDetails implements UserDetails {
   // 业务字段
   private int userId;
   private String nickname;
+  private int roleId;
 
   public TokenDetails(
     final String username,
@@ -32,10 +33,12 @@ public class TokenDetails implements UserDetails {
     final Collection<? extends GrantedAuthority> authorities,
     final boolean enabled,
     final int userId,
-    final String nickname
+    final String nickname,
+    final int roleId
   ) {
     this(username, password, authorities, true, true, true, enabled);
     this.userId = userId;
     this.nickname = nickname;
+    this.roleId = roleId;
   }
 }

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,11 +35,7 @@ public class TokenService {
     final TokenDetails tokenDetails = authenticate(username, request.getPassword());
 
     // 创建 JWT
-    final LinkedHashMap<String, Object> tokenResult = createToken(
-      username,
-      tokenDetails.getNickname(),
-      AuthorityUtils.authorityListToSet(tokenDetails.getAuthorities())
-    );
+    final LinkedHashMap<String, Object> tokenResult = createToken(tokenDetails);
 
     // 加入缓存
     addTokenCache(username, tokenResult);
@@ -74,11 +69,7 @@ public class TokenService {
     final TokenDetails tokenDetails = (TokenDetails) userDetailsService.loadUserByUsername(username);
 
     // 创建 JWT
-    final LinkedHashMap<String, Object> tokenResult = createToken(
-      username,
-      tokenDetails.getNickname(),
-      AuthorityUtils.authorityListToSet(tokenDetails.getAuthorities())
-    );
+    final LinkedHashMap<String, Object> tokenResult = createToken(tokenDetails);
 
     // 加入缓存
     addTokenCache(username, tokenResult);
@@ -98,11 +89,8 @@ public class TokenService {
   }
 
 
-  private LinkedHashMap<String, Object> createToken(
-    final String username,
-    final String nickname,
-    final Set<String> authorities
-  ) {
+  private LinkedHashMap<String, Object> createToken(final TokenDetails token) {
+    final String username = token.getUsername();
     final String accessToken = jwtTokenService.createToken(username, JwtTokenService.ACCESS_TOKEN_TYPE);
     final String refreshToken = jwtTokenService.createToken(username, JwtTokenService.REFRESH_TOKEN_TYPE);
 
@@ -111,8 +99,9 @@ public class TokenService {
       put("refreshToken", refreshToken);
       put("expiresIn", JwtTokenService.EXPIRES_IN_SECONDS);
       put("username", username);
-      put("nickname", nickname);
-      put("authorities", authorities);
+      put("nickname", token.getNickname());
+      put("roleId", token.getRoleId());
+      put("authorities", AuthorityUtils.authorityListToSet(token.getAuthorities()));
     }};
   }
 

@@ -36,6 +36,7 @@ public class TokenController {
    *   "expiresIn": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）
    *   "username": "zhangsan", // 用户名
    *   "nickname": "张三", // 昵称
+   *   "roleId": 1, // 角色 id
    *   "authorities": ["user"] // 权限列表
    * }
    * }</pre>
@@ -57,6 +58,7 @@ public class TokenController {
    *   "expiresIn": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）
    *   "username": "zhangsan", // 用户名
    *   "nickname": "张三", // 昵称
+   *   "roleId": 1, // 角色 id
    *   "authorities": ["user"] // 权限列表
    * }
    * }</pre>

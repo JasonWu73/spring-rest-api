@@ -13,10 +13,14 @@ public interface UserMapper {
 
   AuthData selectByUsername(String username);
 
+  boolean selectExistsByUsername(String username);
+
   int selectCountByUsernameLikeNicknameLikeEnabled(UserRequest request);
 
   List<LinkedHashMap<String, Object>> selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(
     @Param("p") PaginationRequest pagination,
     @Param("q") UserRequest request
   );
+
+  void insert(User user);
 }

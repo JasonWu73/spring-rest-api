@@ -28,7 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       AuthorityUtils.commaSeparatedStringToAuthorityList(authData.getMenus()),
       authData.getEnabled(),
       authData.getUserId(),
-      authData.getNickname()
+      authData.getNickname(),
+      authData.getRoleId()
     );
     /*
     if (!usernameToToken.containsKey(username)) {

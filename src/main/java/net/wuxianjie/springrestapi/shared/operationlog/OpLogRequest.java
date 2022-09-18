@@ -20,12 +20,12 @@ public class OpLogRequest {
   @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
   private LocalDateTime endTime;
 
-  @Size(max = 100, message = "请求方 IP 长度不能大于 100 个字符")
+  @Size(max = 100, message = "请求方 IP 最多 100 个字符")
   private String requestIp;
 
-  @Size(max = 100, message = "接口端点长度不能大于 100 个字符")
+  @Size(max = 100, message = "接口端点最多 100 个字符")
   private String endpoint;
 
-  @Size(max = 100, message = "方法信息长度不能大于 100 个字符")
+  @Size(max = 100, message = "方法信息最多 100 个字符")
   private String message;
 }

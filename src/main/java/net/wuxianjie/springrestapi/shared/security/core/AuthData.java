@@ -14,4 +14,5 @@ public class AuthData {
   // 业务扩展
   private Integer userId;
   private String nickname;
+  private Integer roleId;
 }
