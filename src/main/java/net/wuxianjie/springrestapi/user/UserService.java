@@ -83,10 +83,7 @@ public class UserService {
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> updateUser(final UserRequest request) {
     // 数据存在性校验
-    final User user = userMapper.selectById(request.getUserId());
-    if (user == null) {
-      throw new ApiException(HttpStatus.NOT_FOUND, "用户不存在");
-    }
+    final User user = getUserFromDbMustExists(request.getUserId());
 
     checkForRole(request.getRoleId());
 
@@ -96,6 +93,23 @@ public class UserService {
     user.setNickname(request.getNickname());
     user.setEnabled(request.getEnabled());
     user.setRoleId(request.getRoleId());
+    userMapper.updateById(user);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public ResponseEntity<Void> resetPassword(final UserRequest request) {
+    // 数据存在性校验
+    final User user = getUserFromDbMustExists(request.getUserId());
+
+    // 密码编码
+    final String rawPassword = request.getPassword();
+    final String hashedPassword = passwordEncoder.encode(rawPassword);
+
+    // 更新数据库
+    user.setUpdatedAt(LocalDateTime.now());
+    user.setHashedPassword(hashedPassword);
     userMapper.updateById(user);
 
     return ResponseEntity.ok().build();
@@ -117,5 +131,13 @@ public class UserService {
     if (!startWithCurrentUserRoleFullPath) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "不可创建上级角色的用户");
     }
+  }
+
+  private User getUserFromDbMustExists(final Integer userId) {
+    final User user = userMapper.selectById(userId);
+    if (user == null) {
+      throw new ApiException(HttpStatus.NOT_FOUND, "用户不存在");
+    }
+    return user;
   }
 }

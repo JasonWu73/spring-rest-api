@@ -6,6 +6,7 @@ import net.wuxianjie.springrestapi.shared.pagination.PaginationResult;
 import net.wuxianjie.springrestapi.shared.security.core.Authority;
 import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
 import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
+import net.wuxianjie.springrestapi.shared.validation.group.UpdateTwo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -89,6 +90,7 @@ public class UserController {
   /**
    * 更新用户。
    *
+   * @param userId {@code /api/v1/user/{userId}}
    * @param request <pre>{@code
    * {
    *   "enabled": 1, // 是否启用：1：已启用，0：已禁用，必填
@@ -109,5 +111,28 @@ public class UserController {
   ) {
     request.setUserId(userId);
     return userService.updateUser(request);
+  }
+
+  /**
+   * 重置密码。
+   *
+   * @param userId {@code /api/v1/user/{userId}/reset}
+   * @param request <pre>{@code
+   * {
+   *   "password": "123", // 密码，必填，长度 <= 100
+   * }
+   * }</pre>
+   * @return <pre>{@code
+   * {}
+   * }</pre>
+   */
+  @PostMapping("user/{userId:\\d+}/reset")
+  @PreAuthorize(Authority.UserManagement.HAS_RESET)
+  public ResponseEntity<Void> resetPassword(
+    @PathVariable final int userId,
+    @RequestBody @Validated(UpdateTwo.class) final UserRequest request
+  ) {
+    request.setUserId(userId);
+    return userService.resetPassword(request);
   }
 }

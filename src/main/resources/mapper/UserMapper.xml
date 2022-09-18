@@ -72,7 +72,7 @@
     set updated_at      = #{updatedAt},
         remark          = #{remark},
         nickname        = #{nickname},
-        hashed_password =#{hashedPassword},
+        hashed_password = #{hashedPassword},
         is_enabled      = #{enabled},
         role_id         = #{roleId}
     where id = #{id}

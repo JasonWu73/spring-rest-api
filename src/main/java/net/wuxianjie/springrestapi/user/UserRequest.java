@@ -3,6 +3,7 @@ package net.wuxianjie.springrestapi.user;
 import lombok.Data;
 import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
 import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
+import net.wuxianjie.springrestapi.shared.validation.group.UpdateTwo;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class UserRequest {
   @Size(max = 100, message = "用户昵称最多 100 个字符")
   private String nickname;
 
-  @NotBlank(message = "密码不能为空", groups = CreateOne.class)
+  @NotBlank(message = "密码不能为空", groups = {CreateOne.class, UpdateTwo.class})
   @Size(max = 100, message = "密码最多 100 个字符")
   private String password;
 
