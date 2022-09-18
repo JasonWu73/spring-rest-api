@@ -115,6 +115,33 @@ public class UserService {
     return ResponseEntity.ok().build();
   }
 
+  @Transactional(rollbackFor = Exception.class)
+  public ResponseEntity<Void> changePassword(final PasswdRequest request) {
+    // 新旧密码不能相同
+    final String oldPassword = request.getOldPassword();
+    final String newPassword = request.getNewPassword();
+    if (oldPassword.equals(newPassword)) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "新旧密码不能相同");
+    }
+
+    // 比较传入的旧密码是否与数据库中的一致
+    final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
+    final User user = getUserFromDbMustExists(token.getUserId());
+    if (!passwordEncoder.matches(oldPassword, user.getHashedPassword())) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "旧密码错误");
+    }
+
+    // 密码编码
+    final String hashedPassword = passwordEncoder.encode(newPassword);
+
+    // 更新数据库
+    user.setUpdatedAt(LocalDateTime.now());
+    user.setHashedPassword(hashedPassword);
+    userMapper.updateById(user);
+
+    return ResponseEntity.ok().build();
+  }
+
   private void checkForRole(final int roleId) {
     // 角色 id 有效性校验
     final Role addedUserRole = roleMapper.selectById(roleId);

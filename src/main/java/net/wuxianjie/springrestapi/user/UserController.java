@@ -103,7 +103,7 @@ public class UserController {
    * {}
    * }</pre>
    */
-  @PostMapping("user/{userId:\\d+}")
+  @PutMapping("user/{userId:\\d+}")
   @PreAuthorize(Authority.UserManagement.HAS_EDIT)
   public ResponseEntity<Void> updateUser(
     @PathVariable final int userId,
@@ -126,7 +126,7 @@ public class UserController {
    * {}
    * }</pre>
    */
-  @PostMapping("user/{userId:\\d+}/reset")
+  @PutMapping("user/{userId:\\d+}/reset")
   @PreAuthorize(Authority.UserManagement.HAS_RESET)
   public ResponseEntity<Void> resetPassword(
     @PathVariable final int userId,
@@ -134,5 +134,25 @@ public class UserController {
   ) {
     request.setUserId(userId);
     return userService.resetPassword(request);
+  }
+
+  /**
+   * 修改密码。
+   *
+   * @param request <pre>{@code
+   * {
+   *   "oldPassword": "111", // 密码，必填，长度 <= 100
+   *   "newPassword": "123" // 密码，必填，长度 <= 100
+   * }
+   * }</pre>
+   * @return <pre>{@code
+   * {}
+   * }</pre>
+   */
+  @PostMapping("user/passwd")
+  public ResponseEntity<Void> changePassword(
+    @RequestBody @Valid final PasswdRequest request
+  ) {
+    return userService.changePassword(request);
   }
 }
