@@ -142,6 +142,12 @@ public class UserService {
     return ResponseEntity.ok().build();
   }
 
+  @Transactional(rollbackFor = Exception.class)
+  public ResponseEntity<Void> deleteUser(final int userId) {
+    userMapper.deleteById(userId);
+    return ResponseEntity.ok().build();
+  }
+
   private void checkForRole(final int roleId) {
     // 角色 id 有效性校验
     final Role addedUserRole = roleMapper.selectById(roleId);

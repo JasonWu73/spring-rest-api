@@ -155,4 +155,18 @@ public class UserController {
   ) {
     return userService.changePassword(request);
   }
+
+  /**
+   * 删除用户。
+   *
+   * @param userId {@code /api/v1/user/{userId}}
+   * @return <pre>{@code
+   * {}
+   * }</pre>
+   */
+  @DeleteMapping("user/{userId:\\d+}")
+  @PreAuthorize(Authority.UserManagement.HAS_DEL)
+  public ResponseEntity<Void> deleteUser(@PathVariable final int userId) {
+    return userService.deleteUser(userId);
+  }
 }

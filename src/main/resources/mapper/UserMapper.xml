@@ -77,4 +77,10 @@
         role_id         = #{roleId}
     where id = #{id}
   </update>
+
+  <delete id="deleteById">
+    delete
+    from user
+    where id = #{userId}
+  </delete>
 </mapper>
