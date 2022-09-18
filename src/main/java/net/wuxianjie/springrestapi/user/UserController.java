@@ -78,7 +78,6 @@ public class UserController {
    * }
    * }</pre>
    * @return <pre>{@code
-   * {}
    * }</pre>
    */
   @PostMapping("user")
@@ -100,7 +99,6 @@ public class UserController {
    * }
    * }</pre>
    * @return <pre>{@code
-   * {}
    * }</pre>
    */
   @PutMapping("user/{userId:\\d+}")
@@ -123,7 +121,6 @@ public class UserController {
    * }
    * }</pre>
    * @return <pre>{@code
-   * {}
    * }</pre>
    */
   @PutMapping("user/{userId:\\d+}/reset")
@@ -146,7 +143,6 @@ public class UserController {
    * }
    * }</pre>
    * @return <pre>{@code
-   * {}
    * }</pre>
    */
   @PostMapping("user/passwd")
@@ -161,7 +157,6 @@ public class UserController {
    *
    * @param userId {@code /api/v1/user/{userId}}
    * @return <pre>{@code
-   * {}
    * }</pre>
    */
   @DeleteMapping("user/{userId:\\d+}")

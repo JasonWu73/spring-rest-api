@@ -18,31 +18,31 @@ public final class Authority {
   }
 
   public static class UserManagement {
-    public static final String ROOT = "user_mgmt";
-    public static final String VIEW = "user_mgmt_view";
-    public static final String ADD = "user_mgmt_add";
-    public static final String EDIT = "user_mgmt_edit";
-    public static final String DEL = "user_mgmt_del";
-    public static final String RESET = "user_mgmt_reset";
+    public static final String ROOT = "user";
+    public static final String VIEW = "user_view";
+    public static final String ADD = "user_add";
+    public static final String EDIT = "user_edit";
+    public static final String DEL = "user_del";
+    public static final String RESET = "user_reset";
 
 
-    public static final String HAS_VIEW = "hasAuthority('user_mgmt_view')";
-    public static final String HAS_ADD = "hasAuthority('user_mgmt_add')";
-    public static final String HAS_EDIT = "hasAuthority('user_mgmt_edit')";
-    public static final String HAS_DEL = "hasAuthority('user_mgmt_del')";
-    public static final String HAS_RESET = "hasAuthority('user_mgmt_reset')";
+    public static final String HAS_VIEW = "hasAuthority('user_view')";
+    public static final String HAS_ADD = "hasAuthority('user_add')";
+    public static final String HAS_EDIT = "hasAuthority('user_edit')";
+    public static final String HAS_DEL = "hasAuthority('user_del')";
+    public static final String HAS_RESET = "hasAuthority('user_reset')";
   }
 
   public static class RoleManagement {
-    public static final String ROOT = "role_mgmt";
-    public static final String VIEW = "role_mgmt_view";
-    public static final String ADD = "role_mgmt_add";
-    public static final String EDIT = "role_mgmt_edit";
-    public static final String DEL = "role_mgmt_del";
+    public static final String ROOT = "role";
+    public static final String VIEW = "role_view";
+    public static final String ADD = "role_add";
+    public static final String EDIT = "role_edit";
+    public static final String DEL = "role_del";
 
-    public static final String HAS_VIEW = "hasAuthority('role_mgmt_view')";
-    public static final String HAS_ADD = "hasAuthority('role_mgmt_add')";
-    public static final String HAS_EDIT = "hasAuthority('role_mgmt_edit')";
-    public static final String HAS_DEL = "hasAuthority('role_mgmt_del')";
+    public static final String HAS_VIEW = "hasAuthority('role_view')";
+    public static final String HAS_ADD = "hasAuthority('role_add')";
+    public static final String HAS_EDIT = "hasAuthority('role_edit')";
+    public static final String HAS_DEL = "hasAuthority('role_del')";
   }
 }

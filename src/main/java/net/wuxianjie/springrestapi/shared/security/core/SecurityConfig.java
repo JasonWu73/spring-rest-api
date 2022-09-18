@@ -44,7 +44,7 @@ public class SecurityConfig {
   public RoleHierarchy roleHierarchy() {
     RoleHierarchyImpl role = new RoleHierarchyImpl();
 
-    final String hierarchyValue = "admin > user\n" +
+    final String hierarchyValue = "" +
       Authority.OperationLog.ROOT + " > " + Authority.OperationLog.VIEW + "\n" +
 
       Authority.UserManagement.ROOT + " > " + Authority.UserManagement.VIEW + "\n" +
