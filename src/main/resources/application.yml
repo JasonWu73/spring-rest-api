@@ -1,7 +1,7 @@
 # 部署时，将 application.yml 放于与 Jar 同级目录的 config 子目录下
 server:
   # HTTP 服务监听端口
-  port: 8080
+  port: 8090
 spring:
   datasource:
     url: jdbc:sqlite:app.db

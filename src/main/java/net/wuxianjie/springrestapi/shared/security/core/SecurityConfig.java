@@ -71,6 +71,11 @@ public class SecurityConfig {
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
       .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
       .antMatchers("/api/v1/public/**").permitAll()
+      .antMatchers("/favicon.ico").permitAll()
+      .antMatchers("/", "/index.html").permitAll()
+      .antMatchers("/css/**").permitAll()
+      .antMatchers("/img/**").permitAll()
+      .antMatchers("/js/**").permitAll()
       // 私有请求端点
       .anyRequest().authenticated()
       // 启用 CORS 并禁用 CSRF
