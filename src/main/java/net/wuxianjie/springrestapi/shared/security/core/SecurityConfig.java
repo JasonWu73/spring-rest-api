@@ -67,17 +67,11 @@ public class SecurityConfig {
     http
       // 设置请求端点的权限
       .authorizeRequests()
-      // 公共请求端点
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
       .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
-      .antMatchers("/api/v1/public/**").permitAll()
-      .antMatchers("/favicon.ico").permitAll()
-      .antMatchers("/", "/index.html").permitAll()
-      .antMatchers("/css/**").permitAll()
-      .antMatchers("/img/**").permitAll()
-      .antMatchers("/js/**").permitAll()
-      // 私有请求端点
-      .anyRequest().authenticated()
+      .antMatchers("/api/public/**").permitAll()
+      .antMatchers("/api/**").authenticated()
+      .anyRequest().permitAll()
       // 启用 CORS 并禁用 CSRF
       .and().cors().and().csrf().disable()
       // 将会话管理设置为无状态
