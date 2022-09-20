@@ -78,12 +78,12 @@ public class SecurityConfig {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       // 设置异常处理程序
       .and().exceptionHandling()
-      // 设置身份验证（Authentication）异常处理程序，对应 401 HTTP 状态
+      // 设置身份验证（Authentication）异常处理程序，对应 401 HTTP 状态码
       .authenticationEntryPoint((request, response, authException) -> {
         final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", authException);
         handlerExceptionResolver.resolveException(request, response, null, apiException);
       })
-      // 设置授权（Authorization）异常处理程序，对应 403 HTTP 状态
+      // 设置授权（Authorization）异常处理程序，对应 403 HTTP 状态码
       .accessDeniedHandler((request, response, accessDeniedException) -> {
         final ApiException apiException = new ApiException(HttpStatus.FORBIDDEN, "权限不足", accessDeniedException);
         handlerExceptionResolver.resolveException(request, response, null, apiException);
