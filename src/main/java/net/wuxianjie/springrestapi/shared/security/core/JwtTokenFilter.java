@@ -6,6 +6,7 @@ import cn.hutool.core.exceptions.ValidateException;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -22,11 +26,35 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <a href="https://stackoverflow.com/questions/62065673/with-spring-security-how-do-i-determine-if-the-current-api-request-should-be-aut">With Spring Security how do i determine if the current api request should be authenticated or not? - Stack Overflow</a>
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
+
+  private static final RequestMatcher ALL_API_REQUEST_MATCHER;
+  private static final RequestMatcher PUBLIC_API_REQUEST_MATCHER;
+
+  static {
+    // 所有 API
+    final String[] requiresAuthenticationEndpoints = {"/api/**"};
+    final List<RequestMatcher> apiMatchers = new ArrayList<>();
+    for (final String pattern : requiresAuthenticationEndpoints) {
+      apiMatchers.add(new AntPathRequestMatcher(pattern, null));
+    }
+    ALL_API_REQUEST_MATCHER = new OrRequestMatcher(apiMatchers);
+
+    // API 中无需鉴权的部分
+    final List<RequestMatcher> publicApiMatchers = new ArrayList<>();
+    publicApiMatchers.add(new AntPathRequestMatcher("/api/v1/token", HttpMethod.POST.name()));
+    publicApiMatchers.add(new AntPathRequestMatcher("/api/v1/token/*", HttpMethod.POST.name()));
+    publicApiMatchers.add(new AntPathRequestMatcher("/api/*/public/**", null));
+    PUBLIC_API_REQUEST_MATCHER = new OrRequestMatcher(publicApiMatchers);
+  }
 
   private final HandlerExceptionResolver handlerExceptionResolver;
   private final UserDetailsService userDetailsService;
@@ -39,6 +67,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     final HttpServletResponse response,
     final FilterChain filterChain
   ) throws ServletException, IOException {
+    // 1. 若访问的不是 REST API（静态资源），则无需身份验证
+    // 2. 若访问的是 REST API，但该 API 是公开的，则也无需身份验证
+    final boolean isApiRequest = ALL_API_REQUEST_MATCHER.matches(request);
+    final boolean isPublicApiRequest = PUBLIC_API_REQUEST_MATCHER.matches(request);
+    if (!isApiRequest || isPublicApiRequest) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     // 获取 Authorization HTTP 请求头并验证
     final String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (bearer == null) {

@@ -67,6 +67,7 @@ public class SecurityConfig {
     http
       // 设置请求端点的权限
       .authorizeRequests()
+      // 开放 API 除了此外配置外，于 JwtTokenFilter 再配置，以免过度 Token 身份验证
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
       .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
       .antMatchers("/api/*/public/**").permitAll()
