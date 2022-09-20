@@ -3,6 +3,7 @@ package net.wuxianjie.springrestapi.shared.security.core;
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWTException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,7 +47,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     final String token = bearer.split("\\s+")[1].trim();
     try {
       jwtTokenService.validateToken(token);
-    } catch (ValidateException e) {
+    } catch (JWTException | ValidateException e) {
       filterChain.doFilter(request, response);
       return;
     }
