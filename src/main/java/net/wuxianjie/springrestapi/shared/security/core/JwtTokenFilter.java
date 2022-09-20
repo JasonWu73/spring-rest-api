@@ -1,7 +1,8 @@
 package net.wuxianjie.springrestapi.shared.security.core;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.exceptions.ExceptionUtil;
+import cn.hutool.core.exceptions.ValidateException;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import org.springframework.http.HttpHeaders;
@@ -40,10 +41,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
     // 获取 Authorization HTTP 请求头并验证
     final String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (StrUtil.isBlank(bearer) || !bearer.startsWith("Bearer ")) {
-      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Authorization 值错误");
+    if (bearer == null) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+    if (!bearer.startsWith("Bearer ")) {
+      final RuntimeException exception = new RuntimeException("Authorization 值错误 [" + bearer + "]");
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", exception);
       handlerExceptionResolver.resolveException(request, response, null, apiException);
-      // filterChain.doFilter(request, response);
       return;
     }
 
@@ -51,10 +56,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     final String token = bearer.split("\\s+")[1].trim();
     try {
       jwtTokenService.validateToken(token);
-    } catch (RuntimeException e) {
-      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Token 错误", e);
+    } catch (ValidateException e) {
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", e);
       handlerExceptionResolver.resolveException(request, response, null, apiException);
-      // filterChain.doFilter(request, response);
+      return;
+    } catch (RuntimeException e) {
+      final RuntimeException exception = new RuntimeException(
+        "Token 错误 [" + token + "]; nested exception is " + ExceptionUtil.getMessage(e)
+      );
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", exception);
+      handlerExceptionResolver.resolveException(request, response, null, apiException);
       return;
     }
 
@@ -64,18 +75,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     // 验证 Token 是否为 Access Token
     if (!JwtTokenService.ACCESS_TOKEN_TYPE.equals(type)) {
-      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Token 类型错误");
+      final RuntimeException exception = new RuntimeException("非 Access Token");
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", exception);
       handlerExceptionResolver.resolveException(request, response, null, apiException);
-      // filterChain.doFilter(request, response);
       return;
     }
 
     // 判断 Access Token 是否为当前有效的 Token
     final CachedToken cachedToken = usernameToToken.get(username, false);
     if (cachedToken == null || !cachedToken.getAccessToken().equals(token)) {
-      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Token 已失效");
+      final RuntimeException exception = new RuntimeException("Access Token 已失效");
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", exception);
       handlerExceptionResolver.resolveException(request, response, null, apiException);
-      // filterChain.doFilter(request, response);
       return;
     }
 
