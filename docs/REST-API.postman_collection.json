@@ -6,265 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "鉴权测试",
-			"item": [
-				{
-					"name": "管理员",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/test/admin",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"test",
-								"admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "普通用户",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/test/user",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"test",
-								"user"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "已登录用户",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/test/logged-in",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"test",
-								"logged-in"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "参数校验",
-			"item": [
-				{
-					"name": "默认分组",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bool\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/test/validator-default",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"test",
-								"validator-default"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "保存分组",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bool\": true,\n  \"dateTime\": \"2022-09-13 18:12:45\",\n  \"user\": {\n    \"username\": \"wxj\",\n    \"password\": \"123\"\n  }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/test/validator-save",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"test",
-								"validator-save"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "更新分组",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"bool\": true,\n  \"type\": 2\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/test/validator-update",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"test",
-								"validator-update"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "操作日志",
 			"item": [
 				{
@@ -810,7 +551,7 @@
 						"token"
 					]
 				},
-				"description": "## 请求参数\n\nJSON 请求体：\n\n```json\n{\n  \"username\": \"...\", // 用户名，必填，长度 <= 100\n  \"password\": \"...\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"roleId\": 1, // 角色 id\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+				"description": "## 请求参数\n\nJSON 请求体：\n\n```json\n{\n  \"username\": \"...\", // 用户名，必填，长度 <= 100\n  \"password\": \"...\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 			},
 			"response": []
 		},
@@ -835,13 +576,14 @@
 				"method": "POST",
 				"header": [
 					{
-						"key": "Authorization",
-						"value": "123",
-						"type": "text"
-					},
-					{
 						"key": "Accept",
 						"value": "text/html",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}",
 						"type": "text",
 						"disabled": true
 					}
@@ -933,7 +675,7 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "127.0.0.1:8090"
+			"value": "192.168.2.42:8091"
 		},
 		{
 			"key": "accessToken",
