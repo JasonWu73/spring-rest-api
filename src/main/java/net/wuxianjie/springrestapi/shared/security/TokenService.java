@@ -1,7 +1,6 @@
 package net.wuxianjie.springrestapi.shared.security;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.exceptions.ValidateException;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.security.core.CachedToken;
@@ -46,7 +45,7 @@ public class TokenService {
     // 验证 JWT Token
     try {
       jwtTokenService.validateToken(refreshToken);
-    } catch (ValidateException e) {
+    } catch (RuntimeException e) {
       throw new ApiException(HttpStatus.UNAUTHORIZED, "非法 Token", e);
     }
 
@@ -62,7 +61,7 @@ public class TokenService {
     // 判断 Refresh Token 是否为当前有效的 Token
     final CachedToken cachedToken = usernameToToken.get(username, false);
     if (cachedToken == null || !cachedToken.getRefreshToken().equals(refreshToken)) {
-      throw new ApiException(HttpStatus.UNAUTHORIZED, "无效 Refresh Token");
+      throw new ApiException(HttpStatus.UNAUTHORIZED, "Refresh Token 已失效");
     }
 
     // 获取 Token 详细信息
