@@ -100,7 +100,6 @@ public class TokenService {
       put("expiresIn", JwtTokenService.EXPIRES_IN_SECONDS);
       put("username", username);
       put("nickname", token.getNickname());
-      put("roleId", token.getRoleId());
       put("authorities", AuthorityUtils.authorityListToSet(token.getAuthorities()));
     }};
   }
