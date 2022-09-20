@@ -1,11 +1,11 @@
 package net.wuxianjie.springrestapi.shared.security.core;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.jwt.JWTException;
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
+  private final HandlerExceptionResolver handlerExceptionResolver;
   private final UserDetailsService userDetailsService;
   private final TimedCache<String, CachedToken> usernameToToken;
   private final JwtTokenService jwtTokenService;
@@ -39,7 +41,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     // 获取 Authorization HTTP 请求头并验证
     final String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (StrUtil.isBlank(bearer) || !bearer.startsWith("Bearer ")) {
-      filterChain.doFilter(request, response);
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Authorization 值错误");
+      handlerExceptionResolver.resolveException(request, response, null, apiException);
+      // filterChain.doFilter(request, response);
       return;
     }
 
@@ -47,8 +51,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     final String token = bearer.split("\\s+")[1].trim();
     try {
       jwtTokenService.validateToken(token);
-    } catch (JWTException | ValidateException e) {
-      filterChain.doFilter(request, response);
+    } catch (RuntimeException e) {
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Token 错误", e);
+      handlerExceptionResolver.resolveException(request, response, null, apiException);
+      // filterChain.doFilter(request, response);
       return;
     }
 
@@ -58,14 +64,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     // 验证 Token 是否为 Access Token
     if (!JwtTokenService.ACCESS_TOKEN_TYPE.equals(type)) {
-      filterChain.doFilter(request, response);
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Token 类型错误");
+      handlerExceptionResolver.resolveException(request, response, null, apiException);
+      // filterChain.doFilter(request, response);
       return;
     }
 
     // 判断 Access Token 是否为当前有效的 Token
     final CachedToken cachedToken = usernameToToken.get(username, false);
     if (cachedToken == null || !cachedToken.getAccessToken().equals(token)) {
-      filterChain.doFilter(request, response);
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "Token 已失效");
+      handlerExceptionResolver.resolveException(request, response, null, apiException);
+      // filterChain.doFilter(request, response);
       return;
     }
 
@@ -82,9 +92,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
-    } catch (UsernameNotFoundException ignore) {
-    } finally {
       filterChain.doFilter(request, response);
+    } catch (UsernameNotFoundException e) {
+      final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", e);
+      handlerExceptionResolver.resolveException(request, response, null, apiException);
     }
   }
 }
