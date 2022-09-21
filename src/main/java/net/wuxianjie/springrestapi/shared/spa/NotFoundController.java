@@ -10,13 +10,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Controller
 public class NotFoundController {
 
   @RequestMapping("/api/v1/version")
-  public ResponseEntity<Map<String, Object>> getVersion() {
+  public ResponseEntity<LinkedHashMap<String, Object>> getVersion() {
     return ResponseEntity.ok(new LinkedHashMap<>() {{
       put("version", "v1.0.0");
       put("name", "REST API 项目");
@@ -33,7 +32,7 @@ public class NotFoundController {
   }
 
   @RequestMapping("/404")
-  public ResponseEntity<Map<String, Object>> error() {
+  public ResponseEntity<LinkedHashMap<String, Object>> error() {
     throw new ApiException(HttpStatus.NOT_FOUND, "API 不存在");
   }
 }
