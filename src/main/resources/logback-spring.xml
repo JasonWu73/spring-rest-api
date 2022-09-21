@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  部署时，将 logback-spring.xml 放于与 Jar 同级目录的 config 子目录下，并通过如下命令运行程序：
-  java -jar xxx.jar \-\-logging.config=file:./config/logback-spring.xml`
+  部署时将 `logback-spring.xml` 放于与 Jar 同级目录的 `config` 子目录下，并通过如下命令运行程序：
+  `java -jar xxx.jar &#45;&#45;logging.config=file:./config/logback-spring.xml`
 -->
 <configuration>
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-  <!-- 日志文件的存放目录，绝对或相对路径。注意：哪怕在 Windows 中也要使用 / 作为目录分隔符 -->
+  <!-- 日志文件的存放目录, 绝对或相对路径. 注意: 哪怕在 Windows 中也要使用 `/` 作为目录分隔符 -->
   <property name="LOG_FILE_DIR" value="logs"/>
-  <!-- 日志文件的名称（不包含扩展名 .log） -->
+  <!-- 日志文件的名称 (不包含扩展名 .log) -->
   <property name="LOG_FILE_NAME" value="app"/>
-  <!-- 每个文件大小的最大估值（非精确值，单位有 B（默认）、KB、MB 或 GB）-->
+  <!-- 每个文件大小的最大估值 (非精确值, 单位有 B (默认), KB, MB 或 GB) -->
   <property name="MAX_FILE_SIZE" value="100MB"/>
   <!-- 保留的归档文件的最大天数 -->
   <property name="MAX_HISTORY" value="60"/>
@@ -27,18 +27,24 @@
 
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <fileNamePattern>${LOG_FILE_DIR}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-      <!-- 设置每个日志文件的最大尺寸应保持在多少大小左右，默认为 10 MB。如果设置了该属性，将在文件大小达到阈值或新的一天开始时生成新的日志文件 -->
+      <!--
+        设置每个日志文件的最大尺寸应保持在多少大小左右, 默认为 10 MB.
+        如果设置了该属性, 将在文件大小达到阈值或新的一天开始时生成新的日志文件
+      -->
       <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
-      <!-- 设置日志最大保存的天数，默认为 7 天。如果设置了该属性，将会删除超过指定天数的归档日志文件 -->
+      <!-- 设置日志最大保存的天数, 默认为 7 天. 如果设置了该属性, 将会删除超过指定天数的归档日志文件 -->
       <maxHistory>${MAX_HISTORY}</maxHistory>
-      <!-- 设置所有日志文件的总大小（MB, GB）。如果设置了该属性，将会删除最旧的日志文件，以保持总大小不超过指定值 -->
+      <!-- 设置所有日志文件的总大小 (MB, GB). 如果设置了该属性, 将会删除最旧的日志文件, 以保持总大小不超过指定值 -->
       <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
-      <!-- 设置 Logback 是否在启动时清理存档的日志文件，默认为 false。true：在程序启动时，根据 totalSizeCap 和 maxHistory 的值来清理旧的日志文件 -->
+      <!--
+        设置 Logback 是否在启动时清理存档的日志文件, 默认为 false.
+        true: 在程序启动时, 根据 `totalSizeCap` 和 `maxHistory` 的值来清理旧的日志文件
+      -->
       <cleanHistoryOnStart>true</cleanHistoryOnStart>
     </rollingPolicy>
   </appender>
 
-  <!-- additivity="false"：不要追加日志输出至 <root> -->
+  <!-- additivity="false": 不要追加日志输出至 <root> -->
   <!--
   <logger name="org.springframework.transaction" level="TRACE" additivity="false">
     &lt;!&ndash; 查看 Spring 事务管理是否开启 &ndash;&gt;
@@ -46,7 +52,7 @@
   </logger>
   -->
 
-  <!-- 生产环境下，请使用 WARN 级别日志 -->
+  <!-- 生产环境下, 请使用 WARN 级别日志 -->
   <root level="INFO">
     <!-- 控制台输出直接使用 Spring Boot 的配置 -->
     <appender-ref ref="CONSOLE"/>

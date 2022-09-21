@@ -1,0 +1,9 @@
+<service>
+  <id>REST API 服务</id>
+  <name>REST API 服务</name>
+  <description>开发者: 吴仙杰</description>
+  <executable>jre\bin\java.exe</executable>
+  <arguments>-jar spring-rest-api.jar --logging.config=file:./config/logback-spring.xml</arguments>
+  <logpath>logs</logpath>
+  <log mode="none"/>
+</service>
