@@ -1,11 +1,11 @@
-# 部署时，将 application.yml 放于与 Jar 同级目录的 config 子目录下
+# 部署时，将 `application.yml` 放于与 Jar 同级目录的 `config` 子目录下
 server:
   # HTTP 服务监听端口
   port: 8090
 spring:
   datasource:
     url: jdbc:sqlite:app.db
-    # SQLite 维护多连接会导致库锁！
+    # SQLite 维护多连接会导致库锁!!!
     hikari:
       connection-timeout: 30000
       minimum-idle: 1
