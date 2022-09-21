@@ -1,5 +1,6 @@
 package net.wuxianjie.springrestapi.user;
 
+import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.role.Role;
@@ -7,6 +8,7 @@ import net.wuxianjie.springrestapi.role.RoleMapper;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationRequest;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationResult;
+import net.wuxianjie.springrestapi.shared.security.core.CachedToken;
 import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
 import net.wuxianjie.springrestapi.shared.util.ApiUtils;
 import net.wuxianjie.springrestapi.shared.util.StrUtils;
@@ -25,6 +27,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserService {
 
+  private final TimedCache<String, CachedToken> usernameToToken;
   private final PasswordEncoder passwordEncoder;
   private final UserMapper userMapper;
   private final RoleMapper roleMapper;
@@ -139,6 +142,9 @@ public class UserService {
     user.setUpdatedAt(LocalDateTime.now());
     user.setHashedPassword(hashedPassword);
     userMapper.updateById(user);
+
+    // 密码修改成功后注销登录
+    usernameToToken.remove(user.getUsername());
 
     return ResponseEntity.ok().build();
   }
