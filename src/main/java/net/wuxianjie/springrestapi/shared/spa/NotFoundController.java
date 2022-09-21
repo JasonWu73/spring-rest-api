@@ -9,10 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Controller
 public class NotFoundController {
+
+  @RequestMapping("/api/v1/version")
+  public ResponseEntity<Map<String, Object>> getVersion() {
+    return ResponseEntity.ok(new LinkedHashMap<>() {{
+      put("version", "v1.0.0");
+      put("name", "REST API 项目");
+    }});
+  }
 
   @RequestMapping(value = "/404", produces = MediaType.TEXT_HTML_VALUE)
   public ModelAndView errorHtml(final HttpServletResponse response) {
