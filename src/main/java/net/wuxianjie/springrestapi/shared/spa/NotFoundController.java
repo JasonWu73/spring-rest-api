@@ -14,14 +14,6 @@ import java.util.LinkedHashMap;
 @Controller
 public class NotFoundController {
 
-  @RequestMapping("/api/v1/version")
-  public ResponseEntity<LinkedHashMap<String, Object>> getVersion() {
-    return ResponseEntity.ok(new LinkedHashMap<>() {{
-      put("version", "v1.0.0");
-      put("name", "REST API 项目");
-    }});
-  }
-
   @RequestMapping(value = "/404", produces = MediaType.TEXT_HTML_VALUE)
   public ModelAndView errorHtml(final HttpServletResponse response) {
     // 单页页应用程序 404 应由前端路由自行提供，后端返回 200 即可
