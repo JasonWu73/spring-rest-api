@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "开放接口",
+			"name": "Access Token",
 			"item": [
 				{
 					"name": "获取 Access Token",
@@ -98,53 +98,6 @@
 							]
 						},
 						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/token/{refreshToken}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"roleId\": 1, // 角色 id\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
-					},
-					"response": []
-				},
-				{
-					"name": "修改密码",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"oldPassword\": \"111\",\n  \"newPassword\": \"222\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/user/passwd",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"passwd"
-							]
-						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/passwd\n```\n\nJSON 参数：\n\n```json\n{\n  \"oldPassword\": \"111\", // 密码，必填，长度 <= 100\n  \"newPassword\": \"123\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				}
@@ -478,6 +431,53 @@
 							]
 						},
 						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "修改密码",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"oldPassword\": \"111\",\n  \"newPassword\": \"222\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/user/passwd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"passwd"
+							]
+						},
+						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/passwd\n```\n\nJSON 参数：\n\n```json\n{\n  \"oldPassword\": \"111\", // 密码，必填，长度 <= 100\n  \"newPassword\": \"123\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				}
