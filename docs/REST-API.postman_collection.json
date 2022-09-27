@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3faf1bf6-8509-4369-90a3-fa6b1fe8b31a",
+		"_postman_id": "4e5093db-4a10-4a20-89f2-50c26c09ffe2",
 		"name": "REST-API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -612,7 +612,7 @@
 								"2"
 							]
 						},
-						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"name\": \"测试账号\", // 角色名，必填，长度 <= 100\n  \"menus\": \"user_view,role_view\", // 菜单，必填，长度 <= 200\n  \"remark\": \"角色用途说明\", // 备注，长度 <= 200\n  \"parentId\": 1 // 上级角色 id\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数:\n\n```url\n/api/v1/role/{roleId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"name\": \"测试账号\", // 角色名，必填，长度 <= 100\n  \"menus\": \"user_view,role_view\", // 菜单，必填，长度 <= 200\n  \"remark\": \"角色用途说明\", // 备注，长度 <= 200\n  \"parentId\": 1 // 上级角色 id\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},
