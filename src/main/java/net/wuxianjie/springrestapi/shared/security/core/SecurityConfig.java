@@ -62,6 +62,13 @@ public class SecurityConfig {
       Authority.Role.ROOT + " > " + Authority.Role.EDIT + "\n" +
       Authority.Role.ROOT + " > " + Authority.Role.DEL + "\n";
 
+    // 打印权限编码
+    /*
+    System.out.println("###################################");
+    System.out.println(hierarchyValue);
+    System.out.println("###################################");
+    */
+
     role.setHierarchy(hierarchyValue);
     return role;
   }
