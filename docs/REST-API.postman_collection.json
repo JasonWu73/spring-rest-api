@@ -246,12 +246,12 @@
 								{
 									"key": "enabled",
 									"value": "1",
-									"description": "是否启用：1：已启用，0：已禁用",
+									"description": "是否启用, 1: 已启用, 0: 已禁用",
 									"disabled": true
 								}
 							]
 						},
-						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 1, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"userId\": 123, // 用户 id\n      \"updatedAt\": \"2022-09-16 11:44:07\", // 修改时间\n      \"remark\": \"测试备注\", // 备注\n      \"username\": \"zhangsan\", // 用户名\n      \"nickname\": \"张三\", // 用户昵称\n      \"enabled\": 1, // 是否启用：1：已启用，0：已禁用\n      \"roleId\": 123, // 角色 id\n      \"role\": \"测试人员\", // 角色名\n      \"menus\": \"xxx,xxx\" // 功能权限\n    }\n  ]\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 1, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"userId\": 123, // 用户 id\n      \"updatedAt\": \"2022-09-16 11:44:07\", // 修改时间\n      \"remark\": \"测试备注\", // 备注\n      \"username\": \"zhangsan\", // 用户名\n      \"nickname\": \"张三\", // 用户昵称\n      \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用\n      \"roleId\": 123, // 角色 id\n      \"role\": \"测试人员\", // 角色名\n      \"menus\": \"xxx,xxx\" // 功能权限\n    }\n  ]\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},
@@ -297,7 +297,7 @@
 								"user"
 							]
 						},
-						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"username\": \"zhangsan\", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n  \"enabled\": 1, // 是否启用：1：已启用，0：已禁用，必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"username\": \"zhangsan\", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n  \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},
@@ -344,7 +344,7 @@
 								"6"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"enabled\": 1, // 是否启用：1：已启用，0：已禁用，必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				},

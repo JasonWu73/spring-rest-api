@@ -33,7 +33,7 @@ public class UserController {
    * @param request <pre>{@code
    * username: zhangsan // 用户名，长度 <= 100
    * nickname: 张三 // 用户昵称，长度 <= 100
-   * enabled: 1 // 是否启用：1：已启用，0：已禁用
+   * enabled: 1 // 是否启用, 1: 已启用, 0: 已禁用
    * }</pre>
    * @return <pre>{@code
    * {
@@ -47,7 +47,7 @@ public class UserController {
    *       "remark": "测试备注", // 备注
    *       "username": "zhangsan", // 用户名
    *       "nickname": "张三", // 用户昵称
-   *       "enabled": 1, // 是否启用：1：已启用，0：已禁用
+   *       "enabled": 1, // 是否启用, 1: 已启用, 0: 已禁用
    *       "roleId": 123, // 角色 id
    *       "role": "测试人员", // 角色名
    *       "menus": "xxx,xxx" // 功能权限
@@ -72,7 +72,7 @@ public class UserController {
    * {
    *   "username": "zhangsan", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头
    *   "password": "123", // 密码，必填，长度 <= 100
-   *   "enabled": 1, // 是否启用：1：已启用，0：已禁用，必填
+   *   "enabled": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填
    *   "roleId": 1, // 角色 id，必填
    *   "nickname": "张三", // 用户昵称，长度 <= 100
    *   "remark": "测试用户" // 备注，长度 <= 200
@@ -94,7 +94,7 @@ public class UserController {
    * @param userId {@code /api/v1/user/{userId}}
    * @param request <pre>{@code
    * {
-   *   "enabled": 1, // 是否启用：1：已启用，0：已禁用，必填
+   *   "enabled": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填
    *   "roleId": 1, // 角色 id，必填
    *   "nickname": "张三", // 用户昵称，长度 <= 100
    *   "remark": "测试用户" // 备注，长度 <= 200
