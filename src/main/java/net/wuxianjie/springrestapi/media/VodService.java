@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.util.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -25,13 +26,20 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class VodService {
 
+  @Value("${server.port}")
+  private int serverPort;
+
   private static final int MINIMUM_CONTENT_LENGTH_BYTES = 1024 * 1024;
+  private static final String VOD_DIR = "点播目录/";
 
   private final TimedCache<String, String> filePathToAbsolute;
   private final MediaMapper mediaMapper;
@@ -88,6 +96,33 @@ public class VodService {
     return buildDownload(absoluteFilePath);
   }
 
+  public ResponseEntity<List<LinkedHashMap<String, Object>>> getVodList() {
+    // 于 Jar 的相对目录中读取所有点播文件
+    final String absoluteDir = FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
+    if (!FileUtil.exist(absoluteDir)) {
+      throw new ApiException(HttpStatus.NOT_FOUND, "点播目录不存在");
+    }
+    final List<String> filenames = FileUtil.listFileNames(absoluteDir);
+
+    // 构造点播和下载地址
+    final List<LinkedHashMap<String, Object>> result = new ArrayList<>();
+    for (final String filename : filenames) {
+      final LinkedHashMap<String, Object> item = new LinkedHashMap<>();
+      item.put("filename", filename);
+      final String aodPath = StrUtil.format(
+        "http://{}:{}/{}",
+        "127.0.0.1",
+        serverPort,
+        "vod/" + VOD_DIR + filename
+      );
+      item.put("vodPath", aodPath);
+      final String download = StrUtil.replaceFirst(aodPath, "vod", "dl");
+      item.put("download", download);
+      result.add(item);
+    }
+    return ResponseEntity.ok(result);
+  }
+
   public ResponseEntity<Void> addVod(final MultipartFile file) {
     // 文件名校验, 不能包含在 Windows 下不支持的非法字符, 包括: \ / : * ? " < > |
     final String originalFilename = file.getOriginalFilename();
@@ -106,7 +141,7 @@ public class VodService {
     }
 
     // 于 Jar 的相对目录中保存文件
-    final String broadcastDir = FileUtils.getJarDirAbsoluteFilePath() + "upload_dir";
+    final String broadcastDir = FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
     final String absoluteFilePath = broadcastDir + "/" + filename;
     if (FileUtil.exist(absoluteFilePath)) {
       throw new ApiException(HttpStatus.CONFLICT, "已存在同名文件");

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,6 +53,24 @@ public class VodController {
   }
 
   /**
+   * 获取点播音视频列表.
+   *
+   * @return <pre>{@code
+   * [
+   *   {
+   *     "filename": "sample.mp3", // 文件名
+   *     "vodPath": "http://192.168.2.42:8090/vod/点播目录/sample.mp3", // 点播地址
+   *     "download": "http://192.168.2.42:8090/dl/点播目录/sample.mp3" // 下载地址
+   *   }
+   * ]
+   * }</pre>
+   */
+  @GetMapping("/api/v1/vod")
+  public ResponseEntity<List<LinkedHashMap<String, Object>>> getVodList() {
+    return vodService.getVodList();
+  }
+
+  /**
    * 新增点播音视频.
    *
    * @param file 文件, 必填, 大小 <= 1G, 仅支持 MP3 及 MP4 格式, 文件名不能包含 {@code \ / : * ? " < > |} 字符
@@ -58,7 +78,7 @@ public class VodController {
    * }</pre>
    */
   @Log("新增点播音视频")
-  @PostMapping(value = "/api/v1/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(value = "/api/v1/vod", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Void> addVod(@RequestPart MultipartFile file) {
     if (file.isEmpty()) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "上传文件不能为空");
