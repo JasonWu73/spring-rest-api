@@ -82,7 +82,7 @@ public class SecurityConfig {
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
       .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
       .antMatchers("/api/*/public/**").permitAll()
-      .antMatchers(HttpMethod.GET, "/vod/**").permitAll()
+      .antMatchers(HttpMethod.GET, "/vod/**", "/dl/**").permitAll()
       .antMatchers("/api/**").authenticated()
       .anyRequest().permitAll()
       // 启用 CORS 并禁用 CSRF

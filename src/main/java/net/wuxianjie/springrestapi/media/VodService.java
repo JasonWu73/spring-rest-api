@@ -7,6 +7,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.util.FileUtils;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -30,6 +33,58 @@ public class VodService {
   private final MediaMapper mediaMapper;
 
   public ResponseEntity<ResourceRegion> vod(final HttpServletRequest request, final HttpHeaders headers) {
+    // 获取文件的相对路径
+    final String filePath = getFilePath(request);
+
+    // 缓存文件路径以免频繁读取数据库, 从而影响数据库性能
+    String absoluteFilePath = filePathToAbsolute.get(filePath);
+    if (absoluteFilePath == null) {
+      // 若于 Jar 包的相对路径存在文件, 则添加文件路径缓存并返回点播数据
+      absoluteFilePath = toAbsoluteFilePath(filePath);
+      if (FileUtil.exist(absoluteFilePath)) {
+        filePathToAbsolute.put(filePath, absoluteFilePath);
+        return buildPlayOnDemand(absoluteFilePath, headers);
+      }
+
+      // 若于 Jar 相对路径找不到文件, 则查询数据库
+      absoluteFilePath = getAbsoluteFilePath(filePath);
+    }
+
+    // 若在磁盘中找不到文件, 则删除缓存条目
+    checkForFileExists(filePath, absoluteFilePath);
+
+    // 添加文件路径缓存并返回点播数据
+    filePathToAbsolute.put(filePath, absoluteFilePath);
+    return buildPlayOnDemand(absoluteFilePath, headers);
+  }
+
+  public ResponseEntity<Resource> download(final HttpServletRequest request) {
+    // 获取文件的相对路径
+    final String filePath = getFilePath(request);
+
+    // 获取文件的绝对路径
+    String absoluteFilePath = filePathToAbsolute.get(filePath);
+    if (absoluteFilePath == null) {
+      // 若于 Jar 包的相对路径存在文件, 则添加文件路径缓存并返回数据
+      absoluteFilePath = toAbsoluteFilePath(filePath);
+      if (FileUtil.exist(absoluteFilePath)) {
+        filePathToAbsolute.put(filePath, absoluteFilePath);
+        return buildDownload(absoluteFilePath);
+      }
+
+      // 若于 Jar 相对路径找不到文件, 则查询数据库
+      absoluteFilePath = getAbsoluteFilePath(filePath);
+    }
+
+    // 若在磁盘中找不到文件, 则删除缓存条目
+    checkForFileExists(filePath, absoluteFilePath);
+
+    // 添加文件路径缓存并返回数据
+    filePathToAbsolute.put(filePath, absoluteFilePath);
+    return buildDownload(absoluteFilePath);
+  }
+
+  private static String getFilePath(final HttpServletRequest request) {
     // 获取点播音视频文件的相对路径, 即 ** 部分的地址:
     // http://127.0.0.1:8090/vod/%E6%B5%8B%E8%AF%95/sample.mp4
     // ->
@@ -49,35 +104,30 @@ public class VodService {
     // %E6%B5%8B%E8%AF%95/sample.mp4
     // ->
     // 测试/sample.mp4
-    final String filePath = URLDecoder.decode(encodedFilePath, StandardCharsets.UTF_8);
+    return URLDecoder.decode(encodedFilePath, StandardCharsets.UTF_8);
+  }
 
-    // 缓存文件路径以免频繁读取数据库, 从而影响数据库性能
-    String absoluteFilePath = filePathToAbsolute.get(filePath);
-    if (absoluteFilePath == null) {
-      // 若于 Jar 包的相对路径存在文件, 则添加文件路径缓存并返回点播数据
-      final String jarDirPath = FileUtils.getJarDirAbsoluteFilePath();
-      absoluteFilePath = jarDirPath + filePath;
-      if (FileUtil.exist(absoluteFilePath)) {
-        filePathToAbsolute.put(filePath, absoluteFilePath);
-        return buildPlayOnDemand(absoluteFilePath, headers);
-      }
+  private static String toAbsoluteFilePath(final String filePath) {
+    // 相对于 Jar 包的文件绝对路径
+    final String jarDirPath = FileUtils.getJarDirAbsoluteFilePath();
+    return jarDirPath + filePath;
+  }
 
-      // 若于 Jar 相对路径找不到文件, 则查询数据库
-      absoluteFilePath = mediaMapper.selectFilePathByFilePathLike("%" + filePath);
-    }
+  private String getAbsoluteFilePath(final String filePath) {
+    String absoluteFilePath;
+    absoluteFilePath = mediaMapper.selectFilePathByFilePathLike("%" + filePath);
     if (StrUtil.isEmpty(absoluteFilePath)) {
       throw new ApiException(HttpStatus.NOT_FOUND, "记录不存在");
     }
+    return absoluteFilePath;
+  }
 
+  private void checkForFileExists(final String filePath, final String absoluteFilePath) {
     // 若在磁盘中找不到文件, 则删除缓存条目
     if (!FileUtil.exist(absoluteFilePath)) {
       filePathToAbsolute.remove(filePath);
       throw new ApiException(HttpStatus.NOT_FOUND, "文件不存在");
     }
-
-    // 添加文件路径缓存并返回点播数据
-    filePathToAbsolute.put(filePath, absoluteFilePath);
-    return buildPlayOnDemand(absoluteFilePath, headers);
   }
 
   private ResponseEntity<ResourceRegion> buildPlayOnDemand(
@@ -112,5 +162,27 @@ public class VodService {
       .status(HttpStatus.PARTIAL_CONTENT)
       .contentType(MediaTypeFactory.getMediaType(resource).orElse(MediaType.APPLICATION_OCTET_STREAM))
       .body(resourceRegion);
+  }
+
+  private ResponseEntity<Resource> buildDownload(final String absoluteFilePath) {
+    final File file = new File(absoluteFilePath);
+    final FileSystemResource resource = new FileSystemResource(file);
+    final String fileName = FileUtil.getName(absoluteFilePath);
+    // https://segmentfault.com/a/1190000023601065
+    final String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+      .replaceAll("\\+", "%20");
+    return ResponseEntity
+      .ok()
+      .header(
+        HttpHeaders.CONTENT_DISPOSITION,
+        StrUtil.format(
+          "attachment;filename={};filename*=UTF-8''{}",
+          encodedFileName,
+          encodedFileName
+        )
+      )
+      .contentLength(FileUtil.size(file))
+      .contentType(MediaType.APPLICATION_OCTET_STREAM)
+      .body(resource);
   }
 }

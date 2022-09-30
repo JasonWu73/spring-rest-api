@@ -1,6 +1,7 @@
 package net.wuxianjie.springrestapi.media;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class VodController {
   private final VodService vodService;
 
   /**
-   * 音视频点播。
+   * 音视频点播.
    *
    * @param request HttpServletRequest
    * @param headers HttpHeaders
@@ -27,9 +28,22 @@ public class VodController {
    */
   @GetMapping("/vod/**")
   public ResponseEntity<ResourceRegion> vod(
-    HttpServletRequest request,
-    @RequestHeader HttpHeaders headers
+    final HttpServletRequest request,
+    @RequestHeader final HttpHeaders headers
   ) {
     return vodService.vod(request, headers);
+  }
+
+  /**
+   * 下载点播音视频.
+   *
+   * @param request HttpServletRequest
+   * @return <pre>{@code
+   * 下载音频/视频
+   * }</pre>
+   */
+  @GetMapping("/dl/**")
+  public ResponseEntity<Resource> download(final HttpServletRequest request) {
+    return vodService.download(request);
   }
 }
