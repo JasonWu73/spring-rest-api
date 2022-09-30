@@ -53,6 +53,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     publicApiMatchers.add(new AntPathRequestMatcher("/api/v1/token", HttpMethod.POST.name()));
     publicApiMatchers.add(new AntPathRequestMatcher("/api/v1/token/*", HttpMethod.POST.name()));
     publicApiMatchers.add(new AntPathRequestMatcher("/api/*/public/**", null));
+    publicApiMatchers.add(new AntPathRequestMatcher("/vod/**", HttpMethod.GET.name()));
     PUBLIC_API_REQUEST_MATCHER = new OrRequestMatcher(publicApiMatchers);
   }
 
