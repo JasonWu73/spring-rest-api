@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4e5093db-4a10-4a20-89f2-50c26c09ffe2",
+		"_postman_id": "c777dc47-621d-45b4-b8b8-292ae400f8ce",
 		"name": "REST-API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1689713"
 	},
 	"item": [
 		{
@@ -655,6 +656,95 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "媒体管理",
+			"item": [
+				{
+					"name": "获取点播音视频列表",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/vod",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"vod"
+							]
+						},
+						"description": "## 请求参数\n\n## 返回值\n\n成功时：\n\n```json\n[\n  {\n    \"filename\": \"sample.mp3\", // 文件名\n    \"vodPath\": \"http://192.168.2.42:8090/vod/点播目录/sample.mp3\", // 点播地址\n    \"download\": \"http://192.168.2.42:8090/dl/点播目录/sample.mp3\" // 下载地址\n  }\n]\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "新增点播音视频",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/wxj/Downloads/法庭纪律.mp3"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/vod",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"vod"
+							]
+						},
+						"description": "## 请求参数\n\n文件上传表单参数：\n\n```json\n{\n  \"file\": <file> // 文件, 必填, 大小 <= 1G, 仅支持 MP3 及 MP4 格式, 文件名不能包含 \\ / : * ? \" < > | 字符\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -680,7 +770,7 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "192.168.2.42:8091"
+			"value": "127.0.0.1:8090"
 		},
 		{
 			"key": "accessToken",
