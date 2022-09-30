@@ -2,6 +2,7 @@ package net.wuxianjie.springrestapi.media;
 
 import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.net.URLDecoder;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,13 @@ import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -82,6 +86,39 @@ public class VodService {
     // 添加文件路径缓存并返回数据
     filePathToAbsolute.put(filePath, absoluteFilePath);
     return buildDownload(absoluteFilePath);
+  }
+
+  public ResponseEntity<Void> addVod(final MultipartFile file) {
+    // 文件名校验, 不能包含在 Windows 下不支持的非法字符, 包括: \ / : * ? " < > |
+    final String originalFilename = file.getOriginalFilename();
+    final String filenameTrimToNull = StrUtil.trimToNull(originalFilename);
+    if (filenameTrimToNull == null) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "文件名不存在");
+    }
+    final String filename = FileNameUtil.getName(filenameTrimToNull);
+    if (FileNameUtil.containsInvalid(originalFilename)) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "文件名存在非法字符, 包含: \\ / : * ? \" < > |");
+    }
+
+    // 仅支持 MP3 或 MP4
+    if (!StrUtil.endWithAny(filename, ".mp3", ".mp4")) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅支持 MP3 及 MP4 文件");
+    }
+
+    // 于 Jar 的相对目录中保存文件
+    final String broadcastDir = FileUtils.getJarDirAbsoluteFilePath() + "upload_dir";
+    final String absoluteFilePath = broadcastDir + "/" + filename;
+    if (FileUtil.exist(absoluteFilePath)) {
+      throw new ApiException(HttpStatus.CONFLICT, "已存在同名文件");
+    }
+    final InputStream inputStream;
+    try {
+      inputStream = file.getInputStream();
+    } catch (IOException e) {
+      throw new RuntimeException("上传文件输入流获取失败", e);
+    }
+    FileUtil.writeFromStream(inputStream, absoluteFilePath);
+    return ResponseEntity.ok().build();
   }
 
   private static String getFilePath(final HttpServletRequest request) {

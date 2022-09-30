@@ -1,13 +1,16 @@
 package net.wuxianjie.springrestapi.media;
 
 import lombok.RequiredArgsConstructor;
+import net.wuxianjie.springrestapi.shared.exception.ApiException;
+import net.wuxianjie.springrestapi.shared.operationlog.core.Log;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,5 +48,21 @@ public class VodController {
   @GetMapping("/dl/**")
   public ResponseEntity<Resource> download(final HttpServletRequest request) {
     return vodService.download(request);
+  }
+
+  /**
+   * 新增点播音视频.
+   *
+   * @param file 文件, 必填, 大小 <= 1G, 仅支持 MP3 及 MP4 格式, 文件名不能包含 {@code \ / : * ? " < > |} 字符
+   * @return <pre>{@code
+   * }</pre>
+   */
+  @Log("新增点播音视频")
+  @PostMapping(value = "/api/v1/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<Void> addVod(@RequestPart MultipartFile file) {
+    if (file.isEmpty()) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "上传文件不能为空");
+    }
+    return vodService.addVod(file);
   }
 }
