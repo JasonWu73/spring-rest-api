@@ -6,6 +6,7 @@ import cn.hutool.core.net.URLDecoder;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
+import net.wuxianjie.springrestapi.shared.util.FileUtils;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
@@ -51,9 +52,17 @@ public class VodService {
     final String filePath = URLDecoder.decode(encodedFilePath, StandardCharsets.UTF_8);
 
     // 缓存文件路径以免频繁读取数据库, 从而影响数据库性能
-    // 若文件路径在缓存中不存在, 则查询数据库
     String absoluteFilePath = filePathToAbsolute.get(filePath);
     if (absoluteFilePath == null) {
+      // 若于 Jar 包的相对路径存在文件, 则添加文件路径缓存并返回点播数据
+      final String jarDirPath = FileUtils.getJarDirAbsoluteFilePath();
+      absoluteFilePath = jarDirPath + filePath;
+      if (FileUtil.exist(absoluteFilePath)) {
+        filePathToAbsolute.put(filePath, absoluteFilePath);
+        return buildPlayOnDemand(absoluteFilePath, headers);
+      }
+
+      // 若于 Jar 相对路径找不到文件, 则查询数据库
       absoluteFilePath = mediaMapper.selectFilePathByFilePathLike("%" + filePath);
     }
     if (StrUtil.isEmpty(absoluteFilePath)) {
@@ -61,16 +70,13 @@ public class VodService {
     }
 
     // 若在磁盘中找不到文件, 则删除缓存条目
-    final boolean fileExists = FileUtil.exist(absoluteFilePath);
-    if (!fileExists) {
+    if (!FileUtil.exist(absoluteFilePath)) {
       filePathToAbsolute.remove(filePath);
       throw new ApiException(HttpStatus.NOT_FOUND, "文件不存在");
     }
 
-    // 添加文件路径缓存
+    // 添加文件路径缓存并返回点播数据
     filePathToAbsolute.put(filePath, absoluteFilePath);
-
-    // 返回点播资源
     return buildPlayOnDemand(absoluteFilePath, headers);
   }
 
