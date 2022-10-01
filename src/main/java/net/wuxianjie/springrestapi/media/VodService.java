@@ -98,7 +98,7 @@ public class VodService {
 
   public ResponseEntity<List<LinkedHashMap<String, Object>>> getVodList() {
     // 于 Jar 的相对目录中读取所有点播文件
-    final String vodDir = getVodAbsoluteFilePath();
+    final String vodDir = getVodDirAbsoluteFilePath();
     if (!FileUtil.exist(vodDir)) {
       throw new ApiException(HttpStatus.NOT_FOUND, "点播目录不存在");
     }
@@ -136,12 +136,12 @@ public class VodService {
     }
 
     // 仅支持 MP3 或 MP4
-    if (!StrUtil.endWithAny(filename, ".mp3", ".mp4")) {
+    if (isNotMp3Mp4(filename)) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "仅支持 MP3 及 MP4 文件");
     }
 
     // 于 Jar 的相对目录中保存文件
-    final String vodDir = getVodAbsoluteFilePath();
+    final String vodDir = getVodDirAbsoluteFilePath();
     final String absoluteFilePath = vodDir + "/" + filename;
     if (FileUtil.exist(absoluteFilePath)) {
       throw new ApiException(HttpStatus.CONFLICT, "已存在同名文件");
@@ -156,8 +156,28 @@ public class VodService {
     return ResponseEntity.ok().build();
   }
 
-  public String getVodAbsoluteFilePath() {
+  public String getVodDirAbsoluteFilePath() {
     return FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
+  }
+
+  public ResponseEntity<Void> deleteVod(final String filename) {
+    // 文件名校验, 不能包含在 Windows 下不支持的非法字符, 包括: \ / : * ? " < > |
+    if (FileNameUtil.containsInvalid(filename)) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "文件名存在非法字符, 包含: \\ / : * ? \" < > |");
+    }
+
+    // 仅支持 MP3 或 MP4
+    if (isNotMp3Mp4(filename)) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅支持 MP3 及 MP4 文件");
+    }
+
+    // 于 Jar 的相对目录中删除文件
+    final String absoluteFilePath = getVodDirAbsoluteFilePath() + filename;
+    if (!FileUtil.exist(absoluteFilePath)) {
+      return ResponseEntity.ok().build();
+    }
+    FileUtil.del(absoluteFilePath);
+    return ResponseEntity.ok().build();
   }
 
   private static String getFilePath(final HttpServletRequest request) {
@@ -172,7 +192,7 @@ public class VodService {
     final String encodedFilePath = StrUtil.trimToNull(originalFilePath);
 
     // 文件格式校验
-    if (encodedFilePath == null || !StrUtil.endWithAny(encodedFilePath, ".mp4", ".mp3")) {
+    if (encodedFilePath == null || isNotMp3Mp4(encodedFilePath)) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "文件格式错误");
     }
 
@@ -181,6 +201,10 @@ public class VodService {
     // ->
     // 测试/sample.mp4
     return URLDecoder.decode(encodedFilePath, StandardCharsets.UTF_8);
+  }
+
+  private static boolean isNotMp3Mp4(final String filePath) {
+    return !StrUtil.endWithAny(filePath, ".mp4", ".mp3");
   }
 
   private static String toAbsoluteFilePath(final String filePath) {

@@ -724,6 +724,7 @@
 							"formdata": [
 								{
 									"key": "file",
+									"description": "文件, 必填, 大小 <= 1G, 仅支持 MP3 及 MP4 格式, 文件名不能包含 \\ / : * ? \" < > | 字符",
 									"type": "file",
 									"src": "/Users/wxj/Downloads/法庭纪律.mp3"
 								}
@@ -740,7 +741,45 @@
 								"vod"
 							]
 						},
-						"description": "## 请求参数\n\n文件上传表单参数：\n\n```json\n{\n  \"file\": <file> // 文件, 必填, 大小 <= 1G, 仅支持 MP3 及 MP4 格式, 文件名不能包含 \\ / : * ? \" < > | 字符\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n见左侧视图的 `Body` 标签.\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "删除点播音视频",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/vod/法庭纪律.mp3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"vod",
+								"法庭纪律.mp3"
+							]
+						},
+						"description": "## 请求参数\n\nURL 路径参数:\n\n```url\n/api/v1/vod/{filename}\n```\n\n- `filename`: 文件名, 不能包含 `\\ / : * ? \" < > |` 字符, 且必须以 `.mp3` 或 `.mp4` 结尾\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
 					},
 					"response": []
 				}

@@ -85,4 +85,18 @@ public class VodController {
     }
     return vodService.addVod(file);
   }
+
+  /**
+   * 删除点播音视频.
+   *
+   * @param filename {@code /api/v1/vod/{filename}}
+   * <p>文件名, 不能包含 \ / : * ? " < > | 字符, 且必须以 .mp3 或 .mp4 结尾
+   * @return <pre>{@code
+   * }</pre>
+   */
+  @Log("删除纪律播报")
+  @DeleteMapping("/api/v1/vod/{filename}")
+  public ResponseEntity<Void> deleteVod(@PathVariable final String filename) {
+    return vodService.deleteVod(filename);
+  }
 }

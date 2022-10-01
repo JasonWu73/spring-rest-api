@@ -26,7 +26,7 @@ public class VodCronConfig {
 
   @Scheduled(cron = EVERY_DAY_3_AM_CRON_EXPRESSION)
   public void cleanEmptyVodDir() {
-    final String vodDirPath = vodService.getVodAbsoluteFilePath();
+    final String vodDirPath = vodService.getVodDirAbsoluteFilePath();
     final boolean isCleaned = FileUtil.cleanEmpty(new File(vodDirPath));
     log.warn("定时清理点播空目录 [{}, {}]", vodDirPath, isCleaned);
   }
