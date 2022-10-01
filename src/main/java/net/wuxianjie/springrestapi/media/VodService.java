@@ -98,11 +98,11 @@ public class VodService {
 
   public ResponseEntity<List<LinkedHashMap<String, Object>>> getVodList() {
     // 于 Jar 的相对目录中读取所有点播文件
-    final String absoluteDir = FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
-    if (!FileUtil.exist(absoluteDir)) {
+    final String vodDir = getVodAbsoluteFilePath();
+    if (!FileUtil.exist(vodDir)) {
       throw new ApiException(HttpStatus.NOT_FOUND, "点播目录不存在");
     }
-    final List<String> filenames = FileUtil.listFileNames(absoluteDir);
+    final List<String> filenames = FileUtil.listFileNames(vodDir);
 
     // 构造点播和下载地址
     final List<LinkedHashMap<String, Object>> result = new ArrayList<>();
@@ -141,8 +141,8 @@ public class VodService {
     }
 
     // 于 Jar 的相对目录中保存文件
-    final String broadcastDir = FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
-    final String absoluteFilePath = broadcastDir + "/" + filename;
+    final String vodDir = getVodAbsoluteFilePath();
+    final String absoluteFilePath = vodDir + "/" + filename;
     if (FileUtil.exist(absoluteFilePath)) {
       throw new ApiException(HttpStatus.CONFLICT, "已存在同名文件");
     }
@@ -154,6 +154,10 @@ public class VodService {
     }
     FileUtil.writeFromStream(inputStream, absoluteFilePath);
     return ResponseEntity.ok().build();
+  }
+
+  public String getVodAbsoluteFilePath() {
+    return FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
   }
 
   private static String getFilePath(final HttpServletRequest request) {
