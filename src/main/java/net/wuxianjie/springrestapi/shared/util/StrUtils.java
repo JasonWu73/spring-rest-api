@@ -1,5 +1,7 @@
 package net.wuxianjie.springrestapi.shared.util;
 
+import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,5 +23,9 @@ public final class StrUtils {
       return null;
     }
     return "%" + trimmed.replaceAll(" +", "%") + "%";
+  }
+
+  public static String getMachineCode() {
+    return HexUtil.encodeHexStr(StrUtil.bytes(NetUtil.getLocalMacAddress()), false);
   }
 }
