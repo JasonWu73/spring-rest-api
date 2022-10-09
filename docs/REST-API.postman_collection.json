@@ -784,6 +784,48 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "版本信息",
+			"item": [
+				{
+					"name": "获取版本信息",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/version",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"version"
+							]
+						},
+						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"version\": \"v1.0.0\", // 版本号\n  \"mac\": \"c4-41-1e-b2-12-04\" // 本地 MAC 地址\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
