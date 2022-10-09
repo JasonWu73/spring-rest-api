@@ -4,14 +4,23 @@ server:
   port: 8090
 spring:
   datasource:
+    # SQLite 支持多线程查询, 但不支持多线程修改, 不然会抛出异常: [SQLITE_BUSY] The database file is locked (database is locked)
     url: jdbc:sqlite:app.db
     # SQLite 维护多连接会导致库锁!!!
     hikari:
-      connection-timeout: 30000
+      # 连接池中最小空闲连接数
       minimum-idle: 1
+      # 连接池中最大连接数 (包含空闲连接), 默认是 10
       maximum-pool-size: 1
-      idle-timeout: 600000
-      max-lifetime: 1800000
+      # 连接池中空闲连接的最长存活时间, 默认值: `600_000` (10分钟)
+      idle-timeout: 45_000
+      # 连接池中连接的最长生命周期, 值 `0`: 无限生命周期, 默认值: `1800_000` (30 分钟)
+      max-lifetime: 60_000
+      # 从连接池中获取连接的超时时间, 默认值: `30_000` (30 秒)
+      connection-timeout: 30_000
+      # 测试连接是否可用的查询语句
+      connection-test-query: select 1
+      # 从连接池返回的连接的默认自动提交行为, 默认值: `true`
       auto-commit: true
   servlet:
     multipart:
