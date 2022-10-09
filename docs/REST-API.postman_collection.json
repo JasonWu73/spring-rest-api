@@ -49,7 +49,7 @@
 								"token"
 							]
 						},
-						"description": "## 请求参数\n\nJSON 请求体：\n\n```json\n{\n  \"username\": \"...\", // 用户名，必填，长度 <= 100\n  \"password\": \"...\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nJSON 参数：\n\n``` json\n{\n  \"username\": \"...\", // 用户名, 必填, 长度 <= 100\n  \"password\": \"...\" // 密码, 必填, 长度 <= 100\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期 (秒为单位, 有效期 30 分钟)\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"authorities\": [\"user\"] // 权限列表\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -98,7 +98,7 @@
 								"{{refreshToken}}"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/token/{refreshToken}\n```\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"roleId\": 1, // 角色 id\n  \"authorities\": [\"user\"] // 权限列表\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n``` plaintext\n/api/v1/token/{refreshToken}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"accessToken\": \"...\", // 要获取的 Access Token\n  \"refreshToken\": \"...\", // 用于刷新的 Refresh Token\n  \"expiresIn\": 1800, // Access Token 的有效期 (秒为单位, 有效期 30 分钟)\n  \"username\": \"zhangsan\", // 用户名\n  \"nickname\": \"张三\", // 昵称\n  \"roleId\": 1, // 角色 id\n  \"authorities\": [\"user\"] // 权限列表\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}
@@ -143,44 +143,44 @@
 								{
 									"key": "pageNumber",
 									"value": "1",
-									"description": "页码，必填，值 >= 1"
+									"description": "页码, 必填, 值 >= 1"
 								},
 								{
 									"key": "pageSize",
 									"value": "10",
-									"description": "每页显示条目个数，必填，值 >= 1"
+									"description": "每页显示条目个数, 必填, 值 >= 1"
 								},
 								{
 									"key": "startTime",
 									"value": "2022-09-16 15:35:55",
-									"description": "开始时间，必填，格式为 yyyy-MM-dd HH:mm:ss"
+									"description": "开始时间, 必填, 格式为 `yyyy-MM-dd HH:mm:ss`"
 								},
 								{
 									"key": "endTime",
 									"value": "2022-09-16 16:00:00",
-									"description": "结束时间，必填，格式为 yyyy-MM-dd HH:mm:ss"
+									"description": "结束时间, 必填, 格式为 `yyyy-MM-dd HH:mm:ss`"
 								},
 								{
 									"key": "requestIp",
 									"value": "127",
-									"description": "请求方 IP，长度 <= 100",
+									"description": "请求方 IP, 长度 <= 100",
 									"disabled": true
 								},
 								{
 									"key": "endpoint",
 									"value": "token",
-									"description": "接口端点，长度 <= 100",
+									"description": "接口端点, 长度 <= 2000",
 									"disabled": true
 								},
 								{
 									"key": "message",
 									"value": "获取 Token",
-									"description": "方法信息，长度 <= 100",
+									"description": "方法信息, 长度 <= 100",
 									"disabled": true
 								}
 							]
 						},
-						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 2, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"requestTime\": \"2022-09-16 15:35:57\", // 请求时间\n      \"requestIp\": \"127.0.0.1\", // 请求方 IP\n      \"endpoint\": \"/api/v1/token [POST]\", // 接口端点\n      \"username\": \"zhangsan\", // 用户名\n      \"message\": \"虚拟方法\", // 方法信息\n      \"method\": \"xxx.xxx.test()\" // 方法名\n      \"params\": \"{\\\"request\\\":{\\\"param\\\":\\\"test\\\"}}\" // 方法参数（JSON 字符串）\n    }\n  ]\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n详见 `Params` 标签.\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 2, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"requestTime\": \"2022-09-16 15:35:57\", // 请求时间\n      \"requestIp\": \"127.0.0.1\", // 请求方 IP\n      \"endpoint\": \"/api/v1/token [POST]\", // 接口端点\n      \"username\": \"zhangsan\", // 用户名\n      \"message\": \"虚拟方法\", // 方法信息\n      \"method\": \"xxx.xxx.test()\" // 方法名\n      \"params\": \"{\\\"request\\\":{\\\"param\\\":\\\"test\\\"}}\" // 方法参数 (JSON 字符串)\n    }\n  ]\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}
@@ -225,23 +225,23 @@
 								{
 									"key": "pageNumber",
 									"value": "1",
-									"description": "页码，必填，值 >= 1"
+									"description": "页码, 必填, 值 >= 1"
 								},
 								{
 									"key": "pageSize",
 									"value": "10",
-									"description": "每页显示条目个数，必填，值 >= 1"
+									"description": "每页显示条目个数, 必填, 值 >= 1"
 								},
 								{
 									"key": "username",
 									"value": "s",
-									"description": "用户名，长度 <= 100",
+									"description": "用户名, 长度 <= 100",
 									"disabled": true
 								},
 								{
 									"key": "nickname",
 									"value": "用户",
-									"description": "用户昵称，长度 <= 100",
+									"description": "用户昵称, 长度 <= 100",
 									"disabled": true
 								},
 								{
@@ -252,7 +252,7 @@
 								}
 							]
 						},
-						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n```json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 1, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"userId\": 123, // 用户 id\n      \"updatedAt\": \"2022-09-16 11:44:07\", // 修改时间\n      \"remark\": \"测试备注\", // 备注\n      \"username\": \"zhangsan\", // 用户名\n      \"nickname\": \"张三\", // 用户昵称\n      \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用\n      \"roleId\": 123, // 角色 id\n      \"role\": \"测试人员\", // 角色名\n      \"menus\": \"xxx,xxx\" // 功能权限\n    }\n  ]\n}\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n详见 `Params` 标签.\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"pageNumber\": 1, // 页码\n  \"pageSize\": 10, // 每页显示条目个数\n  \"total\": 1, // 总条目数\n  \"list\": [ // 具体数据列表\n    {\n      \"userId\": 123, // 用户 id\n      \"updatedAt\": \"2022-09-16 11:44:07\", // 修改时间\n      \"remark\": \"测试备注\", // 备注\n      \"username\": \"zhangsan\", // 用户名\n      \"nickname\": \"张三\", // 用户昵称\n      \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用\n      \"roleId\": 123, // 角色 id\n      \"role\": \"测试人员\", // 角色名\n      \"menus\": \"xxx,xxx\" // 功能权限\n    }\n  ]\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -298,7 +298,7 @@
 								"user"
 							]
 						},
-						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"username\": \"zhangsan\", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n  \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nJSON 参数：\n\n``` json\n{\n  \"username\": \"zhangsan\", // 用户名, 必填, 长度 <= 100, 用户名只能包含中文, 英文, 数字或_, 且必须以中文或英文开头\n  \"password\": \"123\", // 密码, 必填, 长度 <= 100\n  \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填\n  \"roleId\": 1, // 角色 id, 必填, 值 >= 1\n  \"nickname\": \"张三\", // 用户昵称, 长度 <= 100\n  \"remark\": \"测试用户\" // 备注, 长度 <= 200\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -345,7 +345,7 @@
 								"6"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填\n  \"roleId\": 1, // 角色 id，必填\n  \"nickname\": \"张三\", // 用户昵称，长度 <= 100\n  \"remark\": \"测试用户\" // 备注，长度 <= 200\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n``` plaintext\n/api/v1/user/{userId}\n\n```\n\nJSON 参数：\n\n``` json\n{\n  \"enabled\": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填\n  \"roleId\": 1, // 角色 id, 必填, 值 >= 1\n  \"nickname\": \"张三\", // 用户昵称, 长度 <= 100\n  \"remark\": \"测试用户\" // 备注, 长度 <= 200\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -393,7 +393,54 @@
 								"reset"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}/reset\n```\n\nJSON 参数：\n\n```json\n{\n  \"password\": \"123\", // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n``` plaintext\n/api/v1/user/{userId}/reset\n\n```\n\nJSON 参数：\n\n``` json\n{\n  \"password\": \"123\", // 密码, 必填, 长度 <= 100\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "修改密码",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"oldPassword\": \"111\",\n  \"newPassword\": \"222\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/user/passwd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"passwd"
+							]
+						},
+						"description": "## 请求参数\n\nJSON 参数：\n\n``` json\n{\n  \"oldPassword\": \"111\", // 密码, 必填, 长度 <= 100\n  \"newPassword\": \"123\" // 密码, 必填, 长度 <= 100\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -431,54 +478,7 @@
 								"6"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/{userId}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
-					},
-					"response": []
-				},
-				{
-					"name": "修改密码",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"oldPassword\": \"111\",\n  \"newPassword\": \"222\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/user/passwd",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"user",
-								"passwd"
-							]
-						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/user/passwd\n```\n\nJSON 参数：\n\n```json\n{\n  \"oldPassword\": \"111\", // 密码，必填，长度 <= 100\n  \"newPassword\": \"123\" // 密码，必填，长度 <= 100\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n``` plaintext\n/api/v1/user/{userId}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}
@@ -520,7 +520,7 @@
 								"role"
 							]
 						},
-						"description": "## 请求参数\n\n## 返回值\n\n成功时：\n\n```json\n[\n  {\n    \"roleId\": 2, // 角色 id\n    \"remark\": \"角色用途说明\", // 备注\n    \"name\": \"测试账号\", // 角色名\n    \"menus\": \"user_view,role_view\", // 菜单\n    \"parentId\": 1, // 上级角色 id\n    \"parentName\": \"管理员\" // 上级角色名\n  }\n]\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n无.\n\n## 返回值\n\n成功时：\n\n``` json\n[\n  {\n    \"roleId\": 2, // 角色 id\n    \"remark\": \"角色用途说明\", // 备注\n    \"name\": \"测试账号\", // 角色名\n    \"menus\": [\"user\"], // 菜单列表, 即权限列表\n    \"parentId\": 1, // 上级角色 id\n    \"parentName\": \"管理员\" // 上级角色名\n  }\n]\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -548,7 +548,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"测试账号\",\n  \"menus\": \"user_view,role_view\",\n  \"remark\": \"测试用途\",\n  \"parentId\": 1\n}",
+							"raw": "{\n  \"name\": \"管理员\",\n  \"menus\": [\"op_log\", \"user_view\", \"user_add\", \"user_edit\", \"role\"],\n  \"parentId\": 1,\n  \"remark\": \"普通管理员\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -566,7 +566,7 @@
 								"role"
 							]
 						},
-						"description": "## 请求参数\n\nJSON 参数：\n\n```json\n{\n  \"name\": \"测试账号\", // 角色名，必填，长度 <= 100\n  \"menus\": \"user_view,role_view\", // 菜单，必填，长度 <= 200\n  \"remark\": \"角色用途说明\", // 备注，长度 <= 200\n  \"parentId\": 1 // 上级角色 id\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nJSON 参数：\n\n``` json\n{\n  \"name\": \"测试账号\", // 角色名, 必填, 长度 <= 100\n  \"menus\": [\"user\"], // 菜单列表, 必填\n  \"parentId\": 1, // 上级角色 id, 必填, 值 >= 1\n  \"remark\": \"角色用途说明\" // 备注, 长度 <= 200\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -594,7 +594,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"用户\",\n  \"menus\": \"user_view,role_view\",\n  \"remark\": \"普通管理员\",\n  \"parentId\": 3\n}",
+							"raw": "{\n  \"name\": \"用户\",\n  \"menus\": [\"user_view\", \"op_log_view\"],\n  \"parentId\": 1,\n  \"remark\": \"普通管理员\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -613,7 +613,7 @@
 								"2"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数:\n\n```url\n/api/v1/role/{roleId}\n```\n\nJSON 参数：\n\n```json\n{\n  \"name\": \"测试账号\", // 角色名，必填，长度 <= 100\n  \"menus\": \"user_view,role_view\", // 菜单，必填，长度 <= 200\n  \"remark\": \"角色用途说明\", // 备注，长度 <= 200\n  \"parentId\": 1 // 上级角色 id\n}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数:\n\n``` plaintext\n/api/v1/role/{roleId}\n\n```\n\nJSON 参数：\n\n``` json\n{\n  \"name\": \"测试账号\", // 角色名, 必填, 长度 <= 100\n  \"menus\": [\"user\"], // 菜单列表, 必填\n  \"parentId\": 1, // 上级角色 id, 必填, 值 >= 1\n  \"remark\": \"角色用途说明\" // 备注, 长度 <= 200\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -651,7 +651,7 @@
 								"6"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数：\n\n```url\n/api/v1/role/{roleId}\n```\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数：\n\n``` plaintext\n/api/v1/role/{roleId}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}
@@ -693,7 +693,7 @@
 								"vod"
 							]
 						},
-						"description": "## 请求参数\n\n## 返回值\n\n成功时：\n\n```json\n[\n  {\n    \"filename\": \"sample.mp3\", // 文件名\n    \"vodPath\": \"http://192.168.2.42:8090/vod/点播目录/sample.mp3\", // 点播地址\n    \"download\": \"http://192.168.2.42:8090/dl/点播目录/sample.mp3\" // 下载地址\n  }\n]\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n无.\n\n## 返回值\n\n成功时：\n\n``` json\n[\n  {\n    \"filename\": \"sample.mp3\", // 文件名\n    \"vodPath\": \"http://192.168.2.42:8090/vod/点播目录/sample.mp3\", // 点播地址\n    \"download\": \"http://192.168.2.42:8090/dl/点播目录/sample.mp3\" // 下载地址\n  }\n]\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -741,7 +741,7 @@
 								"vod"
 							]
 						},
-						"description": "## 请求参数\n\n见左侧视图的 `Body` 标签.\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\n说见 `Body` 标签.\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				},
@@ -779,7 +779,7 @@
 								"法庭纪律.mp3"
 							]
 						},
-						"description": "## 请求参数\n\nURL 路径参数:\n\n```url\n/api/v1/vod/{filename}\n```\n\n- `filename`: 文件名, 不能包含 `\\ / : * ? \" < > |` 字符, 且必须以 `.mp3` 或 `.mp4` 结尾\n\n## 返回值\n\n成功时：\n\n```json\n\n```\n\n失败时：\n\n```json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n```"
+						"description": "## 请求参数\n\nURL 路径参数:\n\n``` plaintext\n/api/v1/vod/{filename}\n\n```\n\n\\*   `filename`: 文件名, 不能包含 `\\ / : \\* ? \" < > |` 字符, 且必须以 `.mp3` 或 `.mp4` 结尾\n    \n\n## 返回值\n\n成功时：\n\n``` json\n{}\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}
@@ -821,7 +821,7 @@
 								"version"
 							]
 						},
-						"description": "## 请求参数\n\n见左侧视图的 `Params` 标签。\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"version\": \"v1.0.0\", // 版本号\n  \"mac\": \"c4-41-1e-b2-12-04\" // 本地 MAC 地址\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
+						"description": "## 请求参数\n\n无.\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"version\": \"v1.0.0\", // 版本号\n  \"machineCode\": \"63342D34312D31652D62322D31322D3034\" // 机器码\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}

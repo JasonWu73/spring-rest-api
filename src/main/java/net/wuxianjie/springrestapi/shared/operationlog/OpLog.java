@@ -18,5 +18,5 @@ public class OpLog {
   // 方法信息
   private String message; // 方法信息
   private String method; // 方法名
-  private String params; // 方法参数（JSON 字符串）
+  private String params; // 方法参数 (JSON 字符串)
 }

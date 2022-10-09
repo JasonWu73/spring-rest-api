@@ -24,15 +24,15 @@ public class UserController {
   private final UserService userService;
 
   /**
-   * 获取用户分页列表。
+   * 获取用户分页列表.
    *
    * @param pagination <pre>{@code
-   * pageNumber: 1 // 页码，必填，值 >= 1
-   * pageSize: 10 // 每页显示条目个数，必填，值 >= 1
+   * pageNumber: 1 // 页码, 必填, 值 >= 1
+   * pageSize: 10 // 每页显示条目个数, 必填, 值 >= 1
    * }</pre>
    * @param request <pre>{@code
-   * username: zhangsan // 用户名，长度 <= 100
-   * nickname: 张三 // 用户昵称，长度 <= 100
+   * username: zhangsan // 用户名, 长度 <= 100
+   * nickname: 张三 // 用户昵称, 长度 <= 100
    * enabled: 1 // 是否启用, 1: 已启用, 0: 已禁用
    * }</pre>
    * @return <pre>{@code
@@ -66,16 +66,16 @@ public class UserController {
   }
 
   /**
-   * 新增用户。
+   * 新增用户.
    *
    * @param request <pre>{@code
    * {
-   *   "username": "zhangsan", // 用户名，必填，长度 <= 100，用户名只能包含中文、英文、数字或_，且必须以中文或英文开头
-   *   "password": "123", // 密码，必填，长度 <= 100
+   *   "username": "zhangsan", // 用户名, 必填, 长度 <= 100, 用户名只能包含中文, 英文, 数字或_, 且必须以中文或英文开头
+   *   "password": "123", // 密码, 必填, 长度 <= 100
    *   "enabled": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填
-   *   "roleId": 1, // 角色 id，必填
-   *   "nickname": "张三", // 用户昵称，长度 <= 100
-   *   "remark": "测试用户" // 备注，长度 <= 200
+   *   "roleId": 1, // 角色 id, 必填, 值 >= 1
+   *   "nickname": "张三", // 用户昵称, 长度 <= 100
+   *   "remark": "测试用户" // 备注, 长度 <= 200
    * }
    * }</pre>
    * @return <pre>{@code
@@ -89,15 +89,15 @@ public class UserController {
   }
 
   /**
-   * 更新用户。
+   * 更新用户.
    *
    * @param userId {@code /api/v1/user/{userId}}
    * @param request <pre>{@code
    * {
    *   "enabled": 1, // 是否启用, 1: 已启用, 0: 已禁用, 必填
-   *   "roleId": 1, // 角色 id，必填
-   *   "nickname": "张三", // 用户昵称，长度 <= 100
-   *   "remark": "测试用户" // 备注，长度 <= 200
+   *   "roleId": 1, // 角色 id, 必填, 值 >= 1
+   *   "nickname": "张三", // 用户昵称, 长度 <= 100
+   *   "remark": "测试用户" // 备注, 长度 <= 200
    * }
    * }</pre>
    * @return <pre>{@code
@@ -115,12 +115,12 @@ public class UserController {
   }
 
   /**
-   * 重置密码。
+   * 重置密码.
    *
    * @param userId {@code /api/v1/user/{userId}/reset}
    * @param request <pre>{@code
    * {
-   *   "password": "123", // 密码，必填，长度 <= 100
+   *   "password": "123", // 密码, 必填, 长度 <= 100
    * }
    * }</pre>
    * @return <pre>{@code
@@ -138,18 +138,18 @@ public class UserController {
   }
 
   /**
-   * 修改密码。
+   * 修改密码.
    *
    * @param request <pre>{@code
    * {
-   *   "oldPassword": "111", // 密码，必填，长度 <= 100
-   *   "newPassword": "123" // 密码，必填，长度 <= 100
+   *   "oldPassword": "111", // 密码, 必填, 长度 <= 100
+   *   "newPassword": "123" // 密码, 必填, 长度 <= 100
    * }
    * }</pre>
    * @return <pre>{@code
    * }</pre>
    */
-  @PostMapping("user/passwd")
+  @PutMapping("user/passwd")
   public ResponseEntity<Void> changePassword(
     @RequestBody @Valid final PasswdRequest request
   ) {
@@ -157,7 +157,7 @@ public class UserController {
   }
 
   /**
-   * 删除用户。
+   * 删除用户.
    *
    * @param userId {@code /api/v1/user/{userId}}
    * @return <pre>{@code

@@ -28,7 +28,6 @@ public enum YesOrNo implements EnumType {
     if (code == null) {
       return Optional.empty();
     }
-
     for (final YesOrNo yesOrNo : VALUES) {
       if (yesOrNo.getCode() == code) {
         return Optional.of(yesOrNo);

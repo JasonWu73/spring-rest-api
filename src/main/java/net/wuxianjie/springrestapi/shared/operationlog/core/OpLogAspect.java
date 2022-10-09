@@ -1,5 +1,6 @@
 package net.wuxianjie.springrestapi.shared.operationlog.core;
 
+import cn.hutool.core.text.StrPool;
 import cn.hutool.core.text.StrSplitter;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
@@ -130,7 +131,7 @@ public class OpLogAspect {
       @Override
       public boolean hasIgnoreMarker(final AnnotatedMember m) {
         final String ignores = annotation.ignores();
-        final List<String> exclusions = StrSplitter.split(ignores, ",", 0, true, true);
+        final List<String> exclusions = StrSplitter.split(ignores, StrPool.COMMA, 0, true, true);
         return exclusions.contains(m.getName()) || super.hasIgnoreMarker(m);
       }
     });

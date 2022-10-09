@@ -6,16 +6,16 @@ import cn.hutool.core.util.StrUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StrUtils {
 
   /**
-   * 去除字符串的首尾空白字符，并转换为支持数据库 LIKE 模糊搜索的字符串（{@code %value%}）。
-   *
-   * <p>本方法会将字符串中的空格替换为 {@code %}，例如：{@code "key1    key2" -> "%key1%key2%"}。
+   * 当 {@code value} 不为空时, 将字符串中的空白字符替换为 {@code %}, 例如: {@code "key1    key2" -> "%key1%key2%"}; 否则返回 {@code null}. 可用于数据库 LIKE 的值.
    *
    * @param value 需要转换的原字符串
-   * @return 去除字符串首尾空白字符后的 {@code %value%} 字符串；若 {@code value} 为 null 或仅包含空白字符，则返回 null
+   * @return {@code "key1    key2" -> "%key1%key2%"} 或 {@code null}
    */
   public static String toNullableLikeValue(final String value) {
     final String trimmed = StrUtil.trimToNull(value);
@@ -27,5 +27,13 @@ public final class StrUtils {
 
   public static String getMachineCode() {
     return HexUtil.encodeHexStr(StrUtil.bytes(NetUtil.getLocalMacAddress()), false);
+  }
+
+  public static Optional<String> toMacAddress(final String machineCode) {
+    final String trimmed = StrUtil.trimToNull(machineCode);
+    if (trimmed == null) {
+      return Optional.empty();
+    }
+    return Optional.of(HexUtil.decodeHexStr(machineCode));
   }
 }

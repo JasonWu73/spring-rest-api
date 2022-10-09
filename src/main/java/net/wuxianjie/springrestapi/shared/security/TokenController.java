@@ -16,7 +16,7 @@ public class TokenController {
   private final TokenService tokenService;
 
   /**
-   * 获取 Access Token，在私有 API 时需要在 HTTP 请求中携带 Access Token：
+   * 获取 Access Token, 在访问私有 API 时需要在 HTTP 请求头中携带 Access Token:
    *
    * <pre>{@code
    *   Authorization: Bearer {accessToken}
@@ -25,15 +25,15 @@ public class TokenController {
    *
    * @param request <pre>{@code
    * {
-   *   "username": "...", // 用户名，必填，长度 <= 100
-   *   "password": "..." // 密码，必填，长度 <= 100
+   *   "username": "...", // 用户名, 必填, 长度 <= 100
+   *   "password": "..." // 密码, 必填, 长度 <= 100
    * }
    * }</pre>
    * @return <pre>{@code
    * {
    *   "accessToken": "...", // 要获取的 Access Token
    *   "refreshToken": "...", // 用于刷新的 Refresh Token
-   *   "expiresIn": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）
+   *   "expiresIn": 1800, // Access Token 的有效期 (秒为单位, 有效期 30 分钟)
    *   "username": "zhangsan", // 用户名
    *   "nickname": "张三", // 昵称
    *   "authorities": ["user"] // 权限列表
@@ -47,14 +47,14 @@ public class TokenController {
   }
 
   /**
-   * 刷新 Access Token，刷新后旧 Access Token 将不可用。
+   * 刷新 Access Token, 刷新后旧 Access Token 将不可用.
    *
    * @param refreshToken {@code /api/v1/token/{refreshToken}}
    * @return <pre>{@code
    * {
    *   "accessToken": "...", // 要获取的 Access Token
    *   "refreshToken": "...", // 用于刷新的 Refresh Token
-   *   "expiresIn": 1800, // Access Token 的有效期（秒为单位，有效期 30 分钟）
+   *   "expiresIn": 1800, // Access Token 的有效期 (秒为单位, 有效期 30 分钟)
    *   "username": "zhangsan", // 用户名
    *   "nickname": "张三", // 昵称
    *   "roleId": 1, // 角色 id

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.wuxianjie.springrestapi.user.UserMapper">
+  <select id="selectHashedPasswordById" resultType="java.lang.String">
+    select hashed_password
+    from user
+    where id = #{userId}
+  </select>
+
   <select id="selectById" resultType="net.wuxianjie.springrestapi.user.User">
     select id,
            remark,
@@ -68,17 +74,29 @@
 
   <insert id="insert">
     insert into user (created_at, updated_at, remark, username, nickname, hashed_password, is_enabled, role_id)
-    values (#{createdAt}, #{updatedAt}, #{remark}, #{username}, #{nickname}, #{hashedPassword}, #{enabled}, #{roleId})
+    values (now(), now(), #{remark}, #{username}, #{nickname}, #{hashedPassword}, #{enabled}, #{roleId})
   </insert>
 
   <update id="updateById">
     update user
-    set updated_at      = #{updatedAt},
-        remark          = #{remark},
-        nickname        = #{nickname},
+    <set>
+      updated_at = now(),
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname},
+      </if>
+      <if test="hashedPassword != null">
         hashed_password = #{hashedPassword},
-        is_enabled      = #{enabled},
-        role_id         = #{roleId}
+      </if>
+      <if test="enabled != null">
+        is_enabled = #{enabled},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId},
+      </if>
+    </set>
     where id = #{id}
   </update>
 

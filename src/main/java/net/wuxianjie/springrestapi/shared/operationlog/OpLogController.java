@@ -21,18 +21,18 @@ public class OpLogController {
   private final OpLogService opLogService;
 
   /**
-   * 获取操作日志分页列表。
+   * 获取操作日志分页列表.
    *
    * @param pagination <pre>{@code
-   * pageNumber: 1 // 页码，必填，值 >= 1
-   * pageSize: 10 // 每页显示条目个数，必填，值 >= 1
+   * pageNumber: 1 // 页码, 必填, 值 >= 1
+   * pageSize: 10 // 每页显示条目个数, 必填, 值 >= 1
    * }</pre>
    * @param request <pre>{@code
-   * startTime: 2022-09-16 15:35:55 // 开始时间，必填，格式为 yyyy-MM-dd HH:mm:ss
-   * endTime: 2022-09-16 16:00:00 // 结束时间，必填，格式为 yyyy-MM-dd HH:mm:ss
-   * requestIp: 127 // 请求方 IP，长度 <= 100
-   * endpoint: token // 接口端点，长度 <= 100
-   * message: 获取 Token // 方法信息，长度 <= 100
+   * startTime: 2022-09-16 15:35:55 // 开始时间, 必填, 格式为 `yyyy-MM-dd HH:mm:ss`
+   * endTime: 2022-09-16 16:00:00 // 结束时间, 必填, 格式为 `yyyy-MM-dd HH:mm:ss`
+   * requestIp: 127 // 请求方 IP, 长度 <= 100
+   * endpoint: token // 接口端点, 长度 <= 2000
+   * message: 获取 Token // 方法信息, 长度 <= 100
    * }</pre>
    * @return <pre>{@code
    * {
@@ -47,7 +47,7 @@ public class OpLogController {
    *       "username": "zhangsan", // 用户名
    *       "message": "虚拟方法", // 方法信息
    *       "method": "xxx.xxx.test()" // 方法名
-   *       "params": "{\"request\":{\"param\":\"test\"}}" // 方法参数（JSON 字符串）
+   *       "params": "{\"request\":{\"param\":\"test\"}}" // 方法参数 (JSON 字符串)
    *     }
    *   ]
    * }

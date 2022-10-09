@@ -19,7 +19,7 @@ public class PaginationRequest {
   private Integer pageSize;
 
   /**
-   * MySQL、SQLite 等数据库的偏移量 OFFSET，例如：
+   * MySQL, SQLite 等数据库的偏移量 OFFSET, 例如：
    *
    * <ul>
    *   <li>{@code SELECT * FROM table_name LIMIT #{pageSize} OFFSET #{offset}}</li>

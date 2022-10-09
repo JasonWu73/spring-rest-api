@@ -8,6 +8,8 @@ import java.util.List;
 @Mapper
 public interface RoleMapper {
 
+  String selectFullPathById(int roleId);
+
   Role selectById(int roleId);
 
   boolean selectExitsByName(String name);
@@ -26,7 +28,7 @@ public interface RoleMapper {
 
   void updateUpdateAtParentNameByParentId(Role child);
 
-  void updateUpdateAtFullPathByFullPathLike(Role lower, String oldFullPathPrefix);
+  void updateFullPathByFullPathLike(String newFullPathPrefix, String oldFullPathPrefix);
 
   void deleteById(int roleId);
 }

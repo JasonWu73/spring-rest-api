@@ -45,12 +45,10 @@
   </appender>
 
   <!-- additivity="false": 不要追加日志输出至 <root> -->
-  <!--
-  <logger name="org.springframework.transaction" level="TRACE" additivity="false">
-    &lt;!&ndash; 查看 Spring 事务管理是否开启 &ndash;&gt;
+  <logger name="com.zaxxer.hikari" level="TRACE" additivity="false">
+    <!-- 查看 HikariCP 数据源配置详情 -->
     <appender-ref ref="CONSOLE"/>
   </logger>
-  -->
 
   <!-- 生产环境下, 请使用 WARN 级别日志 -->
   <root level="INFO">

@@ -15,15 +15,30 @@ public class ExceptionControllerAdvice {
 
   @ExceptionHandler(ApiException.class)
   public ResponseEntity<LinkedHashMap<String, Object>> handleApiException(final ApiException e) {
-    // 若客户端请求异常，则以 WARN 级别记录异常消息
+    logMsg(e);
     final HttpStatus status = e.getStatus();
-    if (status.is4xxClientError()) {
-      log.warn("{}", e.getMessage());
-    } else {
-      // 若非客户端请求异常，则以 ERROR 级别记录异常栈
-      log.error("非客户端错误", e);
-    }
     return ResponseEntity.status(status)
       .body(ApiUtils.error(status, e.getReason()));
+  }
+
+  private void logMsg(final ApiException e) {
+    // 若客户端请求异常, 则以 WARN 级别记录异常消息
+    final HttpStatus status = e.getStatus();
+    final boolean logStack = e.isLogStack();
+    if (status.is4xxClientError() && logStack) {
+      log.warn("{}", e.getMessage(), e);
+      return;
+    }
+    if (status.is4xxClientError()) {
+      log.warn("{}", e.getMessage());
+      return;
+    }
+
+    // 若非客户端请求异常, 则以 ERROR 级别记录异常栈
+    if (logStack) {
+      log.error("{}", e.getMessage(), e);
+      return;
+    }
+    log.error("{}", e.getMessage());
   }
 }

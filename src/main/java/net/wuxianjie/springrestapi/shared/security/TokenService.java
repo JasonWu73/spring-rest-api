@@ -36,7 +36,7 @@ public class TokenService {
     // 创建 JWT
     final LinkedHashMap<String, Object> tokenResult = createToken(tokenDetails);
 
-    // 加入缓存
+    // 添加 Token 缓存
     addTokenCache(username, tokenResult);
     return ResponseEntity.ok(tokenResult);
   }
@@ -70,7 +70,7 @@ public class TokenService {
     // 创建 JWT
     final LinkedHashMap<String, Object> tokenResult = createToken(tokenDetails);
 
-    // 加入缓存
+    // 添加 Token 缓存
     addTokenCache(username, tokenResult);
     return ResponseEntity.ok(tokenResult);
   }

@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * 全局配置（application.yml）：
+ * 全局配置 (application.yml):
  *
  * <p>{@code mybatis.type-handlers-package: net.wuxianjie.springrestapi.shared.mybatis}
  */

@@ -34,7 +34,7 @@ public class JsonConfig {
   @Bean
   public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
     return builder -> {
-      // 设置与 JVM 相同的时区，默认使用 UTC 时间
+      // 设置与 JVM 相同的时区, 默认使用 UTC 时间
       builder.timeZone(ZoneId.systemDefault().getId());
 
       // 设置 Date 序列化后的字符串格式

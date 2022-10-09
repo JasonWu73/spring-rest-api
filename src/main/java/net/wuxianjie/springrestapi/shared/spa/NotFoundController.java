@@ -16,7 +16,7 @@ public class NotFoundController {
 
   @RequestMapping(value = "/404", produces = MediaType.TEXT_HTML_VALUE)
   public ModelAndView errorHtml(final HttpServletResponse response) {
-    // 单页页应用程序 404 应由前端路由自行提供，后端返回 200 即可
+    // 单页面应用程序 404 应由前端路由自行提供, 后端返回 200 即可
     response.setStatus(HttpStatus.OK.value());
     // Spring Boot 默认会将 `src/main/resources/static/` 中的内容作为静态资源提供
     //noinspection SpringMVCViewInspection

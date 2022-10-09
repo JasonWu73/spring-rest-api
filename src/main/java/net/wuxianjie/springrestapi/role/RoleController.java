@@ -21,7 +21,7 @@ public class RoleController {
   private final RoleService roleService;
 
   /**
-   * 获取角色列表。
+   * 获取角色列表.
    *
    * @return <pre>{@code
    * [
@@ -29,7 +29,7 @@ public class RoleController {
    *     "roleId": 2, // 角色 id
    *     "remark": "角色用途说明", // 备注
    *     "name": "测试账号", // 角色名
-   *     "menus": "user_view,role_view", // 菜单
+   *     "menus": ["user"], // 菜单列表, 即权限列表
    *     "parentId": 1, // 上级角色 id
    *     "parentName": "管理员" // 上级角色名
    *   }
@@ -43,14 +43,14 @@ public class RoleController {
   }
 
   /**
-   * 新增角色。
+   * 新增角色.
    *
    * @param request <pre>{@code
    * {
-   *   "name": "测试账号", // 角色名，必填，长度 <= 100
-   *   "menus": "user_view,role_view", // 菜单，必填，长度 <= 200
-   *   "remark": "角色用途说明", // 备注，长度 <= 200
-   *   "parentId": 1 // 上级角色 id
+   *   "name": "测试账号", // 角色名, 必填, 长度 <= 100
+   *   "menus": ["user"], // 菜单列表, 必填
+   *   "parentId": 1, // 上级角色 id, 必填, 值 >= 1
+   *   "remark": "角色用途说明" // 备注, 长度 <= 200
    * }
    * }</pre>
    * @return <pre>{@code
@@ -64,15 +64,15 @@ public class RoleController {
   }
 
   /**
-   * 更新角色。
+   * 更新角色.
    *
    * @param roleId {@code /api/v1/role/{roleId}}
    * @param request <pre>{@code
    * {
-   *   "name": "测试账号", // 角色名，必填，长度 <= 100
-   *   "menus": "user_view,role_view", // 菜单，必填，长度 <= 200
-   *   "remark": "角色用途说明", // 备注，长度 <= 200
-   *   "parentId": 1 // 上级角色 id
+   *   "name": "测试账号", // 角色名, 必填, 长度 <= 100
+   *   "menus": ["user"], // 菜单列表, 必填
+   *   "parentId": 1, // 上级角色 id, 必填, 值 >= 1
+   *   "remark": "角色用途说明" // 备注, 长度 <= 200
    * }
    * }</pre>
    * @return <pre>{@code
@@ -90,7 +90,7 @@ public class RoleController {
   }
 
   /**
-   * 删除角色。
+   * 删除角色.
    *
    * @param roleId {@code /api/v1/role/{roleId}}
    * @return <pre>{@code

@@ -13,16 +13,29 @@ public class ApiException extends RuntimeException {
   @Getter
   private final String reason;
 
-  public ApiException(final HttpStatus status, final String reason) {
+  @Getter
+  private final boolean logStack;
+
+  public ApiException(final HttpStatus status, final String reason, final boolean logStack) {
     super(reason);
     this.status = status;
     this.reason = reason;
+    this.logStack = logStack;
   }
 
-  public ApiException(final HttpStatus status, final String reason, final Throwable cause) {
+  public ApiException(final HttpStatus status, final String reason) {
+    this(status, reason, false);
+  }
+
+  public ApiException(final HttpStatus status, final String reason, final Throwable cause, final boolean logStack) {
     super(reason, cause);
     this.status = status;
     this.reason = reason;
+    this.logStack = logStack;
+  }
+
+  public ApiException(final HttpStatus status, final String reason, final Throwable cause) {
+    this(status, reason, cause, false);
   }
 
   @Override

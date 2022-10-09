@@ -125,15 +125,7 @@ public class VodService {
 
   public ResponseEntity<Void> addVod(final MultipartFile file) {
     // 文件名校验, 不能包含在 Windows 下不支持的非法字符, 包括: \ / : * ? " < > |
-    final String originalFilename = file.getOriginalFilename();
-    final String filenameTrimToNull = StrUtil.trimToNull(originalFilename);
-    if (filenameTrimToNull == null) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "文件名不存在");
-    }
-    final String filename = FileNameUtil.getName(filenameTrimToNull);
-    if (FileNameUtil.containsInvalid(originalFilename)) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "文件名存在非法字符, 包含: \\ / : * ? \" < > |");
-    }
+    final String filename = FileUtils.getValidFilename(file);
 
     // 仅支持 MP3 或 MP4
     if (isNotMp3Mp4(filename)) {

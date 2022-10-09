@@ -21,10 +21,9 @@ public final class ApiUtils {
   public static Optional<TokenDetails> getAuthentication() {
     final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication instanceof AnonymousAuthenticationToken) {
-      // 匿名用户，即无需身份验证的 API
+      // 匿名用户, 即无需身份验证的 API
       return Optional.empty();
     }
-
     return Optional.of((TokenDetails) authentication.getPrincipal());
   }
 

@@ -8,7 +8,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 
 /**
- * 全局配置（application.yml）：
+ * 全局配置 (application.yml):
  *
  * <p>{@code mybatis.type-handlers-package: net.wuxianjie.springrestapi.shared.mybatis}
  */

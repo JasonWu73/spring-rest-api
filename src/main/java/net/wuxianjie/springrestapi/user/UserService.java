@@ -1,6 +1,7 @@
 package net.wuxianjie.springrestapi.user;
 
 import cn.hutool.cache.impl.TimedCache;
+import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import net.wuxianjie.springrestapi.role.Role;
@@ -18,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +41,8 @@ public class UserService {
     request.setNickname(StrUtils.toNullableLikeValue(request.getNickname()));
 
     // 获取分页列表和总条目数
-    final int total = userMapper.selectCountByUsernameLikeNicknameLikeEnabled(request);
+    final int total = userMapper.
+      selectCountByUsernameLikeNicknameLikeEnabled(request);
     final List<LinkedHashMap<String, Object>> list = userMapper
       .selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(pagination, request);
 
@@ -69,10 +70,8 @@ public class UserService {
     final String rawPassword = request.getPassword();
     final String hashedPassword = passwordEncoder.encode(rawPassword);
 
-    // 保存数据库
+    // 将用户数据保存至数据库
     final User user = new User();
-    user.setCreatedAt(LocalDateTime.now());
-    user.setUpdatedAt(LocalDateTime.now());
     user.setRemark(request.getRemark());
     user.setUsername(request.getUsername());
     user.setNickname(request.getNickname());
@@ -80,42 +79,40 @@ public class UserService {
     user.setEnabled(request.getEnabled());
     user.setRoleId(request.getRoleId());
     userMapper.insert(user);
-
     return ResponseEntity.ok().build();
   }
 
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> updateUser(final UserRequest request) {
-    // 数据存在性校验
-    final User user = getUserFromDbMustExists(request.getUserId());
+    // 从数据库中获取用户数据
+    final User user = userMapper.selectById(request.getUserId());
+    if (user == null) {
+      throw new ApiException(HttpStatus.NOT_FOUND, "用户不存在");
+    }
 
+    // 检查角色 id 是否有效
+    // 用户仅可创建自身或下级角色的用户
     checkForRole(request.getRoleId());
 
-    // 更新数据库
-    user.setUpdatedAt(LocalDateTime.now());
+    // 更新数据库中的用户数据
     user.setRemark(request.getRemark());
     user.setNickname(request.getNickname());
     user.setEnabled(request.getEnabled());
     user.setRoleId(request.getRoleId());
     userMapper.updateById(user);
-
     return ResponseEntity.ok().build();
   }
 
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> resetPassword(final UserRequest request) {
-    // 数据存在性校验
-    final User user = getUserFromDbMustExists(request.getUserId());
-
     // 密码编码
     final String rawPassword = request.getPassword();
     final String hashedPassword = passwordEncoder.encode(rawPassword);
 
-    // 更新数据库
-    user.setUpdatedAt(LocalDateTime.now());
+    // 更新数据库中的用户密码
+    final User user = new User();
     user.setHashedPassword(hashedPassword);
     userMapper.updateById(user);
-
     return ResponseEntity.ok().build();
   }
 
@@ -128,29 +125,29 @@ public class UserService {
       throw new ApiException(HttpStatus.BAD_REQUEST, "新旧密码不能相同");
     }
 
-    // 比较传入的旧密码是否与数据库中的一致
+    // 比较传入的旧密码是否与数据库中保存的用户密码一致
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
-    final User user = getUserFromDbMustExists(token.getUserId());
-    if (!passwordEncoder.matches(oldPassword, user.getHashedPassword())) {
+    final String oldHashedPassword = userMapper.selectHashedPasswordById(token.getUserId());
+    if (oldHashedPassword == null || !passwordEncoder.matches(oldPassword, oldHashedPassword)) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "旧密码错误");
     }
 
     // 密码编码
-    final String hashedPassword = passwordEncoder.encode(newPassword);
+    final String newHashedPassword = passwordEncoder.encode(newPassword);
 
-    // 更新数据库
-    user.setUpdatedAt(LocalDateTime.now());
-    user.setHashedPassword(hashedPassword);
+    // 更新数据库中的密码
+    final User user = new User();
+    user.setHashedPassword(newHashedPassword);
     userMapper.updateById(user);
 
     // 密码修改成功后注销登录
     usernameToToken.remove(user.getUsername());
-
     return ResponseEntity.ok().build();
   }
 
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> deleteUser(final int userId) {
+    // 删除数据库中的用户数据
     userMapper.deleteById(userId);
     return ResponseEntity.ok().build();
   }
@@ -168,17 +165,9 @@ public class UserService {
     final String currentUserRoleFullPath = currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
     final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
     final boolean startWithCurrentUserRoleFullPath = Objects.equals(addedUserFullPath, currentUserRoleFullPath) ||
-      StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath + ".");
+      StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath + StrPool.DOT);
     if (!startWithCurrentUserRoleFullPath) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建自身或下级角色的用户");
     }
-  }
-
-  private User getUserFromDbMustExists(final Integer userId) {
-    final User user = userMapper.selectById(userId);
-    if (user == null) {
-      throw new ApiException(HttpStatus.NOT_FOUND, "用户不存在");
-    }
-    return user;
   }
 }

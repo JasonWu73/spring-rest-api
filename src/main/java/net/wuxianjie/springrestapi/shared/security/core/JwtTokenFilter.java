@@ -69,8 +69,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     final HttpServletResponse response,
     final FilterChain filterChain
   ) throws ServletException, IOException {
-    // 1. 若访问的不是 REST API（静态资源），则无需身份验证
-    // 2. 若访问的是 REST API，但该 API 是公开的，则也无需身份验证
+    // 1. 若访问的不是 REST API (静态资源), 则无需身份验证
+    // 2. 若访问的是 REST API, 但该 API 是公开的, 则也无需身份验证
     final boolean isApiRequest = ALL_API_REQUEST_MATCHER.matches(request);
     final boolean isPublicApiRequest = PUBLIC_API_REQUEST_MATCHER.matches(request);
     if (!isApiRequest || isPublicApiRequest) {

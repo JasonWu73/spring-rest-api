@@ -26,9 +26,10 @@ public class OpLogService {
     request.setMessage(StrUtils.toNullableLikeValue(request.getMessage()));
 
     // 获取分页列表和总条目数
-    final int total = opLogMapper.selectCountByReqIpLikeEndPointLikeMessageLike(request);
+    final int total = opLogMapper
+      .selectCountByRequestIpLikeEndpointLikeMessageLike(request);
     final List<LinkedHashMap<String, Object>> list = opLogMapper
-      .selectByReqIpLikeEndPointLikeMessageLikeOrderByReqTimeDesc(pagination, request);
+      .selectByRequestIpLikeEndpointLikeMessageLikeOrderByRequestTimeDesc(pagination, request);
 
     // 构造并返回分页结果
     return ResponseEntity.ok(new PaginationResult<>(

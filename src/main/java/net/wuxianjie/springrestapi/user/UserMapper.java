@@ -11,6 +11,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
+  String selectHashedPasswordById(int userId);
+
   User selectById(int userId);
 
   AuthData selectByUsername(String username);

@@ -5,17 +5,14 @@ import net.wuxianjie.springrestapi.shared.validation.group.CreateOne;
 import net.wuxianjie.springrestapi.shared.validation.group.UpdateOne;
 import net.wuxianjie.springrestapi.shared.validation.group.UpdateTwo;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 public class UserRequest {
 
   @Pattern(
     regexp = "(^\\s*$|^[\\u4E00-\\u9FA5A-Za-z][\\u4E00-\\u9FA5A-Za-z\\d_]+$)",
-    message = "用户名只能包含中文、英文、数字或_，且必须以中文或英文开头",
+    message = "用户名只能包含中文, 英文, 数字或_，且必须以中文或英文开头",
     groups = CreateOne.class
   )
   @NotBlank(message = "用户名不能为空", groups = CreateOne.class)
@@ -36,7 +33,9 @@ public class UserRequest {
   private String remark;
 
   @NotNull(message = "角色 id 不能为 null", groups = {CreateOne.class, UpdateOne.class})
+  @Min(value = 1, message = "角色 id 不能小于 1")
   private Integer roleId;
 
+  @Min(value = 1, message = "用户 id 不能小于 1")
   private Integer userId;
 }

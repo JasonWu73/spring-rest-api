@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="net.wuxianjie.springrestapi.role.RoleMapper">
+  <select id="selectFullPathById" resultType="java.lang.String">
+    select full_path
+    from role
+    where id = #{roleId}
+  </select>
+
   <select id="selectById" resultType="net.wuxianjie.springrestapi.role.Role">
     select id,
            remark,
@@ -49,33 +55,47 @@
 
   <insert id="insert" parameterType="net.wuxianjie.springrestapi.role.Role" useGeneratedKeys="true" keyProperty="id">
     insert into role (created_at, updated_at, remark, name, menus, parent_id, parent_name, full_path)
-    values (#{createdAt}, #{updatedAt}, #{remark}, #{name}, #{menus}, #{parentId}, #{parentName}, #{fullPath})
+    values (now(), now(), #{remark}, #{name}, #{menus}, #{parentId}, #{parentName}, #{fullPath})
   </insert>
 
   <update id="updateById">
     update role
-    set updated_at  = #{updatedAt},
-        remark      = #{remark},
-        name        = #{name},
-        menus       = #{menus},
-        parent_id   = #{parentId},
+    <set>
+      updated_at = now(),
+      <if test="remark != null">
+        remark = #{remark},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="menus != null">
+        menus = #{menus},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId},
+      </if>
+      <if test="parentName != null">
         parent_name = #{parentName},
-        full_path   = #{fullPath}
+      </if>
+      <if test="fullPath != null">
+        full_path = #{fullPath},
+      </if>
+    </set>
     where id = #{id}
   </update>
 
   <update id="updateUpdateAtParentNameByParentId">
     update role
-    set updated_at  = #{updatedAt},
+    set updated_at  = now(),
         parent_name = #{parentName}
     where parent_id = #{parentId}
   </update>
 
-  <update id="updateUpdateAtFullPathByFullPathLike">
+  <update id="updateFullPathByFullPathLike">
     update role
-    set updated_at = #{lower.updatedAt},
-        full_path  = replace(full_path, #{oldFullPathPrefix}, #{lower.fullPath})
-    where full_path like (#{oldFullPathPrefix} || '%')
+    set updated_at = now(),
+        full_path  = replace(full_path, #{oldFullPathPrefix}, #{newFullPathPrefix})
+    where full_path like concat(#{oldFullPathPrefix}, '%')
   </update>
 
   <delete id="deleteById">

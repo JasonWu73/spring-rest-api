@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 public class PaginationOffsetAspect {
 
   /**
-   * 匹配所有符合以下条件的方法：
+   * 匹配所有符合以下条件的方法:
    *
    * <ol>
-   *     <li>类名后缀为 Controller</li>
-   *     <li>方法的访问修饰符为 public</li>
-   *     <li>方法的第一个参数为 {@link PaginationRequest}</li>
+   *   <li>类名后缀为 Controller</li>
+   *   <li>方法的访问修饰符为 {@code public}</li>
+   *   <li>方法的第一个参数为 {@link PaginationRequest}</li>
    * </ol>
    *
-   * @param joinPoint 程序执行期间的一个点，Spring AOP 中即为一个方法执行
+   * @param joinPoint 程序执行期间的一个点, Spring AOP 中即为一个方法执行
    */
   // execution([方法的可见性] 返回类型 [方法所在类的全路径名].方法名(参数类型列表) [方法抛出的异常类型])
   @Before("execution(public * *..*Controller.*(PaginationRequest, ..))")

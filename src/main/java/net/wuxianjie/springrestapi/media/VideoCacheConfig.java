@@ -13,8 +13,11 @@ public class VideoCacheConfig {
    */
   @Bean
   public TimedCache<String, String> filePathToAbsolute() {
+    // 创建定时缓存, 设置过期时间为 24 小时
     final long timeoutMilliseconds = 24 * 60 * 60 * 1000;
     final TimedCache<String, String> filePathToAbsolute = CacheUtil.newTimedCache(timeoutMilliseconds);
+
+    // 启动定时任务, 每 24 小时清理一次过期条目, 注释此行首次启动仍会清理过期条目
     filePathToAbsolute.schedulePrune(timeoutMilliseconds);
     return filePathToAbsolute;
   }

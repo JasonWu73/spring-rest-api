@@ -78,7 +78,7 @@ public class SecurityConfig {
     http
       // 设置请求端点的权限
       .authorizeRequests()
-      // 开放 API 除了此外配置外，于 JwtTokenFilter 再配置，以免过度 Token 身份验证
+      // 开放 API 除了此外配置外, 于 JwtTokenFilter 再配置, 以免过度 Token 身份验证
       .antMatchers(HttpMethod.POST, "/api/v1/token").permitAll()
       .antMatchers(HttpMethod.POST, "/api/v1/token/*").permitAll()
       .antMatchers("/api/*/public/**").permitAll()
@@ -91,7 +91,7 @@ public class SecurityConfig {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       // 设置异常处理程序
       .and().exceptionHandling()
-      // 设置身份验证（Authentication）异常处理程序，对应 401 HTTP 状态码
+      // 设置身份验证 (Authentication) 异常处理程序, 对应 401 HTTP 状态码
       .authenticationEntryPoint((request, response, authException) -> {
         final ApiException apiException = new ApiException(HttpStatus.UNAUTHORIZED, "身份验证失败", authException);
         handlerExceptionResolver.resolveException(request, response, null, apiException);
@@ -107,7 +107,7 @@ public class SecurityConfig {
   }
 
   /**
-   * 公开身份验证管理器，在登录业务中调用 {@link AuthenticationManager#authenticate} 即可实现身份验证：
+   * 公开身份验证管理器, 在登录业务中调用 {@link AuthenticationManager#authenticate} 即可实现身份验证:
    *
    * <pre>{@code
    *   final Authentication authenticate = authenticationManager.authenticate(
@@ -127,7 +127,7 @@ public class SecurityConfig {
   }
 
   /**
-   * 使用 bcrypt 密码哈希算法作为 Spring Security 身份验证管理器的密码编码模式。
+   * 使用 bcrypt 密码哈希算法作为 Spring Security 身份验证管理器的密码编码模式.
    *
    * @return bcrypt 密码编码器
    */
@@ -137,7 +137,7 @@ public class SecurityConfig {
   }
 
   /**
-   * CORS 过滤器，在启用 CORS 时，被 Spring Security 所使用 。
+   * CORS 过滤器, 在启用 CORS 时, 被 Spring Security 所使用.
    *
    * @return CORS 过滤器
    */
