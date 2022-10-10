@@ -111,6 +111,7 @@ public class UserService {
 
     // 更新数据库中的用户密码
     final User user = new User();
+    user.setId(request.getUserId());
     user.setHashedPassword(hashedPassword);
     userMapper.updateById(user);
     return ResponseEntity.ok().build();
@@ -137,6 +138,7 @@ public class UserService {
 
     // 更新数据库中的密码
     final User user = new User();
+    user.setId(token.getUserId());
     user.setHashedPassword(newHashedPassword);
     userMapper.updateById(user);
 
