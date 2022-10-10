@@ -134,7 +134,7 @@ public class RoleService {
     // 当角色存在下级角色时不可删除
     final String fullPath = roleMapper.selectFullPathById(roleId);
     if (StrUtil.isEmpty(fullPath)) {
-      return ResponseEntity.ok().build();
+      throw new ApiException(HttpStatus.BAD_REQUEST, "不可删除根角色");
     }
     final boolean existsLowerNode = roleMapper.selectExitsByFullPathLike(fullPath + StrPool.DOT + "%");
     if (existsLowerNode) {
