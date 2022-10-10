@@ -1,13 +1,9 @@
 <service>
-  <id>REST API 服务</id>
-  <name>REST API 服务</name>
-  <description>开发者: 吴仙杰</description>
-  <executable>jre\bin\java.exe</executable>
-  <arguments>
-    -Djasypt.encryptor.password=k3y
-    -jar spring-rest-api.jar
-    --logging.config=file:./config/logback-spring.xml
-  </arguments>
+  <id>开发数据库</id>
+  <name>开发数据库</name>
+  <description>维护者: 吴仙杰</description>
+  <executable>bin\mysqld.exe</executable>
+  <arguments/>
   <logpath>logs</logpath>
   <log mode="none"/>
 </service>

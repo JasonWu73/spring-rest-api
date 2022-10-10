@@ -26,8 +26,9 @@ spring:
       # 连接池中最大连接数 (包括空闲和正使用的连接)
       # 当达到时, 调用 getConnection() 时可能会阻塞到 connectionTimeout 毫秒
       # 总体目标: 以最小的大小, 只要满足业务需求即可
+      # MySQL: `show variables like 'max_connections';`
       # 默认: `10`
-      maximum-pool-size: 5
+      maximum-pool-size: 10
       # 连接池中空闲连接的最长存活时间 (仅适用于 minimumIdle < maximumPoolSize 的情况), 单位 ms
       # `0`: 永不删除
       # 默认: `600_000` (10分钟), 最小: `10_000` (10 秒)
