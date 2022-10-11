@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper
 public interface OpLogMapper {
 
-  int selectCountByRequestIpLikeEndpointLikeMessageLike(OpLogRequest request);
+  long selectCountByRequestIpLikeEndpointLikeMessageLike(OpLogRequest request);
 
   List<LinkedHashMap<String, Object>> selectByRequestIpLikeEndpointLikeMessageLikeOrderByRequestTimeDesc(
     @Param("p") PaginationRequest pagination,

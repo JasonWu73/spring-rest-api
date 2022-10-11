@@ -12,11 +12,11 @@ public class PaginationRequest {
 
   @NotNull(message = "页码不能为 null")
   @Min(value = 1, message = "页码不能小于 1")
-  private Integer pageNumber;
+  private Long pageNumber;
 
   @NotNull(message = "每页显示条目个数不能为 null")
   @Min(value = 1, message = "每页显示条目个数不能小于 1")
-  private Integer pageSize;
+  private Long pageSize;
 
   /**
    * MySQL, SQLite 等数据库的偏移量 OFFSET, 例如：
@@ -27,7 +27,7 @@ public class PaginationRequest {
    * </ul>
    */
   @Setter(AccessLevel.PRIVATE)
-  private Integer offset;
+  private Long offset;
 
   public void setOffset() {
     setOffset((pageNumber - 1) * pageSize);

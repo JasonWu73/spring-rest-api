@@ -98,7 +98,7 @@ CREATE TABLE `user` (
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `nickname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hashed_password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `is_enabled` tinyint unsigned DEFAULT NULL,
+  `is_enabled` tinyint DEFAULT NULL,
   `role_id` int unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

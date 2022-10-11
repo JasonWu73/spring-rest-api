@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class User {
 
-  private Integer id;
+  private Long id;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private String remark;
@@ -20,5 +20,5 @@ public class User {
   /**
    * {@link Role#getId()}
    */
-  private Integer roleId;
+  private Long roleId;
 }

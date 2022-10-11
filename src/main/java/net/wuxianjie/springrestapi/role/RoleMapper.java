@@ -8,13 +8,13 @@ import java.util.List;
 @Mapper
 public interface RoleMapper {
 
-  String selectFullPathById(int roleId);
+  String selectFullPathById(long roleId);
 
-  Role selectById(int roleId);
+  Role selectById(long roleId);
 
   boolean selectExitsByName(String name);
 
-  boolean selectExitsByNameIdNot(String name, int roleId);
+  boolean selectExitsByNameIdNot(String name, long roleId);
 
   boolean selectExitsByFullPathLike(String fullPathPrefix);
 
@@ -30,5 +30,5 @@ public interface RoleMapper {
 
   void updateFullPathByFullPathLike(String newFullPathPrefix, String oldFullPathPrefix);
 
-  void deleteById(int roleId);
+  void deleteById(long roleId);
 }

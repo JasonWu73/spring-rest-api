@@ -34,8 +34,8 @@ public class UserRequest {
 
   @NotNull(message = "角色 id 不能为 null", groups = {CreateOne.class, UpdateOne.class})
   @Min(value = 1, message = "角色 id 不能小于 1")
-  private Integer roleId;
+  private Long roleId;
 
   @Min(value = 1, message = "用户 id 不能小于 1")
-  private Integer userId;
+  private Long userId;
 }

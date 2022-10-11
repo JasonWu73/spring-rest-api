@@ -11,8 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PaginationResult<E> {
 
-  private Integer pageNumber; // 页码
-  private Integer pageSize; // 每页显示条目个数
-  private Integer total; // 总条目数
+  private Long pageNumber; // 页码
+  private Long pageSize; // 每页显示条目个数
+  private Long total; // 总条目数
   private List<E> list; // 具体数据列表
 }

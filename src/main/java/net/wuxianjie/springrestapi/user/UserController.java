@@ -107,7 +107,7 @@ public class UserController {
   @PutMapping("user/{userId:\\d+}")
   @PreAuthorize(Authority.User.HAS_EDIT)
   public ResponseEntity<Void> updateUser(
-    @PathVariable final int userId,
+    @PathVariable final long userId,
     @RequestBody @Validated(UpdateOne.class) final UserRequest request
   ) {
     request.setUserId(userId);
@@ -130,7 +130,7 @@ public class UserController {
   @PutMapping("user/{userId:\\d+}/reset")
   @PreAuthorize(Authority.User.HAS_RESET)
   public ResponseEntity<Void> resetPassword(
-    @PathVariable final int userId,
+    @PathVariable final long userId,
     @RequestBody @Validated(UpdateTwo.class) final UserRequest request
   ) {
     request.setUserId(userId);
@@ -166,7 +166,7 @@ public class UserController {
   @Log("删除用户")
   @DeleteMapping("user/{userId:\\d+}")
   @PreAuthorize(Authority.User.HAS_DEL)
-  public ResponseEntity<Void> deleteUser(@PathVariable final int userId) {
+  public ResponseEntity<Void> deleteUser(@PathVariable final long userId) {
     return userService.deleteUser(userId);
   }
 }

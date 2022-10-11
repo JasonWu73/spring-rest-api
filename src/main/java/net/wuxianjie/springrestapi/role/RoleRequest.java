@@ -22,8 +22,8 @@ public class RoleRequest {
 
   @NotNull(message = "上级角色 id 不能为 null", groups = {CreateOne.class, UpdateOne.class})
   @Min(value = 1, message = "上级角色 id 不能小于 1")
-  private Integer parentId;
+  private Long parentId;
 
   @Min(value = 1, message = "角色 id 不能小于 1")
-  private Integer roleId;
+  private Long roleId;
 }

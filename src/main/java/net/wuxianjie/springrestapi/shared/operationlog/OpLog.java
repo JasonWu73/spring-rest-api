@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class OpLog {
 
-  private Integer id;
+  private Long id;
 
   // 请求信息
   private LocalDateTime requestTime; // 请求时间

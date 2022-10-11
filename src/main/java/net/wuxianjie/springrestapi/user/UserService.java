@@ -41,7 +41,7 @@ public class UserService {
     request.setNickname(StrUtils.toNullableLikeValue(request.getNickname()));
 
     // 获取分页列表和总条目数
-    final int total = userMapper.
+    final long total = userMapper.
       selectCountByUsernameLikeNicknameLikeEnabled(request);
     final List<LinkedHashMap<String, Object>> list = userMapper
       .selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(pagination, request);
@@ -148,13 +148,13 @@ public class UserService {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public ResponseEntity<Void> deleteUser(final int userId) {
+  public ResponseEntity<Void> deleteUser(final long userId) {
     // 删除数据库中的用户数据
     userMapper.deleteById(userId);
     return ResponseEntity.ok().build();
   }
 
-  private void checkForRole(final int roleId) {
+  private void checkForRole(final long roleId) {
     // 角色 id 有效性校验
     final Role addedUserRole = roleMapper.selectById(roleId);
     if (addedUserRole == null) {

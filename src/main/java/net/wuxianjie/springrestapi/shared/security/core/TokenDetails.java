@@ -23,18 +23,18 @@ public class TokenDetails implements UserDetails {
   private final boolean enabled;
 
   // 业务字段
-  private int userId;
+  private long userId;
   private String nickname;
-  private int roleId;
+  private long roleId;
 
   public TokenDetails(
     final String username,
     final String password,
     final Collection<? extends GrantedAuthority> authorities,
     final boolean enabled,
-    final int userId,
+    final long userId,
     final String nickname,
-    final int roleId
+    final long roleId
   ) {
     this(username, password, authorities, true, true, true, enabled);
     this.userId = userId;

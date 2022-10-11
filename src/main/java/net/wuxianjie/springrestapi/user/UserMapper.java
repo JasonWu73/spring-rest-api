@@ -11,17 +11,17 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-  String selectHashedPasswordById(int userId);
+  String selectHashedPasswordById(long userId);
 
-  User selectById(int userId);
+  User selectById(long userId);
 
   AuthData selectByUsername(String username);
 
   boolean selectExistsByUsername(String username);
 
-  boolean selectExistsByRoleId(int roleId);
+  boolean selectExistsByRoleId(long roleId);
 
-  int selectCountByUsernameLikeNicknameLikeEnabled(UserRequest request);
+  long selectCountByUsernameLikeNicknameLikeEnabled(UserRequest request);
 
   List<LinkedHashMap<String, Object>> selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(
     @Param("p") PaginationRequest pagination,
@@ -32,5 +32,5 @@ public interface UserMapper {
 
   void updateById(User user);
 
-  void deleteById(int userId);
+  void deleteById(long userId);
 }

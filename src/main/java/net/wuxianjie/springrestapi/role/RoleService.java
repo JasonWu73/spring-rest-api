@@ -62,7 +62,7 @@ public class RoleService {
     roleMapper.insert(role);
 
     // 更新数据库中角色的上级角色名及全路径
-    final Integer parentId = request.getParentId();
+    final Long parentId = request.getParentId();
     final Map<String, Object> hierarchyInfo = getRoleHierarchyInfo(role.getId(), parentId, null);
     role.setParentId(parentId);
     role.setParentName((String) hierarchyInfo.get("parentName"));
@@ -74,7 +74,7 @@ public class RoleService {
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> updateRole(final RoleRequest request) {
     // 从数据库中获取角色数据
-    final Integer roleId = request.getRoleId();
+    final Long roleId = request.getRoleId();
     final Role role = roleMapper.selectById(roleId);
     if (role == null) {
       throw new ApiException(HttpStatus.NOT_FOUND, "角色不存在");
@@ -92,8 +92,8 @@ public class RoleService {
     }
 
     // 获取上级角色信息，并构造全路径
-    final Integer newParentId = request.getParentId();
-    final Integer oldParentId = role.getParentId();
+    final Long newParentId = request.getParentId();
+    final Long oldParentId = role.getParentId();
     final Map<String, Object> hierarchyInfo;
     final boolean needsUpdateParent = !Objects.equals(newParentId, oldParentId);
     final String oldFullPath = role.getFullPath();
@@ -130,7 +130,7 @@ public class RoleService {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public ResponseEntity<Void> deleteRole(final int roleId) {
+  public ResponseEntity<Void> deleteRole(final long roleId) {
     // 当角色存在下级角色时不可删除
     final String fullPath = roleMapper.selectFullPathById(roleId);
     if (StrUtil.isEmpty(fullPath)) {
@@ -153,8 +153,8 @@ public class RoleService {
   }
 
   private Map<String, Object> getRoleHierarchyInfo(
-    final int roleId,
-    final int parentId,
+    final long roleId,
+    final long parentId,
     final String oldFullPath
   ) {
     final Role parentRole = roleMapper.selectById(parentId);

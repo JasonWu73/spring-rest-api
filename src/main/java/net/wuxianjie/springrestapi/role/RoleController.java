@@ -82,7 +82,7 @@ public class RoleController {
   @PutMapping("role/{roleId:\\d+}")
   @PreAuthorize(Authority.Role.HAS_EDIT)
   public ResponseEntity<Void> updateRole(
-    @PathVariable final int roleId,
+    @PathVariable final long roleId,
     @RequestBody @Validated(UpdateOne.class) final RoleRequest request
   ) {
     request.setRoleId(roleId);
@@ -99,7 +99,7 @@ public class RoleController {
   @Log("删除角色")
   @DeleteMapping("role/{roleId:\\d+}")
   @PreAuthorize(Authority.Role.HAS_DEL)
-  public ResponseEntity<Void> deleteRole(@PathVariable final int roleId) {
+  public ResponseEntity<Void> deleteRole(@PathVariable final long roleId) {
     return roleService.deleteRole(roleId);
   }
 }
