@@ -12,11 +12,11 @@
   <log mode="none"/>
 </service>
 
-<!-- Windows 安装 Java 服务 (Ctrl + R -> `services.msc`) -->
+<!-- Windows 安装 Java 服务 (win+r -> `services.msc`) -->
 <!--
   • `run.exe install`: 注册服务
   • `run.exe uninstall`: 删除服务
-  • `run.exe start`: 启动动服务
+  • `run.exe start`: 启动服务
   • `run.exe stop`: 停止服务
   • `run.exe restart`: 重启服务
   • `run.exe status`: 查看当前服务状态
@@ -24,7 +24,7 @@
 
 <!-- Windows 查杀进程 -->
 <!--
-  • `tasklist | findstr -i java`: 查询正在执行的名称包含 Java 的进程 PID
-  • `netstat -ano | findstr 80`: 查询正在占用 TCP 80 端口的进程 PID
+  • `tasklist | findstr -i java`: 查询名称包含 Java 的进程 PID
+  • `netstat -ano | findstr 80`: 查询占用 TCP 80 端口的进程 PID
   • `taskkill /f /pid 1660`: 杀死 PID 为 1660 的进程
 -->
