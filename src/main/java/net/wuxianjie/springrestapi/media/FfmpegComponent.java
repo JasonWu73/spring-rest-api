@@ -23,7 +23,7 @@ public class FfmpegComponent {
       final int signal = process.waitFor();
 
       if (signal != 0) {
-        log.error("音频提取失败 [{}], Exit Code: {}", command, signal);
+        log.error("音频可能提取失败 [{}], Exit Code: {}", command, signal);
       }
     } catch (Exception e) {
       log.error("音频提取失败 [{}]", command, e);
