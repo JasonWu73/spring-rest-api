@@ -42,12 +42,13 @@
 
   <select id="selectCountByUsernameLikeNicknameLikeEnabled" resultType="java.lang.Long">
     select count(1)
-    from user
-    <where>
-      <if test="username != null">and username like #{username}</if>
-      <if test="nickname != null">and nickname like #{nickname}</if>
-      <if test="enabled != null">and is_enabled = #{enabled}</if>
-    </where>
+    from user u
+    join role r on r.id = u.role_id
+    where
+    r.full_path like concat(#{currentUserRoleFullPath}, '.%')
+    <if test="q.username != null">and u.username like #{q.username}</if>
+    <if test="q.nickname != null">and u.nickname like #{q.nickname}</if>
+    <if test="q.enabled != null">and u.is_enabled = #{q.enabled}</if>
   </select>
 
   <select id="selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc" resultType="java.util.LinkedHashMap">
@@ -63,11 +64,11 @@
     r.menus
     from user u
     join role r on r.id = u.role_id
-    <where>
-      <if test="q.username != null">and u.username like #{q.username}</if>
-      <if test="q.nickname != null">and u.nickname like #{q.nickname}</if>
-      <if test="q.enabled != null">and u.is_enabled = #{q.enabled}</if>
-    </where>
+    where
+    r.full_path like concat(#{currentUserRoleFullPath}, '.%')
+    <if test="q.username != null">and u.username like #{q.username}</if>
+    <if test="q.nickname != null">and u.nickname like #{q.nickname}</if>
+    <if test="q.enabled != null">and u.is_enabled = #{q.enabled}</if>
     order by u.updated_at desc
     limit #{p.offset}, #{p.pageSize}
   </select>
@@ -100,9 +101,11 @@
     where id = #{id}
   </update>
 
-  <delete id="deleteById">
-    delete
-    from user
-    where id = #{userId}
+  <delete id="deleteByIdRoleFullPathLike">
+    delete u
+    from user u
+           join role r on r.id = u.role_id
+    where u.id = #{userId}
+      and r.full_path like concat(#{currentUserRoleFullPath}, '.%')
   </delete>
 </mapper>

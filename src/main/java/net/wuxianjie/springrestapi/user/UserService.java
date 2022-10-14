@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -41,10 +40,12 @@ public class UserService {
     request.setNickname(StrUtils.toNullableLikeValue(request.getNickname()));
 
     // 获取分页列表和总条目数
+    // 用户仅可显示其下级角色的用户
+    final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
     final long total = userMapper.
-      selectCountByUsernameLikeNicknameLikeEnabled(request);
+      selectCountByUsernameLikeNicknameLikeEnabled(currentUserRoleFullPath, request);
     final List<LinkedHashMap<String, Object>> list = userMapper
-      .selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(pagination, request);
+      .selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(currentUserRoleFullPath, pagination, request);
 
     // 构造并返回分页结果
     return ResponseEntity.ok(new PaginationResult<>(
@@ -64,6 +65,8 @@ public class UserService {
       throw new ApiException(HttpStatus.CONFLICT, "已存在相同用户名");
     }
 
+    // 检查角色 id 是否有效
+    // 用户仅可创建下级角色的用户
     checkForRole(request.getRoleId());
 
     // 密码编码
@@ -91,7 +94,7 @@ public class UserService {
     }
 
     // 检查角色 id 是否有效
-    // 用户仅可创建自身或下级角色的用户
+    // 用户仅可创建下级角色的用户
     checkForRole(request.getRoleId());
 
     // 更新数据库中的用户数据
@@ -150,7 +153,9 @@ public class UserService {
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> deleteUser(final long userId) {
     // 删除数据库中的用户数据
-    userMapper.deleteById(userId);
+    // 用户仅可显示其下级角色的用户
+    final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
+    userMapper.deleteByIdRoleFullPathLike(userId, currentUserRoleFullPath);
     return ResponseEntity.ok().build();
   }
 
@@ -161,15 +166,21 @@ public class UserService {
       throw new ApiException(HttpStatus.NOT_FOUND, "角色不存在");
     }
 
-    // 用户仅可创建自身或下级角色的用户
+    // 用户仅可创建下级角色的用户
+    final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
+    final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
+    final boolean startWithCurrentUserRoleFullPath = StrUtil.startWith(
+      addedUserFullPath,
+      currentUserRoleFullPath + StrPool.DOT
+    );
+    if (!startWithCurrentUserRoleFullPath) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建下级角色的用户");
+    }
+  }
+
+  private String getCurrentUserRoleFullPath() {
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
     final Role currentUserRole = roleMapper.selectById(token.getRoleId());
-    final String currentUserRoleFullPath = currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
-    final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
-    final boolean startWithCurrentUserRoleFullPath = Objects.equals(addedUserFullPath, currentUserRoleFullPath) ||
-      StrUtil.startWith(addedUserFullPath, currentUserRoleFullPath + StrPool.DOT);
-    if (!startWithCurrentUserRoleFullPath) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建自身或下级角色的用户");
-    }
+    return currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
   }
 }

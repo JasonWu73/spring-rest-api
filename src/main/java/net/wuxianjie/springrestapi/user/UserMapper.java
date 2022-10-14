@@ -21,9 +21,11 @@ public interface UserMapper {
 
   boolean selectExistsByRoleId(long roleId);
 
-  long selectCountByUsernameLikeNicknameLikeEnabled(UserRequest request);
+  long selectCountByUsernameLikeNicknameLikeEnabled(String currentUserRoleFullPath,
+                                                    @Param("q") UserRequest request);
 
   List<LinkedHashMap<String, Object>> selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(
+    String currentUserRoleFullPath,
     @Param("p") PaginationRequest pagination,
     @Param("q") UserRequest request
   );
@@ -32,5 +34,5 @@ public interface UserMapper {
 
   void updateById(User user);
 
-  void deleteById(long userId);
+  void deleteByIdRoleFullPathLike(long userId, final String currentUserRoleFullPath);
 }
