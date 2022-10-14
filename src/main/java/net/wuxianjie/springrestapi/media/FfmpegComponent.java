@@ -28,8 +28,8 @@ public class FfmpegComponent {
   }
 
   private void waitForTimeout(final Process process, final String command) {
-    // 1 分钟, 850 M MP4 需要 15 秒左右时间, 故 1 分钟超时时间足以
-    long timeoutMillis = 60_000;
+    // 5 分钟
+    long timeoutMillis = 300_000;
     do {
       // 每 10 秒检查一次
       final int sleepMillis = 10_000;
@@ -42,6 +42,6 @@ public class FfmpegComponent {
     } while (timeoutMillis > 0);
 
     RuntimeUtil.destroy(process);
-    log.error("音频提取超时 [{}]", command);
+    log.error("音频转换超时 [{}]", command);
   }
 }
