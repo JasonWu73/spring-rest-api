@@ -28,11 +28,11 @@ public class FfmpegComponent {
   }
 
   private void waitForTimeout(final Process process, final String command) {
-    // 5 分钟
-    long timeoutMillis = 300_000;
+    // 1 分钟, 850 M MP4 需要 15 秒左右时间, 故 1 分钟超时时间足以
+    long timeoutMillis = 60_000;
     do {
-      // 每 30 秒检查一次
-      final int sleepMillis = 30_000;
+      // 每 10 秒检查一次
+      final int sleepMillis = 10_000;
       ThreadUtil.sleep(sleepMillis);
       timeoutMillis -= sleepMillis;
 
