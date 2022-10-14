@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FfmpegComponent {
 
-  public void extractMp3(final String sourceFilePath, final String targetFilePath) {
-
+  public void convertToAudio(final String sourceFilePath, final String targetFilePath) {
     // 提取音频时偶尔会无法退出 FFmpeg 进程, 故采用异步执行, 且超时后销毁进程
     ThreadUtil.execAsync(() -> {
       // `ffmpeg -y -i trial.mp4 trial.mp3`
