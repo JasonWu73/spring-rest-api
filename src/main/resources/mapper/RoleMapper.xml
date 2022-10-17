@@ -49,8 +49,7 @@
            parent_id   as parentId,
            parent_name as parentName
     from role
-    where full_path = #{fullPath}
-       or full_path like #{fullPathLike}
+    where full_path like #{fullPathLike}
   </select>
 
   <insert id="insert" parameterType="net.wuxianjie.springrestapi.role.Role" useGeneratedKeys="true" keyProperty="id">
