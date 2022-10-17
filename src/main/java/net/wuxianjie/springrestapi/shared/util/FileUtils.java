@@ -10,7 +10,10 @@ import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
+import ws.schild.jave.Encoder;
 import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
 import ws.schild.jave.info.MultimediaInfo;
 
 import java.io.File;
@@ -54,5 +57,36 @@ public final class FileUtils {
       return defaultLength;
     }
     return info.getDuration() / 1000;
+  }
+
+  public static void toMp3(final File source, final File targetMp3) {
+    // https://blog.csdn.net/l42606525/article/details/100743844
+    try {
+      final MultimediaObject multimediaObject = new MultimediaObject(source);
+
+      // 需要转换的音频属性
+      final AudioAttributes audio = new AudioAttributes();
+      // 音频编码器: MP3
+      audio.setCodec("libmp3lame");
+      // 比特率: 64kbit/s is 64000
+      audio.setBitRate(64000);
+      // 声道: 立体声
+      audio.setChannels(2);
+      // 采样率: 使用源文件音频流采样率
+      audio.setSamplingRate(multimediaObject.getInfo().getAudio().getSamplingRate());
+
+      // 编码属性
+      final EncodingAttributes attrs = new EncodingAttributes();
+      // 设置输出格式
+      attrs.setOutputFormat("mp3");
+      // 设置音频参数
+      attrs.setAudioAttributes(audio);
+
+      // 开始编码
+      final Encoder encoder = new Encoder();
+      encoder.encode(multimediaObject, targetMp3, attrs);
+    } catch (Exception e) {
+      log.error("文件转换失败 [{} -> {}]", source.getAbsolutePath(), targetMp3.getAbsolutePath(), e);
+    }
   }
 }
