@@ -62,7 +62,7 @@ public class RoleService {
     roleMapper.insert(role);
 
     // 更新数据库中角色的上级角色名及全路径
-    final Long parentId = request.getParentId();
+    final long parentId = request.getParentId();
     final Map<String, Object> hierarchyInfo = getRoleHierarchyInfo(role.getId(), parentId, null);
     role.setParentId(parentId);
     role.setParentName((String) hierarchyInfo.get("parentName"));
@@ -74,7 +74,7 @@ public class RoleService {
   @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Void> updateRole(final RoleRequest request) {
     // 从数据库中获取角色数据
-    final Long roleId = request.getRoleId();
+    final long roleId = request.getRoleId();
     final Role role = roleMapper.selectById(roleId);
     if (role == null) {
       throw new ApiException(HttpStatus.NOT_FOUND, "角色不存在");
@@ -153,26 +153,28 @@ public class RoleService {
   }
 
   private Map<String, Object> getRoleHierarchyInfo(
-    final long roleId,
-    final long parentId,
+    final long savedOrUpdatedRoleId,
+    final long savedOrUpdatedParentId,
     final String oldFullPath
   ) {
-    final Role parentRole = roleMapper.selectById(parentId);
+    final Role parentRole = roleMapper.selectById(savedOrUpdatedParentId);
     if (parentRole == null) {
       throw new ApiException(HttpStatus.NOT_FOUND, "上级角色不存在");
     }
     final String parentName = parentRole.getName();
     final String parentRoleFullPath = parentRole.getFullPath();
-    final String fullPath = parentRoleFullPath + StrPool.DOT + roleId;
+    final String newFullPath = parentRoleFullPath + StrPool.DOT + savedOrUpdatedRoleId;
 
-    // 用户仅可创建自身或下级角色
+    // 用户仅可创建或更新下级角色
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
     final String currentUserRoleFullPath = Optional.ofNullable(roleMapper.selectFullPathById(token.getRoleId()))
       .orElse("");
-    final boolean startWithCurrentUserRoleFullPath = Objects.equals(parentRoleFullPath, currentUserRoleFullPath) ||
-      StrUtil.startWith(parentRoleFullPath, currentUserRoleFullPath + StrPool.DOT);
-    if (!startWithCurrentUserRoleFullPath) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建自身或下级角色");
+    final boolean isLowerParentNode = StrUtil.startWith(
+      parentRoleFullPath,
+      currentUserRoleFullPath + StrPool.DOT
+    );
+    if (!isLowerParentNode) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建下级角色");
     }
 
     // 检查是否需要更新其他相关节点信息
@@ -184,14 +186,15 @@ public class RoleService {
       }
 
       // 不可将下级作为上级角色
-      final boolean isLowerNode = StrUtil.startWith(parentRoleFullPath, oldFullPath + StrPool.DOT);
-      if (isLowerNode) {
+      final boolean isLowerOfOldNode = StrUtil.startWith(parentRoleFullPath, oldFullPath + StrPool.DOT);
+      if (isLowerOfOldNode) {
         throw new ApiException(HttpStatus.BAD_REQUEST, "不可将下级作为上级角色");
       }
     }
     return new HashMap<>() {{
       put("parentName", parentName);
-      put("fullPath", fullPath);
+      put("fullPath", newFullPath);
     }};
   }
 }
+

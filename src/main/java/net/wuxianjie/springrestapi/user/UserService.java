@@ -169,11 +169,11 @@ public class UserService {
     // 用户仅可创建下级角色的用户
     final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
     final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
-    final boolean startWithCurrentUserRoleFullPath = StrUtil.startWith(
+    final boolean isLowerNode = StrUtil.startWith(
       addedUserFullPath,
       currentUserRoleFullPath + StrPool.DOT
     );
-    if (!startWithCurrentUserRoleFullPath) {
+    if (!isLowerNode) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建下级角色的用户");
     }
   }
