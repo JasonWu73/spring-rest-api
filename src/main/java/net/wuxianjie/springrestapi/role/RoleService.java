@@ -134,7 +134,7 @@ public class RoleService {
     // 当角色存在下级角色时不可删除
     final String fullPath = roleMapper.selectFullPathById(roleId);
     if (StrUtil.isEmpty(fullPath)) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "不可删除根角色");
+      throw new ApiException(HttpStatus.NOT_FOUND, "未找到可删除的角色");
     }
     final boolean existsLowerNode = roleMapper.selectExitsByFullPathLike(fullPath + StrPool.DOT + "%");
     if (existsLowerNode) {
@@ -197,4 +197,3 @@ public class RoleService {
     }};
   }
 }
-

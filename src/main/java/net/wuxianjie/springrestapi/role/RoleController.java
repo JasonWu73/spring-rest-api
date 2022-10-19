@@ -10,9 +10,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -99,7 +101,7 @@ public class RoleController {
   @Log("删除角色")
   @DeleteMapping("role/{roleId:\\d+}")
   @PreAuthorize(Authority.Role.HAS_DEL)
-  public ResponseEntity<Void> deleteRole(@PathVariable final long roleId) {
+  public ResponseEntity<Void> deleteRole(@PathVariable @Min(value = 1, message = "角色 id 不能小于 1") final long roleId) {
     return roleService.deleteRole(roleId);
   }
 }

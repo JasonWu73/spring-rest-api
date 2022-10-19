@@ -14,8 +14,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.LinkedHashMap;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -166,7 +168,7 @@ public class UserController {
   @Log("删除用户")
   @DeleteMapping("user/{userId:\\d+}")
   @PreAuthorize(Authority.User.HAS_DEL)
-  public ResponseEntity<Void> deleteUser(@PathVariable final long userId) {
+  public ResponseEntity<Void> deleteUser(@PathVariable @Min(value = 1, message = "用户 id 不能小于 1") final long userId) {
     return userService.deleteUser(userId);
   }
 }
