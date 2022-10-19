@@ -1,6 +1,7 @@
 package net.wuxianjie.springrestapi.media;
 
 import cn.hutool.cache.impl.TimedCache;
+import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.net.URLDecoder;
@@ -123,7 +124,7 @@ public class VodService {
     return ResponseEntity.ok(result);
   }
 
-  public ResponseEntity<Void> addVod(final MultipartFile file) {
+  public ResponseEntity<Void> addVod(final MultipartFile file) throws IOException {
     // 文件名校验, 不能包含在 Windows 下不支持的非法字符, 包括: \ / : * ? " < > |
     final String filename = FileUtils.getValidFilename(file);
 
@@ -132,17 +133,19 @@ public class VodService {
       throw new ApiException(HttpStatus.BAD_REQUEST, "仅支持 MP3 及 MP4 文件");
     }
 
+    // 文件内容类型校验
+    final InputStream inputStream = file.getInputStream();
+    final String type = FileTypeUtil.getType(inputStream);
+    if (!StrUtil.equalsAnyIgnoreCase(type, "mp3", "mp4")) {
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅支持 MP3 及 MP4 文件");
+    }
+
+
     // 于 Jar 的相对目录中保存文件
     final String vodDir = getVodDirAbsoluteFilePath();
     final String absoluteFilePath = vodDir + "/" + filename;
     if (FileUtil.exist(absoluteFilePath)) {
       throw new ApiException(HttpStatus.CONFLICT, "已存在同名文件");
-    }
-    final InputStream inputStream;
-    try {
-      inputStream = file.getInputStream();
-    } catch (IOException e) {
-      throw new RuntimeException("上传文件输入流获取失败", e);
     }
     FileUtil.writeFromStream(inputStream, absoluteFilePath);
     return ResponseEntity.ok().build();

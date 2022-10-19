@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class VodController {
    */
   @Log("新增点播音视频")
   @PostMapping(value = "/api/v1/vod", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Void> addVod(@RequestPart MultipartFile file) {
+  public ResponseEntity<Void> addVod(@RequestPart MultipartFile file) throws IOException {
     if (file.isEmpty()) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "上传文件不能为空");
     }
