@@ -32,16 +32,16 @@ import java.util.Optional;
 public class ExceptionControllerAdvice {
 
   /**
-   * 处理因客户端中止请求而导致的异常.
+   * 处理因客户端主动中止连接而导致的异常.
    */
   @ExceptionHandler(ClientAbortException.class)
-  public ResponseEntity<LinkedHashMap<String, Object>> handleException(ClientAbortException e) {
+  public void handleException(ClientAbortException e) {
     final ApiException apiException = new ApiException(
       HttpStatus.BAD_REQUEST,
-      "客户端中止了当前请求",
+      "客户端主动中止了连接",
       e
     );
-    return handleApiException(apiException);
+    logMsg(apiException);
   }
 
   /**
