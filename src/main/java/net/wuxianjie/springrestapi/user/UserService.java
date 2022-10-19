@@ -4,7 +4,6 @@ import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
-import net.wuxianjie.springrestapi.role.Role;
 import net.wuxianjie.springrestapi.role.RoleMapper;
 import net.wuxianjie.springrestapi.shared.exception.ApiException;
 import net.wuxianjie.springrestapi.shared.pagination.PaginationRequest;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +40,18 @@ public class UserService {
     request.setNickname(StrUtils.toNullableLikeValue(request.getNickname()));
 
     // 获取分页列表和总条目数
-    // 用户仅可显示其下级角色的用户
+    // 用户仅可显示当前用户的下级角色的用户
     final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
-    final long total = userMapper.
-      selectCountByUsernameLikeNicknameLikeEnabled(currentUserRoleFullPath, request);
+    long total = userMapper.
+      selectCountByFullPathLikeUsernameLikeNicknameLikeEnabled(currentUserRoleFullPath, request);
     final List<LinkedHashMap<String, Object>> list = userMapper
-      .selectByUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(currentUserRoleFullPath, pagination, request);
+      .selectByFullPathLikeUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(currentUserRoleFullPath, pagination, request);
+
+    // 获取当前用户并添加至用户列表首位
+    final long userId = ApiUtils.getAuthentication().orElseThrow().getUserId();
+    final LinkedHashMap<String, Object> curUser = userMapper.selectUserRoleById(userId);
+    list.add(0, curUser);
+    total++;
 
     // 构造并返回分页结果
     return ResponseEntity.ok(new PaginationResult<>(
@@ -161,26 +167,22 @@ public class UserService {
 
   private void checkForRole(final long roleId) {
     // 角色 id 有效性校验
-    final Role addedUserRole = roleMapper.selectById(roleId);
-    if (addedUserRole == null) {
+    final String newRoleFullPath = roleMapper.selectFullPathById(roleId);
+    if (newRoleFullPath == null) {
       throw new ApiException(HttpStatus.NOT_FOUND, "角色不存在");
     }
 
     // 用户仅可创建下级角色的用户
     final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
-    final String addedUserFullPath = addedUserRole.getFullPath() == null ? "" : addedUserRole.getFullPath();
-    final boolean isLowerNode = StrUtil.startWith(
-      addedUserFullPath,
-      currentUserRoleFullPath + StrPool.DOT
-    );
+    final boolean isLowerNode = StrUtil.equals(newRoleFullPath, currentUserRoleFullPath)
+      || StrUtil.startWith(newRoleFullPath, currentUserRoleFullPath + StrPool.DOT);
     if (!isLowerNode) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建下级角色的用户");
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可操作下级角色的用户");
     }
   }
 
   private String getCurrentUserRoleFullPath() {
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
-    final Role currentUserRole = roleMapper.selectById(token.getRoleId());
-    return currentUserRole.getFullPath() == null ? "" : currentUserRole.getFullPath();
+    return Optional.ofNullable(roleMapper.selectFullPathById(token.getRoleId())).orElseThrow();
   }
 }

@@ -23,18 +23,11 @@ public class RoleService {
   private final UserMapper userMapper;
 
   public ResponseEntity<List<LinkedHashMap<String, Object>>> getRoles() {
-    // 获取当前用户角色的所有下级角色
-    // 若角色的节点完整路径为空, 则代表当前用户拥有全部角色的权限
+    // 获取当前用户的角色及下级角色
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
     final String currentUserRoleFullPath = roleMapper.selectFullPathById(token.getRoleId());
-    final List<LinkedHashMap<String, Object>> list;
-    if (StrUtil.isEmpty(currentUserRoleFullPath)) {
-      list = roleMapper.selectAll();
-    }
-    // 若角色的节点完整路径不为空, 则获取下级角色
-    else {
-      list = roleMapper.selectByFullPathOrLike(currentUserRoleFullPath, currentUserRoleFullPath + ".%");
-    }
+    final List<LinkedHashMap<String, Object>> list =
+      roleMapper.selectByFullPathOrLike(currentUserRoleFullPath);
 
     // 将菜单字符串转换为列表
     for (final LinkedHashMap<String, Object> item : list) {
@@ -169,12 +162,10 @@ public class RoleService {
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
     final String currentUserRoleFullPath = Optional.ofNullable(roleMapper.selectFullPathById(token.getRoleId()))
       .orElse("");
-    final boolean isLowerParentNode = StrUtil.startWith(
-      parentRoleFullPath,
-      currentUserRoleFullPath + StrPool.DOT
-    );
+    final boolean isLowerParentNode = StrUtil.equals(parentRoleFullPath, currentUserRoleFullPath)
+      || StrUtil.startWith(parentRoleFullPath, currentUserRoleFullPath + StrPool.DOT);
     if (!isLowerParentNode) {
-      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可创建下级角色");
+      throw new ApiException(HttpStatus.BAD_REQUEST, "仅可操作下级角色");
     }
 
     // 检查是否需要更新其他相关节点信息

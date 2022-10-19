@@ -18,9 +18,7 @@ public interface RoleMapper {
 
   boolean selectExitsByFullPathLike(String fullPathPrefix);
 
-  List<LinkedHashMap<String, Object>> selectAll();
-
-  List<LinkedHashMap<String, Object>> selectByFullPathOrLike(String fullPath, String fullPathLike);
+  List<LinkedHashMap<String, Object>> selectByFullPathOrLike(String fullPath);
 
   void insert(Role role);
 
