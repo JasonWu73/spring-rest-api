@@ -89,4 +89,22 @@ public final class FileUtils {
       log.error("文件转换失败 [{} -> {}]", source.getAbsolutePath(), targetMp3.getAbsolutePath(), e);
     }
   }
+
+  public static boolean isMp3(final MultipartFile file) {
+    final String contentType = file.getContentType();
+    final boolean isMp3 = StrUtil.equalsAnyIgnoreCase(contentType, "audio/mpeg");
+    if (!isMp3) {
+      log.warn("非 MP3 MIME-Type [{}]", contentType);
+    }
+    return isMp3;
+  }
+
+  public static boolean isMp4(final MultipartFile file) {
+    final String contentType = file.getContentType();
+    final boolean isMp4 = StrUtil.equalsAnyIgnoreCase(contentType, "video/mp4");
+    if (!isMp4) {
+      log.warn("非 MP4 MIME-Type [{}]", contentType);
+    }
+    return isMp4;
+  }
 }

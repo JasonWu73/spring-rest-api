@@ -1,7 +1,6 @@
 package net.wuxianjie.springrestapi.media;
 
 import cn.hutool.cache.impl.TimedCache;
-import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.net.URLDecoder;
@@ -134,9 +133,7 @@ public class VodService {
     }
 
     // 文件内容类型校验
-    final InputStream inputStream = file.getInputStream();
-    final String type = FileTypeUtil.getType(inputStream);
-    if (!StrUtil.equalsAnyIgnoreCase(type, "mp3", "mp4")) {
+    if (!FileUtils.isMp3(file) && !FileUtils.isMp4(file)) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "仅支持 MP3 及 MP4 文件");
     }
 
@@ -147,6 +144,7 @@ public class VodService {
     if (FileUtil.exist(absoluteFilePath)) {
       throw new ApiException(HttpStatus.CONFLICT, "已存在同名文件");
     }
+    final InputStream inputStream = file.getInputStream();
     FileUtil.writeFromStream(inputStream, absoluteFilePath);
     return ResponseEntity.ok().build();
   }
