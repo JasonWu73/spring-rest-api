@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
 import net.wuxianjie.springrestapi.shared.util.ApiUtils;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,19 @@ import java.util.Optional;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionControllerAdvice {
+
+  /**
+   * 处理因客户端中止请求而导致的异常.
+   */
+  @ExceptionHandler(ClientAbortException.class)
+  public ResponseEntity<LinkedHashMap<String, Object>> handleException(ClientAbortException e) {
+    final ApiException apiException = new ApiException(
+      HttpStatus.BAD_REQUEST,
+      "客户端中止了当前请求",
+      e
+    );
+    return handleApiException(apiException);
+  }
 
   /**
    * 处理因无法处理请求提交的媒体类型而导致的异常.
