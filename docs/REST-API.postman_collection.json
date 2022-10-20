@@ -445,6 +445,53 @@
 					"response": []
 				},
 				{
+					"name": "修改昵称",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nickname\": \"超级管理员\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/user/self",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"self"
+							]
+						},
+						"description": "## 请求参数\n\nJSON 参数：\n\n``` json\n{\n  \"nickname\": \"张三\" // 昵称, 必填, 长度 <= 100\n}\n\n```\n\n## 返回值\n\n成功时：\n\n``` json\n{}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
+					},
+					"response": []
+				},
+				{
 					"name": "删除用户",
 					"event": [
 						{
@@ -726,7 +773,7 @@
 									"key": "file",
 									"description": "文件, 必填, 大小 <= 1G, 仅支持 MP3 及 MP4 格式, 文件名不能包含 \\ / : * ? \" < > | 字符",
 									"type": "file",
-									"src": "/Users/wxj/Downloads/法庭纪律.mp3"
+									"src": []
 								}
 							]
 						},

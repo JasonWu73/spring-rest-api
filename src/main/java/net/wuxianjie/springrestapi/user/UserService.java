@@ -127,7 +127,7 @@ public class UserService {
   }
 
   @Transactional(rollbackFor = Exception.class)
-  public ResponseEntity<Void> changePassword(final PasswdRequest request) {
+  public ResponseEntity<Void> changePassword(final SelfRequest request) {
     // 新旧密码不能相同
     final String oldPassword = request.getOldPassword();
     final String newPassword = request.getNewPassword();
@@ -136,8 +136,8 @@ public class UserService {
     }
 
     // 比较传入的旧密码是否与数据库中保存的用户密码一致
-    final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
-    final String oldHashedPassword = userMapper.selectHashedPasswordById(token.getUserId());
+    final long userId = getCurrentUserId();
+    final String oldHashedPassword = userMapper.selectHashedPasswordById(userId);
     if (oldHashedPassword == null || !passwordEncoder.matches(oldPassword, oldHashedPassword)) {
       throw new ApiException(HttpStatus.BAD_REQUEST, "旧密码错误");
     }
@@ -147,12 +147,25 @@ public class UserService {
 
     // 更新数据库中的密码
     final User user = new User();
-    user.setId(token.getUserId());
+    user.setId(userId);
     user.setHashedPassword(newHashedPassword);
     userMapper.updateById(user);
 
     // 密码修改成功后注销登录
     usernameToToken.remove(user.getUsername());
+    return ResponseEntity.ok().build();
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  public ResponseEntity<Void> changeSelf(final SelfRequest request) {
+    // 获取当前用户 id
+    final long userId = getCurrentUserId();
+
+    // 更新数据库中的用户信息
+    final User user = new User();
+    user.setId(userId);
+    user.setNickname(request.getNickname());
+    userMapper.updateById(user);
     return ResponseEntity.ok().build();
   }
 
@@ -184,5 +197,10 @@ public class UserService {
   private String getCurrentUserRoleFullPath() {
     final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
     return Optional.ofNullable(roleMapper.selectFullPathById(token.getRoleId())).orElseThrow();
+  }
+
+  private static long getCurrentUserId() {
+    final TokenDetails token = ApiUtils.getAuthentication().orElseThrow();
+    return token.getUserId();
   }
 }

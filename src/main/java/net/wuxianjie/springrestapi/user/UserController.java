@@ -153,9 +153,27 @@ public class UserController {
    */
   @PutMapping("user/passwd")
   public ResponseEntity<Void> changePassword(
-    @RequestBody @Valid final PasswdRequest request
+    @RequestBody @Validated(UpdateOne.class) final SelfRequest request
   ) {
     return userService.changePassword(request);
+  }
+
+  /**
+   * 修改昵称.
+   *
+   * @param request <pre>{@code
+   * {
+   *   "nickname": "张三" // 昵称, 必填, 长度 <= 100
+   * }
+   * }</pre>
+   * @return <pre>{@code
+   * }</pre>
+   */
+  @PutMapping("user/self")
+  public ResponseEntity<Void> changeSelf(
+    @RequestBody @Validated(UpdateTwo.class) final SelfRequest request
+  ) {
+    return userService.changeSelf(request);
   }
 
   /**
