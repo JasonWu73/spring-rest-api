@@ -108,6 +108,22 @@
       <artifactId>jave-all-deps</artifactId>
       <version>3.3.1</version>
     </dependency>
+
+    <!-- 海康 SDK 依赖 -->
+    <dependency>
+      <groupId>hikvision.sdk</groupId>
+      <artifactId>jna</artifactId>
+      <version>6.1.9.4</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/jna.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>hikvision.sdk</groupId>
+      <artifactId>examples</artifactId>
+      <version>6.1.9.4</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/examples.jar</systemPath>
+    </dependency>
   </dependencies>
 
   <build>
@@ -117,6 +133,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
+          <includeSystemScope>true</includeSystemScope>
           <excludes>
             <exclude>
               <groupId>org.projectlombok</groupId>
