@@ -3,22 +3,19 @@ package net.wuxianjie.springrestapi.hikvision;
 import cn.hutool.core.util.StrUtil;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Optional;
+
+import static net.wuxianjie.springrestapi.hikvision.HkSdkConfiguration.HC_NET_SDK;
 
 /**
  * @see <a href="https://blog.csdn.net/lftaoyuan/article/details/108072732">海康OSD添加获取及清除</a>
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class HkSdkComponent {
-
-  private final Optional<HCNetSDK> sdkOpt;
 
   /**
    * 设置 OSD 字符叠加参数.
@@ -48,7 +45,7 @@ public class HkSdkComponent {
     final int channel,
     final String[] contents
   ) {
-    if (sdkOpt.isEmpty()) return;
+    if (HC_NET_SDK == null) return;
 
     if (null == contents || contents.length == 0) return;
 
@@ -70,7 +67,7 @@ public class HkSdkComponent {
         try {
           osdBytes = content.getBytes("GBK");
         } catch (UnsupportedEncodingException e) {
-          log.error("不支持 GBK 编码");
+          log.error("不支持 GBK 编码 []");
           return;
         }
         osdCfg.struStringInfo[index].wShowString = 1;
@@ -102,7 +99,7 @@ public class HkSdkComponent {
     final String password,
     final int channel
   ) {
-    if (sdkOpt.isEmpty()) return;
+    if (HC_NET_SDK == null) return;
 
     final int userHandle = login(deviceIp, username, password);
     if (userHandle == -1) return;
@@ -140,9 +137,9 @@ public class HkSdkComponent {
     loginInfo.wPort = 8000; // SDK 端口
     loginInfo.bUseAsynLogin = false; // 是否异步登录
     loginInfo.write();
-    final int userHandle = sdkOpt.get().NET_DVR_Login_V40(loginInfo, deviceInfo); // 用户句柄
+    final int userHandle = HC_NET_SDK.NET_DVR_Login_V40(loginInfo, deviceInfo); // 用户句柄
     if (userHandle == -1) {
-      log.error("登录失败 [错误码={}]", sdkOpt.get().NET_DVR_GetLastError());
+      log.error("设备登录失败 [错误码={}]", HC_NET_SDK.NET_DVR_GetLastError());
       return userHandle;
     } else {
       log.warn(
@@ -157,7 +154,7 @@ public class HkSdkComponent {
 
   private void logout(final int userHandle) {
     // 退出程序时调用, 每一台设备分别注销
-    sdkOpt.get().NET_DVR_Logout(userHandle);
+    HC_NET_SDK.NET_DVR_Logout(userHandle);
   }
 
   private HCNetSDK.NET_DVR_SHOWSTRING_V30 getOsdCfg(final int userHandle, final int channel) {
@@ -167,7 +164,7 @@ public class HkSdkComponent {
     // 获取网络参数 NET_DVR_GetDVRConfig
     final Pointer osdPointer = osdCfg.getPointer(); // 接收数据的缓冲指针
     final IntByReference bytesReturned = new IntByReference(0); // 获取 OSD 配置参数
-    if (!sdkOpt.get().NET_DVR_GetDVRConfig(
+    if (!HC_NET_SDK.NET_DVR_GetDVRConfig(
       userHandle,
       HCNetSDK.NET_DVR_GET_SHOWSTRING_V30,
       channel,
@@ -175,7 +172,7 @@ public class HkSdkComponent {
       osdCfg.size(),
       bytesReturned
     )) {
-      log.error("SDK 获取叠加字符参数失败");
+      log.error("海康 SDK 获取叠加字符参数失败 [错误码={}]", HC_NET_SDK.NET_DVR_GetLastError());
       return null;
     }
     osdCfg.read();
@@ -186,14 +183,14 @@ public class HkSdkComponent {
   private void setOsdCfg(final int userHandle, final int channel, final HCNetSDK.NET_DVR_SHOWSTRING_V30 osdCfg) {
     // 设置叠加字符参数 NET_DVR_SET_SHOWSTRING_V30
     // 设置通道参数 NET_DVR_SetDVRConfig
-    if (!sdkOpt.get().NET_DVR_SetDVRConfig(
+    if (!HC_NET_SDK.NET_DVR_SetDVRConfig(
       userHandle,
       HCNetSDK.NET_DVR_SET_SHOWSTRING_V30,
       channel,
       osdCfg.getPointer(),
       osdCfg.size()
     )) {
-      log.error("SDK 设置叠加字符参数失败");
+      log.error("海康 SDK 设置叠加字符参数失败 [错误码={}]", HC_NET_SDK.NET_DVR_GetLastError());
     }
   }
 }
