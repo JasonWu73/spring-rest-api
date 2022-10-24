@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class TestController {
+public class HkTestController {
 
   private final HkSdkComponent hkSdk;
 
