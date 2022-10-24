@@ -150,7 +150,7 @@ public class VodService {
   }
 
   public String getVodDirAbsoluteFilePath() {
-    return FileUtils.getJarDirAbsoluteFilePath() + VOD_DIR;
+    return FileUtils.getAppDirAbsolutePath() + VOD_DIR;
   }
 
   public ResponseEntity<Void> deleteVod(final String filename) {
@@ -202,7 +202,7 @@ public class VodService {
 
   private static String toAbsoluteFilePath(final String filePath) {
     // 相对于 Jar 包的文件绝对路径
-    final String jarDirPath = FileUtils.getJarDirAbsoluteFilePath();
+    final String jarDirPath = FileUtils.getAppDirAbsolutePath();
     return jarDirPath + filePath;
   }
 

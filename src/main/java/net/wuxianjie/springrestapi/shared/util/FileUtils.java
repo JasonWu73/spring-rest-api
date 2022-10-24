@@ -29,7 +29,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileUtils {
 
-  public static String getJarDirAbsoluteFilePath() {
+  public static String getAppDirAbsolutePath() {
     return new ApplicationHome(FileUtils.class).getDir().getAbsolutePath() + "/";
   }
 

@@ -30,13 +30,13 @@ class LicenseTest {
     log.info("Machine Code: {}", machineCode);
     log.info("MAC: {}", StrUtils.toMacAddress(machineCode));
 
-    final String privateKeyBase64 = FileUtil.readString(FileUtils.getJarDirAbsoluteFilePath() + "PRIVATE_KEY.txt", CharsetUtil.CHARSET_UTF_8);
+    final String privateKeyBase64 = FileUtil.readString(FileUtils.getAppDirAbsolutePath() + "PRIVATE_KEY.txt", CharsetUtil.CHARSET_UTF_8);
     final RSA rsaOnlyPrivateKey = new RSA(privateKeyBase64, null);
     final byte[] encryptBytes = rsaOnlyPrivateKey.encrypt(StrUtil.bytes(machineCode, CharsetUtil.CHARSET_UTF_8), KeyType.PrivateKey);
     final String license = HexUtil.encodeHexStr(encryptBytes, false);
     log.info("LICENSE (length: {}):\n{}", license.length(), license);
 
-    final String publicKeyBase64 = FileUtil.readString(FileUtils.getJarDirAbsoluteFilePath() + "PUBLIC_KEY.txt", CharsetUtil.CHARSET_UTF_8);
+    final String publicKeyBase64 = FileUtil.readString(FileUtils.getAppDirAbsolutePath() + "PUBLIC_KEY.txt", CharsetUtil.CHARSET_UTF_8);
     final RSA rsaOnlyPublicKey = new RSA(null, publicKeyBase64);
     final byte[] decryptBytes = rsaOnlyPublicKey.decrypt(license, KeyType.PublicKey);
     Assertions.assertEquals(machineCode, StrUtil.str(decryptBytes, CharsetUtil.CHARSET_UTF_8));
