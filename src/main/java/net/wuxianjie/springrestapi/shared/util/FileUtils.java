@@ -66,19 +66,19 @@ public final class FileUtils {
     return info.getDuration() / 1000;
   }
 
-  public static boolean toLowQualityMp3(final File source, final File targetMp3) {
+  public static boolean toMp3(final File source, final File targetMp3) {
     // https://github.com/a-schild/jave2/wiki/Examples
     try {
       // 需要转换的音频属性
       final AudioAttributes audio = new AudioAttributes();
       // 音频编码器: MP3
       audio.setCodec("libmp3lame");
-      // 比特率: 56 kbit/s
-      audio.setBitRate(56_000);
-      // 采样率: 22050 Hz
-      audio.setSamplingRate(22_050);
-      // 声道: 单声道
-      audio.setChannels(1);
+      // 比特率: 128 kbit/s
+      audio.setBitRate(128000);
+      // 采样率: 44100 Hz
+      audio.setSamplingRate(44100);
+      // 声道: 立体声
+      audio.setChannels(2);
 
       // 编码属性
       final EncodingAttributes attrs = new EncodingAttributes();
