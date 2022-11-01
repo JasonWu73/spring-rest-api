@@ -1,11 +1,10 @@
 package net.wuxianjie.springrestapi.shared.exception;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.wuxianjie.springrestapi.shared.security.core.TokenDetails;
 import net.wuxianjie.springrestapi.shared.util.ApiUtils;
+import net.wuxianjie.springrestapi.shared.util.ServletUtils;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -170,7 +169,7 @@ public class ExceptionControllerAdvice {
     // 若客户端请求异常, 则以 WARN 级别记录异常消息
     final HttpStatus status = e.getStatus();
     final boolean logStack = e.isLogStack();
-    final String clientInfo = getClientInfo();
+    final String clientInfo = ServletUtils.getClientInfo();
     if (status.is4xxClientError() && logStack) {
       log.warn("{} -> {}", clientInfo, e.getMessage(), e);
       return;
@@ -186,17 +185,5 @@ public class ExceptionControllerAdvice {
       return;
     }
     log.error("{} -> {}", clientInfo, e.getMessage());
-  }
-
-  private String getClientInfo() {
-    final HttpServletRequest request = ApiUtils.getHttpServletRequest().orElseThrow();
-    String username = ApiUtils.getAuthentication().map(TokenDetails::getUsername).orElse(null);
-    return StrUtil.format(
-      "api=[{} {}];client={};user={}",
-      request.getMethod(),
-      request.getRequestURI(),
-      ServletUtil.getClientIP(request),
-      username
-    );
   }
 }
