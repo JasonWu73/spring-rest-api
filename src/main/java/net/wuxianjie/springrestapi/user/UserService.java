@@ -40,18 +40,22 @@ public class UserService {
     request.setNickname(StrUtils.toNullableLikeValue(request.getNickname()));
 
     // 获取分页列表和总条目数
-    // 用户仅可显示当前用户的下级角色的用户
+    // 用户仅可显示当前用户或其下级角色的用户
     final String currentUserRoleFullPath = getCurrentUserRoleFullPath();
-    long total = userMapper.
-      selectCountByFullPathLikeUsernameLikeNicknameLikeEnabled(currentUserRoleFullPath, request);
-    final List<LinkedHashMap<String, Object>> list = userMapper
-      .selectByFullPathLikeUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(currentUserRoleFullPath, pagination, request);
-
-    // 获取当前用户并添加至用户列表首位
     final long userId = ApiUtils.getAuthentication().orElseThrow().getUserId();
-    final LinkedHashMap<String, Object> curUser = userMapper.selectUserRoleById(userId);
-    list.add(0, curUser);
-    total++;
+    long total = userMapper.
+      selectCountByFullPathLikeOrUserIdUsernameLikeNicknameLikeEnabled(
+        currentUserRoleFullPath,
+        userId,
+        request
+      );
+    final List<LinkedHashMap<String, Object>> list = userMapper
+      .selectByFullPathLikeOrUserIdUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(
+        currentUserRoleFullPath,
+        userId,
+        pagination,
+        request
+      );
 
     // 构造并返回分页结果
     return ResponseEntity.ok(new PaginationResult<>(

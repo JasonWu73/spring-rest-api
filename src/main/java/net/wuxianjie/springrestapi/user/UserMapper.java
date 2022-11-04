@@ -21,16 +21,18 @@ public interface UserMapper {
 
   boolean selectExistsByRoleId(long roleId);
 
-  long selectCountByFullPathLikeUsernameLikeNicknameLikeEnabled(String currentUserRoleFullPath,
-                                                                @Param("q") UserRequest request);
-
-  List<LinkedHashMap<String, Object>> selectByFullPathLikeUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(
+  long selectCountByFullPathLikeOrUserIdUsernameLikeNicknameLikeEnabled(
     String currentUserRoleFullPath,
-    @Param("p") PaginationRequest pagination,
+    final long userId,
     @Param("q") UserRequest request
   );
 
-  LinkedHashMap<String, Object> selectUserRoleById(long userId);
+  List<LinkedHashMap<String, Object>> selectByFullPathLikeOrUserIdUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc(
+    String currentUserRoleFullPath,
+    final long userId,
+    @Param("p") PaginationRequest pagination,
+    @Param("q") UserRequest request
+  );
 
   void insert(User user);
 

@@ -40,18 +40,18 @@
     select exists(select 1 from user where role_id = #{roleId})
   </select>
 
-  <select id="selectCountByFullPathLikeUsernameLikeNicknameLikeEnabled" resultType="java.lang.Long">
+  <select id="selectCountByFullPathLikeOrUserIdUsernameLikeNicknameLikeEnabled" resultType="java.lang.Long">
     select count(1)
     from user u
     join role r on r.id = u.role_id
     where
-    r.full_path like concat(#{currentUserRoleFullPath}, '.%')
+    (u.id = #{userId} or r.full_path like concat(#{currentUserRoleFullPath}, '.%'))
     <if test="q.username != null">and u.username like #{q.username}</if>
     <if test="q.nickname != null">and u.nickname like #{q.nickname}</if>
     <if test="q.enabled != null">and u.is_enabled = #{q.enabled}</if>
   </select>
 
-  <select id="selectByFullPathLikeUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc"
+  <select id="selectByFullPathLikeOrUserIdUsernameLikeNicknameLikeEnabledOrderByUpdatedAtDesc"
           resultType="java.util.LinkedHashMap">
     select
     u.id as userId,
@@ -66,27 +66,12 @@
     from user u
     join role r on r.id = u.role_id
     where
-    r.full_path like concat(#{currentUserRoleFullPath}, '.%')
+    (u.id = #{userId} or r.full_path like concat(#{currentUserRoleFullPath}, '.%'))
     <if test="q.username != null">and u.username like #{q.username}</if>
     <if test="q.nickname != null">and u.nickname like #{q.nickname}</if>
     <if test="q.enabled != null">and u.is_enabled = #{q.enabled}</if>
     order by u.updated_at desc
     limit #{p.offset}, #{p.pageSize}
-  </select>
-
-  <select id="selectUserRoleById" resultType="java.util.LinkedHashMap">
-    select u.id         as userId,
-           u.updated_at as updatedAt,
-           u.remark,
-           u.username,
-           u.nickname,
-           u.is_enabled as enabled,
-           u.role_id    as roleId,
-           r.name       as role,
-           r.menus
-    from user u
-           join role r on r.id = u.role_id
-    where u.id = #{userId}
   </select>
 
   <insert id="insert">
