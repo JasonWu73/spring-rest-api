@@ -29,6 +29,8 @@ public class HkSdkComponent {
     final String username,
     final String password
   ) {
+    if (HC_NET_SDK == null) throw new RuntimeException("海康 SDK 初始化失败");
+
     // 登录设备, 每一台设备分别登录; 登录句柄是唯一的, 可以区分设备
     final HCNetSDK.NET_DVR_USER_LOGIN_INFO loginInfo = new HCNetSDK.NET_DVR_USER_LOGIN_INFO();// 设备登录信息
     final HCNetSDK.NET_DVR_DEVICEINFO_V40 deviceInfo = new HCNetSDK.NET_DVR_DEVICEINFO_V40();// 设备信息
