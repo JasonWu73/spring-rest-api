@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 import static net.wuxianjie.springrestapi.hikvision.HkSdkConfiguration.HC_NET_SDK;
 
@@ -18,9 +19,36 @@ import static net.wuxianjie.springrestapi.hikvision.HkSdkConfiguration.HC_NET_SD
 public class HkSdkComponent {
 
   /**
+   * 获取设备序列号.
+   *
+   * @return 设备序列号
+   */
+  public Optional<String> getSn(
+    final String deviceIp,
+    final int devicePort,
+    final String username,
+    final String password
+  ) {
+    // 登录设备, 每一台设备分别登录; 登录句柄是唯一的, 可以区分设备
+    final HCNetSDK.NET_DVR_USER_LOGIN_INFO loginInfo = new HCNetSDK.NET_DVR_USER_LOGIN_INFO();// 设备登录信息
+    final HCNetSDK.NET_DVR_DEVICEINFO_V40 deviceInfo = new HCNetSDK.NET_DVR_DEVICEINFO_V40();// 设备信息
+    fillInLoginInfo(deviceIp, (short) devicePort, username, password, loginInfo);
+    final int userHandle = HC_NET_SDK.NET_DVR_Login_V40(loginInfo, deviceInfo); // 用户句柄
+    if (userHandle == -1) {
+      log.error("设备登录失败 [错误码={}]", HC_NET_SDK.NET_DVR_GetLastError());
+      return Optional.empty();
+    } else {
+      final String sn = new String(deviceInfo.struDeviceV30.sSerialNumber).trim();
+      log.warn("设备登录成功 [IP={};SN={}]", deviceIp, sn);
+      return Optional.of(sn);
+    }
+  }
+
+  /**
    * 设置 OSD 字符叠加参数.
    *
    * @param deviceIp 设备 IP
+   * @param devicePort 设备端口号
    * @param username 设备登录用户名
    * @param password 设备登录密码
    * @param channel 通道号
@@ -40,6 +68,7 @@ public class HkSdkComponent {
    */
   public void setOsd(
     final String deviceIp,
+    final int devicePort,
     final String username,
     final String password,
     final int channel,
@@ -49,7 +78,7 @@ public class HkSdkComponent {
 
     if (null == contents || contents.length == 0) return;
 
-    final int userHandle = login(deviceIp, username, password);
+    final int userHandle = login(deviceIp, devicePort, username, password);
     if (userHandle == -1) return;
 
     try {
@@ -89,19 +118,21 @@ public class HkSdkComponent {
    * 清除 OSD.
    *
    * @param deviceIp 设备 IP
+   * @param devicePort 设备端口号
    * @param username 设备登录用户名
    * @param password 设备登录密码
    * @param channel 通道号
    */
   public void clearOsd(
     final String deviceIp,
+    final int devicePort,
     final String username,
     final String password,
     final int channel
   ) {
     if (HC_NET_SDK == null) return;
 
-    final int userHandle = login(deviceIp, username, password);
+    final int userHandle = login(deviceIp, devicePort, username, password);
     if (userHandle == -1) return;
 
     try {
@@ -120,23 +151,11 @@ public class HkSdkComponent {
     }
   }
 
-  private int login(final String deviceIp, final String username, final String password) {
+  private int login(final String deviceIp, final int devicePort, final String username, final String password) {
     // 登录设备, 每一台设备分别登录; 登录句柄是唯一的, 可以区分设备
     final HCNetSDK.NET_DVR_USER_LOGIN_INFO loginInfo = new HCNetSDK.NET_DVR_USER_LOGIN_INFO();// 设备登录信息
     final HCNetSDK.NET_DVR_DEVICEINFO_V40 deviceInfo = new HCNetSDK.NET_DVR_DEVICEINFO_V40();// 设备信息
-
-    loginInfo.sDeviceAddress = new byte[HCNetSDK.NET_DVR_DEV_ADDRESS_MAX_LEN];
-    System.arraycopy(deviceIp.getBytes(), 0, loginInfo.sDeviceAddress, 0, deviceIp.length());
-
-    loginInfo.sUserName = new byte[HCNetSDK.NET_DVR_LOGIN_USERNAME_MAX_LEN];
-    System.arraycopy(username.getBytes(), 0, loginInfo.sUserName, 0, username.length());
-
-    loginInfo.sPassword = new byte[HCNetSDK.NET_DVR_LOGIN_PASSWD_MAX_LEN];
-    System.arraycopy(password.getBytes(), 0, loginInfo.sPassword, 0, password.length());
-
-    loginInfo.wPort = 8000; // SDK 端口
-    loginInfo.bUseAsynLogin = false; // 是否异步登录
-    loginInfo.write();
+    fillInLoginInfo(deviceIp, (short) devicePort, username, password, loginInfo);
     final int userHandle = HC_NET_SDK.NET_DVR_Login_V40(loginInfo, deviceInfo); // 用户句柄
     if (userHandle == -1) {
       log.error("设备登录失败 [错误码={}]", HC_NET_SDK.NET_DVR_GetLastError());
@@ -150,6 +169,27 @@ public class HkSdkComponent {
       deviceInfo.read();
     }
     return userHandle;
+  }
+
+  private static void fillInLoginInfo(
+    final String deviceIp,
+    final short devicePort,
+    final String username,
+    final String password,
+    final HCNetSDK.NET_DVR_USER_LOGIN_INFO loginInfo
+  ) {
+    loginInfo.sDeviceAddress = new byte[HCNetSDK.NET_DVR_DEV_ADDRESS_MAX_LEN];
+    System.arraycopy(deviceIp.getBytes(), 0, loginInfo.sDeviceAddress, 0, deviceIp.length());
+
+    loginInfo.sUserName = new byte[HCNetSDK.NET_DVR_LOGIN_USERNAME_MAX_LEN];
+    System.arraycopy(username.getBytes(), 0, loginInfo.sUserName, 0, username.length());
+
+    loginInfo.sPassword = new byte[HCNetSDK.NET_DVR_LOGIN_PASSWD_MAX_LEN];
+    System.arraycopy(password.getBytes(), 0, loginInfo.sPassword, 0, password.length());
+
+    loginInfo.wPort = devicePort; // SDK 端口
+    loginInfo.bUseAsynLogin = false; // 是否异步登录
+    loginInfo.write();
   }
 
   private void logout(final int userHandle) {

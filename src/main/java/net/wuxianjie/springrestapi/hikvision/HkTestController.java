@@ -14,6 +14,7 @@ public class HkTestController {
   public void test() {
     hkSdk.setOsd(
       "192.168.133.22",
+      8000,
       "admin",
       "admin12345",
       1,
@@ -34,6 +35,7 @@ public class HkTestController {
   public void testClear() {
     hkSdk.clearOsd(
       "192.168.133.22",
+      8000,
       "admin",
       "admin12345",
       1
