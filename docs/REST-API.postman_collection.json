@@ -868,7 +868,7 @@
 								"version"
 							]
 						},
-						"description": "## 请求参数\n\n无.\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"version\": \"v1.0.0\", // 版本号\n  \"developer\": \"吴仙杰\", // 开发者\n  \"machineCode\": \"63342D34312D31652D62322D31322D3034\" // 机器码\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
+						"description": "## 请求参数\n\n无.\n\n## 返回值\n\n成功时：\n\n``` json\n{\n  \"version\": \"v1.0.0\", // 版本号\n  \"developer\": \"吴仙杰\", // 开发者\n  \"machineCode\": \"...\" // 机器码\n}\n\n```\n\n失败时：\n\n``` json\n{\n  \"timestamp\": \"2022-09-15 10:25:13\",\n  \"status\": 500,\n  \"error\": \"Internal Server Error\", // 错误信息\n  \"path\": \"/api/v1/token\"\n}\n\n```"
 					},
 					"response": []
 				}
