@@ -26,9 +26,9 @@ class LicenseTest {
 
   @Test
   void checkForLocalMacAddressSigning() {
-    final String machineCode = StrUtils.getMachineCode();
+    final String machineCode = StrUtils.getMachineCode().orElseThrow();
     log.info("Machine Code: {}", machineCode);
-    log.info("MAC: {}", StrUtils.toMacAddress(machineCode));
+    log.info("MAC Address: {}", StrUtils.toMacAddress(machineCode).orElseThrow());
 
     final String privateKeyBase64 = FileUtil.readString(FileUtils.getAppDirAbsolutePath() + "PRIVATE_KEY.txt", CharsetUtil.CHARSET_UTF_8);
     final RSA rsaOnlyPrivateKey = new RSA(privateKeyBase64, null);

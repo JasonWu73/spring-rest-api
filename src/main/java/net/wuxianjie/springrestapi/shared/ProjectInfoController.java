@@ -26,7 +26,7 @@ public class ProjectInfoController {
     return ResponseEntity.ok(new LinkedHashMap<>() {{
       put("version", "v1.0.0");
       put("developer", "吴仙杰");
-      put("machineCode", StrUtils.getMachineCode());
+      put("machineCode", StrUtils.getMachineCode().orElse("unknown"));
     }});
   }
 }

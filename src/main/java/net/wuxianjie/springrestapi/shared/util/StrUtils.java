@@ -25,8 +25,11 @@ public final class StrUtils {
     return "%" + trimmed.replaceAll(" +", "%") + "%";
   }
 
-  public static String getMachineCode() {
-    return HexUtil.encodeHexStr(StrUtil.bytes(NetUtil.getLocalMacAddress()), false);
+  public static Optional<String> getMachineCode() {
+    final String macAddr = NetUtil.getLocalMacAddress();
+    if (macAddr == null) return Optional.empty();
+
+    return Optional.of(HexUtil.encodeHexStr(StrUtil.bytes(macAddr), false));
   }
 
   public static Optional<String> toMacAddress(final String machineCode) {
