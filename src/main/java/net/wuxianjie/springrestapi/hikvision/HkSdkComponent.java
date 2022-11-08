@@ -42,6 +42,9 @@ public class HkSdkComponent {
     } else {
       final String sn = new String(deviceInfo.struDeviceV30.sSerialNumber).trim();
       log.warn("设备登录成功 [IP={};SN={}]", deviceIp, sn);
+
+      // 注销
+      logout(userHandle);
       return Optional.of(sn);
     }
   }
