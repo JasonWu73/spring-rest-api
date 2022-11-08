@@ -16,6 +16,7 @@ public class ProjectInfoController {
    * @return <pre>{@code
    * {
    *   "version": "v1.0.0", // 版本号
+   *   "developer": "吴仙杰", // 开发者
    *   "machineCode": "63342D34312D31652D62322D31322D3034" // 机器码
    * }
    * }</pre>
@@ -24,6 +25,7 @@ public class ProjectInfoController {
   public ResponseEntity<LinkedHashMap<String, Object>> getVersion() {
     return ResponseEntity.ok(new LinkedHashMap<>() {{
       put("version", "v1.0.0");
+      put("developer", "吴仙杰");
       put("machineCode", StrUtils.getMachineCode());
     }});
   }
