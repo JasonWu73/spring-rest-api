@@ -34,7 +34,7 @@ class LicenseTest {
     log.info("LICENSE (length: {}):\n{}", license.length(), license);
 
     final String publicKeyBase64 = FileUtil.readString(FileUtils.getAppDirAbsolutePath() + "PUBLIC_KEY.txt", CharsetUtil.CHARSET_UTF_8);
-    final byte[] decrypt = RsaUtils.decrypt(publicKeyBase64, license);
-    Assertions.assertEquals(machineCode, StrUtil.str(decrypt, CharsetUtil.CHARSET_UTF_8));
+    final byte[] decrypted = RsaUtils.decrypt(publicKeyBase64, license);
+    Assertions.assertEquals(machineCode, StrUtil.str(decrypted, CharsetUtil.CHARSET_UTF_8));
   }
 }
