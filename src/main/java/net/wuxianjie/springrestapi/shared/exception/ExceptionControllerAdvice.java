@@ -17,6 +17,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
@@ -134,6 +135,19 @@ public class ExceptionControllerAdvice {
     final ApiException apiException = new ApiException(
       HttpStatus.BAD_REQUEST,
       String.join("; ", msgList),
+      e
+    );
+    return handleApiException(apiException);
+  }
+
+  /**
+   * 处理因 URL 请求参数不符合指定数据类型时而导致的异常.
+   */
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<LinkedHashMap<String, Object>> handleException(final MethodArgumentTypeMismatchException e) {
+    final ApiException apiException = new ApiException(
+      HttpStatus.BAD_REQUEST,
+      StrUtil.format("参数值错误 [{}={}]", e.getName(), e.getValue()),
       e
     );
     return handleApiException(apiException);
