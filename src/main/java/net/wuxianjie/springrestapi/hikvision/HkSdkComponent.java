@@ -73,7 +73,7 @@ public class HkSdkComponent {
       // 硬盘状态, 一次最多只能获取 33 个硬盘信息
       for (int i = 0; i < workStatus.struHardDiskStatic.length; i++) {
         // log.warn("{}. 硬盘状态: {}", i, workStatus.struHardDiskStatic[i].dwHardDiskStatic);
-        // 硬盘状态, 0: 正常, 1: 休眠, 2: 不正常, 3: 休眠硬盘出错
+        // 硬盘状态, 0: 正常, 1: 休眠, 2: 不正常, 3: 休眠硬盘出错 (硬盘拆除)
         if (workStatus.struHardDiskStatic[i].dwHardDiskStatic != 0) {
           diskStatus = false;
           break;
@@ -346,4 +346,3 @@ public class HkSdkComponent {
     private Boolean videoStatus; // 视频状态
   }
 }
-
