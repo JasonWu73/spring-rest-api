@@ -28,15 +28,13 @@ public class HkSdkComponent {
    * @param devicePort 设备端口号
    * @param username 设备登录用户名
    * @param password 设备登录密码
-   * @param channel 通道号
    * @return 主机状态
    */
   public NvrStatus getNvrStatus(
     final String deviceIp,
     final int devicePort,
     final String username,
-    final String password,
-    final int channel
+    final String password
   ) {
     if (HC_NET_SDK == null) throw new RuntimeException("海康 SDK 初始化失败");
 
@@ -46,7 +44,8 @@ public class HkSdkComponent {
     if (userHandle == -1) return new NvrStatus(false, null, null, null, null);
 
     try {
-      final NvrStatus status = new NvrStatus(true, null, null, null, null);
+      // 音视频状态, 只要设备在线就一定正常
+      final NvrStatus status = new NvrStatus(true, null, null, true, true);
       // 录像状态
       final HCNetSDK.NET_DVR_WORKSTATE_V30 workStatus = new HCNetSDK.NET_DVR_WORKSTATE_V30();
       workStatus.write();
@@ -57,34 +56,30 @@ public class HkSdkComponent {
       workStatus.read();
 
       // 通道的状态, 从前往后顺序排列
-      final byte startDigitalChannel = deviceInfo.struDeviceV30.byStartDChan; // 数字通道起始通道号
-      // for (int i = 0; i < workStatus.struChanStatic.length; i++) {
-      // log.warn("{}. 录像状态: {}", i, workStatus.struChanStatic[i].byRecordStatic);
-      // }
-      final int channelIndex = (startDigitalChannel - 1) + (channel - 1);
-      if (channelIndex <= workStatus.struChanStatic.length) {
+      // 只要有一个正常就认为录像正常
+      boolean recordStatus = false;
+      for (int i = 0; i < workStatus.struChanStatic.length; i++) {
+        // log.warn("{}. 录像状态: {}", i, workStatus.struChanStatic[i].byRecordStatic);
         // 通道是否在录像, 0: 不录像, 1: 录像
-        status.setRecordStatus(workStatus.struChanStatic[channelIndex].byRecordStatic == 1);
-      } else {
-        log.warn("未找到通道的状态 [channel={}]", channel);
+        if (workStatus.struChanStatic[i].byRecordStatic == 1) {
+          recordStatus = true;
+          break;
+        }
       }
+      status.setRecordStatus(recordStatus);
 
       // 硬盘状态, 只要有一个不正常就认为硬盘异常
       boolean diskStatus = true;
       // 硬盘状态, 一次最多只能获取 33 个硬盘信息
       for (int i = 0; i < workStatus.struHardDiskStatic.length; i++) {
         // log.warn("{}. 硬盘状态: {}", i, workStatus.struHardDiskStatic[i].dwHardDiskStatic);
-        // 硬盘状态, 0: 正常
+        // 硬盘状态, 0: 正常, 1: 休眠, 2: 不正常, 3: 休眠硬盘出错
         if (workStatus.struHardDiskStatic[i].dwHardDiskStatic != 0) {
           diskStatus = false;
           break;
         }
       }
       status.setDiskStatus(diskStatus);
-
-      // 音视频状态, 与通道是否存在为准即可, 即当通道状态不存在时, 才设置为 null, 否则都为 true
-      status.setAudioStatus(status.getRecordStatus() == null ? null : true);
-      status.setVideoStatus(status.getRecordStatus() == null ? null : true);
 
       return status;
     } finally {
@@ -351,3 +346,4 @@ public class HkSdkComponent {
     private Boolean videoStatus; // 视频状态
   }
 }
+
