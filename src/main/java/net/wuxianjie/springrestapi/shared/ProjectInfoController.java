@@ -3,11 +3,13 @@ package net.wuxianjie.springrestapi.shared;
 import net.wuxianjie.springrestapi.shared.util.StrUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedHashMap;
 
 @RestController
+@RequestMapping("/api/v1")
 public class ProjectInfoController {
 
   /**
@@ -21,7 +23,7 @@ public class ProjectInfoController {
    * }
    * }</pre>
    */
-  @GetMapping("/api/v1/version")
+  @GetMapping("public/version")
   public ResponseEntity<LinkedHashMap<String, Object>> getVersion() {
     return ResponseEntity.ok(new LinkedHashMap<>() {{
       put("version", "v1.0.0");

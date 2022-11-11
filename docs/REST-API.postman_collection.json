@@ -858,13 +858,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/api/v1/version",
+							"raw": "{{host}}/api/v1/public/version",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v1",
+								"public",
 								"version"
 							]
 						},
