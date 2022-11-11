@@ -59,7 +59,7 @@ public class HkSdkComponent {
       // 只要有一个正常就认为录像正常
       boolean recordStatus = false;
       for (int i = 0; i < workStatus.struChanStatic.length; i++) {
-        // log.warn("{}. 录像状态: {}", i, workStatus.struChanStatic[i].byRecordStatic);
+        log.info("{}. 录像状态: {}", i, workStatus.struChanStatic[i].byRecordStatic);
         // 通道是否在录像, 0: 不录像, 1: 录像
         if (workStatus.struChanStatic[i].byRecordStatic == 1) {
           recordStatus = true;
@@ -72,9 +72,10 @@ public class HkSdkComponent {
       boolean diskStatus = true;
       // 硬盘状态, 一次最多只能获取 33 个硬盘信息
       for (int i = 0; i < workStatus.struHardDiskStatic.length; i++) {
-        // log.warn("{}. 硬盘状态: {}", i, workStatus.struHardDiskStatic[i].dwHardDiskStatic);
-        // 硬盘状态, 0: 正常, 1: 休眠, 2: 不正常, 3: 休眠硬盘出错 (硬盘拆除)
-        if (workStatus.struHardDiskStatic[i].dwHardDiskStatic != 0) {
+        log.info("{}. 硬盘状态: {}", i, workStatus.struHardDiskStatic[i].dwHardDiskStatic);
+        // 硬盘状态, 0: 正常, 1: 休眠, 2: 不正常, 3: 休眠硬盘出错 (如拆除硬盘)
+        final int diskStatusCode = workStatus.struHardDiskStatic[i].dwHardDiskStatic;
+        if (diskStatusCode != 0 && diskStatusCode != 1) {
           diskStatus = false;
           break;
         }
