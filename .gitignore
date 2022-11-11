@@ -34,3 +34,4 @@ build/
 
 ### 非项目文件 ###
 logs/
+.DS_Store
