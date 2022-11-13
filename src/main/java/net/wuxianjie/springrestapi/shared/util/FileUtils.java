@@ -33,6 +33,22 @@ public final class FileUtils {
     return new ApplicationHome(FileUtils.class).getDir().getAbsolutePath() + "/";
   }
 
+  public static String appendPath(final String filePath, final String... names) {
+    final String filePathWithoutSuffix;
+    if (StrUtil.endWith(filePath, "/")) {
+      filePathWithoutSuffix = StrUtil.removeSuffix(filePath, "/");
+    } else if (StrUtil.endWith(filePath, "\\")) {
+      filePathWithoutSuffix = StrUtil.removeSuffix(filePath, "\\");
+    } else {
+      filePathWithoutSuffix = filePath;
+    }
+    return StrUtil.join(getFilePathSeparator(), filePathWithoutSuffix, names);
+  }
+
+  public static String getFilePathSeparator() {
+    return OsUtils.isWindows() ? "\\" : "/";
+  }
+
   public static String getTopmostDirPath(final String filePath) {
     final String parent = FileUtil.getParent(filePath, 1);
     if (parent == null) {
