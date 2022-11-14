@@ -57,16 +57,16 @@ public class HkSdkComponent {
 
       // 通道的状态, 从前往后顺序排列
       // 只要有一个正常就认为录像正常
-      boolean recordStatus = false;
-      for (int i = 0; i < workStatus.struChanStatic.length; i++) {
-        log.info("{}. 录像状态: {}", i, workStatus.struChanStatic[i].byRecordStatic);
-        // 通道是否在录像, 0: 不录像, 1: 录像
-        if (workStatus.struChanStatic[i].byRecordStatic == 1) {
-          recordStatus = true;
-          break;
-        }
-      }
-      status.setRecordStatus(recordStatus);
+      // boolean recordStatus = false;
+      // for (int i = 0; i < workStatus.struChanStatic.length; i++) {
+      //   log.info("{}. 录像状态: {}", i, workStatus.struChanStatic[i].byRecordStatic);
+      //   // 通道是否在录像, 0: 不录像, 1: 录像
+      //   if (workStatus.struChanStatic[i].byRecordStatic == 1) {
+      //     recordStatus = true;
+      //     break;
+      //   }
+      // }
+      // status.setRecordStatus(recordStatus);
 
       // 硬盘状态, 只要有一个不正常就认为硬盘异常
       boolean diskStatus = true;
@@ -81,6 +81,8 @@ public class HkSdkComponent {
         }
       }
       status.setDiskStatus(diskStatus);
+      // 录像状态直接与硬盘状态同步更为符合实际需求, 因为用户关心的是否录像文件存在于硬盘中
+      status.setRecordStatus(diskStatus);
 
       return status;
     } finally {
