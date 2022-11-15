@@ -50,7 +50,7 @@ public class HkSdkComponent {
       final HCNetSDK.NET_DVR_WORKSTATE_V30 workStatus = new HCNetSDK.NET_DVR_WORKSTATE_V30();
       workStatus.write();
       if (!HC_NET_SDK.NET_DVR_GetDVRWorkState_V30(userHandle, workStatus)) {
-        log.warn("海康 SDK 获取设备状态失败");
+        log.error("海康 SDK 获取设备状态失败 [错误码={}]", HC_NET_SDK.NET_DVR_GetLastError());
         return status;
       }
       workStatus.read();
@@ -143,7 +143,7 @@ public class HkSdkComponent {
         try {
           osdBytes = content.getBytes("GBK");
         } catch (UnsupportedEncodingException e) {
-          log.error("不支持 GBK 编码 []");
+          log.error("不支持 GBK 编码");
           return;
         }
         osdCfg.struStringInfo[index].wShowString = 1;
@@ -261,7 +261,7 @@ public class HkSdkComponent {
     final byte startChannel = deviceInfo.struDeviceV30.byStartChan;
     final int ipChannelNums = deviceInfo.struDeviceV30.byIPChanNum + deviceInfo.struDeviceV30.byHighDChanNum * 256;
     final byte startDigitalChannel = deviceInfo.struDeviceV30.byStartDChan;
-    log.warn(
+    log.info(
       "设备登录成功 [IP={};SN={};模拟通道个数={};模拟通道起始通道号={};设备支持的最大 IP 通道数={};数字通道起始通道号={}]",
       deviceIp,
       sn,
@@ -319,7 +319,7 @@ public class HkSdkComponent {
     }
 
     osdCfg.read();
-    // log.warn("debug osdCfg: {} -> {}", osdCfg, osdCfg.struStringInfo);
+    // log.info("debug osdCfg: {} -> {}", osdCfg, osdCfg.struStringInfo);
     return osdCfg;
   }
 
