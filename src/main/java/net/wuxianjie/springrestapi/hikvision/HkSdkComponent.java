@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
-import static net.wuxianjie.springrestapi.hikvision.HkSdkConfiguration.HC_NET_SDK;
+import static net.wuxianjie.springrestapi.hikvision.HkSdkConfig.HC_NET_SDK;
 
 /**
  * @see <a href="https://blog.csdn.net/lftaoyuan/article/details/108072732">海康OSD添加获取及清除</a>

@@ -12,7 +12,7 @@ import javax.annotation.PreDestroy;
 
 @Slf4j
 @Configuration
-public class HkSdkConfiguration {
+public class HkSdkConfig {
 
   static HCNetSDK HC_NET_SDK;
 
@@ -35,6 +35,8 @@ public class HkSdkConfiguration {
   @PreDestroy
   public void destroySdk() {
     // SDK 反初始化, 释放资源, 只需要退出时调用一次
+    if (HC_NET_SDK == null) return;
+
     HC_NET_SDK.NET_DVR_Cleanup();
   }
 
